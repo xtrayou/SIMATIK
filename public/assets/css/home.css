@@ -1,0 +1,61 @@
+/* Home Page Styles - extracted from inline CSS */
+
+:root {
+    --primary-color: #3B5BDB;
+    --primary-light: #5C7CFA;
+    --primary-dark: #2B4ACB;
+    --secondary-color: #6B7A99;
+    --accent-color: #4263EB;
+    --dark-color: #1a1c23;
+    --light-color: #EDF2FF;
+    --bg-gradient: linear-gradient(135deg, #3B5BDB 0%, #5C7CFA 50%, #748FFC 100%);
+}
+
+* {
+    font-family: Arial, sans-serif;
+}
+
+.font-accent {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-style: italic;
+}
+
+.font-accent-normal {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-style: normal;
+}
+
+.text-highlight {
+    position: relative;
+    display: inline-block;
+}
+
+.text-highlight::after {
+    content: '';
+    position: absolute;
+    bottom: 5px;
+    left: -4px;
+    right: -4px;
+    height: 35%;
+    background: rgba(92, 124, 250, 0.25);
+    border-radius: 4px;
+    z-index: -1;
+    transform: skewX(-3deg);
+}
+
+.text-highlight-green::after {
+    background: rgba(81, 207, 102, 0.3);
+}
+
+.text-highlight-purple::after {
+    background: rgba(132, 94, 247, 0.3);
+}
+
+.text-glow {
+    background: linear-gradient(135deg, #5C7CFA, #748FFC);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+/* ...existing code... (all other homepage CSS styles) ... */

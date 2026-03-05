@@ -1,0 +1,144 @@
+<mxfile host="app.diagrams.net" agent="copilot" version="26.0.0">
+  <diagram id="class-diagram" name="Class Diagram SIMATIK">
+    <mxGraphModel dx="1399" dy="772" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1400" pageHeight="1000" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="eCatProd" edge="1" parent="1" source="3_Xr5JkuWB-xrtWpuw0Z-31" style="rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=1;strokeColor=#000000;strokeWidth=1;exitX=0.519;exitY=0.934;exitDx=0;exitDy=0;exitPerimeter=0;" target="3_Xr5JkuWB-xrtWpuw0Z-17">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="680" y="280" as="sourcePoint" />
+            <mxPoint x="680.0588235294117" y="320" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="eCatProd_1" parent="eCatProd" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=12;" value="1" vertex="1">
+          <mxGeometry relative="1" x="-1" as="geometry">
+            <mxPoint x="-10" y="20" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="eCatProd_N" parent="eCatProd" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=12;" value="N" vertex="1">
+          <mxGeometry relative="1" x="1" y="1" as="geometry">
+            <mxPoint x="20" y="-10" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="eProdMove" edge="1" parent="1" style="rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=1;strokeColor=#000000;strokeWidth=1;entryX=1.007;entryY=0.392;entryDx=0;entryDy=0;entryPerimeter=0;" target="clsStockMovementAttr">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="520" y="460" as="sourcePoint" />
+            <mxPoint x="380" y="505" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="eProdMove_1" parent="eProdMove" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=12;" value="1" vertex="1">
+          <mxGeometry relative="1" x="-1" as="geometry">
+            <mxPoint x="-18" y="10" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="eProdMove_N" parent="eProdMove" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=12;" value="N" vertex="1">
+          <mxGeometry relative="1" x="1" y="1" as="geometry">
+            <mxPoint x="22" y="10" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="eUserMove" edge="1" parent="1" source="3_Xr5JkuWB-xrtWpuw0Z-6" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=1;strokeColor=#000000;strokeWidth=1;exitX=0.532;exitY=0.969;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0.533;entryY=-0.007;entryDx=0;entryDy=0;entryPerimeter=0;" target="3_Xr5JkuWB-xrtWpuw0Z-12">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="220" y="320" as="sourcePoint" />
+            <mxPoint x="219.99999999999977" y="380" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="eUserMove_1" parent="eUserMove" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=12;" value="1" vertex="1">
+          <mxGeometry relative="1" x="-1" as="geometry">
+            <mxPoint x="-10" y="22" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="eUserMove_N" parent="eUserMove" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=12;" value="N" vertex="1">
+          <mxGeometry relative="1" x="1" y="1" as="geometry">
+            <mxPoint x="9" y="-20" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="eLoanItem" edge="1" parent="1" source="3_Xr5JkuWB-xrtWpuw0Z-26" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=1;strokeColor=#000000;strokeWidth=1;exitX=0.544;exitY=1.013;exitDx=0;exitDy=0;exitPerimeter=0;">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1140" y="340" as="sourcePoint" />
+            <mxPoint x="1140" y="400" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="eLoanItem_1" parent="eLoanItem" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=12;" value="1" vertex="1">
+          <mxGeometry relative="1" x="-1" as="geometry">
+            <mxPoint x="-18" y="10" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="eLoanItem_N" parent="eLoanItem" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=12;" value="N" vertex="1">
+          <mxGeometry relative="1" x="1" y="1" as="geometry">
+            <mxPoint x="22" y="-20" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="eProdLoanItem" edge="1" parent="1" source="clsProductAttr" style="rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=1;strokeColor=#000000;strokeWidth=1;entryX=0.003;entryY=0.576;entryDx=0;entryDy=0;entryPerimeter=0;exitX=1;exitY=0.784;exitDx=0;exitDy=0;exitPerimeter=0;" target="clsLoanItemAttr">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="840" y="487.30999999999995" as="sourcePoint" />
+            <mxPoint x="965.3400000000001" y="488.70000000000005" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="eProdLoanItem_1" parent="eProdLoanItem" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=12;" value="1" vertex="1">
+          <mxGeometry relative="1" x="-1" as="geometry">
+            <mxPoint x="40" y="-14" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="eProdLoanItem_N" parent="eProdLoanItem" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=12;" value="N" vertex="1">
+          <mxGeometry relative="1" x="1" y="1" as="geometry">
+            <mxPoint x="-40" y="-14" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="3_Xr5JkuWB-xrtWpuw0Z-1" parent="1" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=26;fillColor=none;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" value="&lt;span style=&quot;font-size: 14px; font-weight: 700;&quot;&gt;User&lt;/span&gt;" vertex="1">
+          <mxGeometry height="230" width="300" x="60" y="80" as="geometry" />
+        </mxCell>
+        <mxCell id="clsUserAttr" parent="3_Xr5JkuWB-xrtWpuw0Z-1" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=10;spacingTop=6;fontSize=12;" value="- id : int&#xa;- username : String&#xa;- password : String&#xa;- name : String&#xa;- role : enum(admin,staff)&#xa;- is_active : boolean&#xa;- created_at : datetime&#xa;- updated_at : datetime" vertex="1">
+          <mxGeometry height="140" width="300" y="26" as="geometry" />
+        </mxCell>
+        <mxCell id="3_Xr5JkuWB-xrtWpuw0Z-6" parent="3_Xr5JkuWB-xrtWpuw0Z-1" style="html=1;whiteSpace=wrap;align=left;" value="&lt;span style=&quot;text-wrap-mode: nowrap;&quot;&gt;+ login() : void&lt;/span&gt;&lt;br style=&quot;text-wrap-mode: nowrap;&quot;&gt;&lt;span style=&quot;text-wrap-mode: nowrap;&quot;&gt;+ logout() : void&lt;/span&gt;&lt;br style=&quot;text-wrap-mode: nowrap;&quot;&gt;&lt;span style=&quot;text-wrap-mode: nowrap;&quot;&gt;+ hasRole() : boolean&lt;/span&gt;" vertex="1">
+          <mxGeometry height="64" width="300" y="166" as="geometry" />
+        </mxCell>
+        <mxCell id="3_Xr5JkuWB-xrtWpuw0Z-12" parent="1" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=26;fillColor=none;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" value="&lt;span style=&quot;font-size: 14px; font-weight: 700;&quot;&gt;StockMovement&lt;/span&gt;" vertex="1">
+          <mxGeometry height="280" width="330" x="40" y="380" as="geometry" />
+        </mxCell>
+        <mxCell id="clsStockMovementAttr" parent="3_Xr5JkuWB-xrtWpuw0Z-12" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=10;spacingTop=6;fontSize=12;" value="- id : int&#xa;- product_id : int&#xa;- created_by : int&#xa;- type : enum(IN,OUT,ADJUSTMENT)&#xa;- quantity : int&#xa;- previous_stock : int&#xa;- reference_no : String&#xa;- notes : String&#xa;- created_at : datetime&#xa;- updated_at : datetime" vertex="1">
+          <mxGeometry height="170" width="330" y="26" as="geometry" />
+        </mxCell>
+        <mxCell id="3_Xr5JkuWB-xrtWpuw0Z-16" parent="3_Xr5JkuWB-xrtWpuw0Z-12" style="html=1;whiteSpace=wrap;align=left;" value="&lt;span style=&quot;text-wrap-mode: nowrap;&quot;&gt;+ recordIn() : void&lt;/span&gt;&lt;br style=&quot;text-wrap-mode: nowrap;&quot;&gt;&lt;div style=&quot;&quot;&gt;&lt;span style=&quot;text-wrap-mode: nowrap; background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;+ recordOut() : void&lt;/span&gt;&lt;/div&gt;&lt;span style=&quot;text-wrap-mode: nowrap;&quot;&gt;+ adjust() : void&lt;/span&gt;&lt;br style=&quot;text-wrap-mode: nowrap;&quot;&gt;&lt;span style=&quot;text-wrap-mode: nowrap;&quot;&gt;+ generateReferenceNo() : String&lt;/span&gt;" vertex="1">
+          <mxGeometry height="84" width="330" y="196" as="geometry" />
+        </mxCell>
+        <mxCell id="3_Xr5JkuWB-xrtWpuw0Z-17" parent="1" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=26;fillColor=none;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" value="&lt;span style=&quot;font-size: 14px; font-weight: 700;&quot;&gt;Product&lt;/span&gt;" vertex="1">
+          <mxGeometry height="370" width="360" x="490" y="330" as="geometry" />
+        </mxCell>
+        <mxCell id="clsProductAttr" parent="3_Xr5JkuWB-xrtWpuw0Z-17" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=10;spacingTop=6;fontSize=12;" value="- id : int&#xa;- category_id : int&#xa;- name : String&#xa;- sku : String&#xa;- description : String&#xa;- price : decimal&#xa;- cost_price : decimal&#xa;- min_stock : int&#xa;- current_stock : int&#xa;- unit : String&#xa;- is_active : boolean&#xa;- created_at : datetime&#xa;- updated_at : datetime" vertex="1">
+          <mxGeometry height="240" width="360" y="26" as="geometry" />
+        </mxCell>
+        <mxCell id="3_Xr5JkuWB-xrtWpuw0Z-21" parent="3_Xr5JkuWB-xrtWpuw0Z-17" style="html=1;whiteSpace=wrap;align=left;" value="&lt;span style=&quot;text-wrap-mode: nowrap;&quot;&gt;+ create() : void&lt;/span&gt;&lt;br style=&quot;text-wrap-mode: nowrap;&quot;&gt;&lt;span style=&quot;text-wrap-mode: nowrap;&quot;&gt;+ update() : void&lt;/span&gt;&lt;br style=&quot;text-wrap-mode: nowrap;&quot;&gt;&lt;span style=&quot;text-wrap-mode: nowrap;&quot;&gt;+ delete() : void&lt;/span&gt;&lt;br style=&quot;text-wrap-mode: nowrap;&quot;&gt;&lt;span style=&quot;text-wrap-mode: nowrap;&quot;&gt;+ generateSKU() : String&lt;/span&gt;" vertex="1">
+          <mxGeometry height="104" width="360" y="266" as="geometry" />
+        </mxCell>
+        <mxCell id="3_Xr5JkuWB-xrtWpuw0Z-22" parent="1" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=26;fillColor=none;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" value="&lt;span style=&quot;font-size: 14px; font-weight: 700;&quot;&gt;Loan&lt;/span&gt;" vertex="1">
+          <mxGeometry height="330" width="370" x="960" y="80" as="geometry" />
+        </mxCell>
+        <mxCell id="clsLoanAttr" parent="3_Xr5JkuWB-xrtWpuw0Z-22" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=10;spacingTop=6;fontSize=12;" value="- id : int&#xa;- borrower_name : String&#xa;- borrower_identifier : String&#xa;- borrower_unit : String&#xa;- contact : String&#xa;- loan_date : datetime&#xa;- due_date : datetime&#xa;- status : enum(pending,approved,canceled,returned)&#xa;- notes : String&#xa;- created_at : datetime&#xa;- updated_at : datetime" vertex="1">
+          <mxGeometry height="200" width="370" y="26" as="geometry" />
+        </mxCell>
+        <mxCell id="3_Xr5JkuWB-xrtWpuw0Z-26" parent="3_Xr5JkuWB-xrtWpuw0Z-22" style="html=1;whiteSpace=wrap;align=left;" value="&lt;span style=&quot;text-wrap-mode: nowrap;&quot;&gt;+ createRequest() : void&lt;/span&gt;&lt;br style=&quot;text-wrap-mode: nowrap;&quot;&gt;&lt;span style=&quot;text-wrap-mode: nowrap;&quot;&gt;+ approve() : void&lt;/span&gt;&lt;br style=&quot;text-wrap-mode: nowrap;&quot;&gt;&lt;span style=&quot;text-wrap-mode: nowrap;&quot;&gt;+ cancel() : void&lt;/span&gt;&lt;br style=&quot;text-wrap-mode: nowrap;&quot;&gt;&lt;span style=&quot;text-wrap-mode: nowrap;&quot;&gt;+ markReturned() : void&lt;/span&gt;" vertex="1">
+          <mxGeometry height="104" width="370" y="226" as="geometry" />
+        </mxCell>
+        <mxCell id="3_Xr5JkuWB-xrtWpuw0Z-27" parent="1" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=26;fillColor=none;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" value="&lt;span style=&quot;font-size: 14px; font-weight: 700;&quot;&gt;Category&lt;/span&gt;" vertex="1">
+          <mxGeometry height="196" width="330" x="510" y="80" as="geometry" />
+        </mxCell>
+        <mxCell id="clsCategoryAttr" parent="3_Xr5JkuWB-xrtWpuw0Z-27" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=10;spacingTop=6;fontSize=12;" value="- id : int&#xa;- name : String&#xa;- description : String&#xa;- is_active : boolean&#xa;- created_at : datetime&#xa;- updated_at : datetime" vertex="1">
+          <mxGeometry height="120" width="330" y="26" as="geometry" />
+        </mxCell>
+        <mxCell id="3_Xr5JkuWB-xrtWpuw0Z-31" parent="3_Xr5JkuWB-xrtWpuw0Z-27" style="html=1;whiteSpace=wrap;align=left;" value="&lt;span style=&quot;text-wrap-mode: nowrap;&quot;&gt;+ create() : void&lt;/span&gt;&lt;br style=&quot;text-wrap-mode: nowrap;&quot;&gt;&lt;span style=&quot;text-wrap-mode: nowrap;&quot;&gt;+ update() : void&lt;/span&gt;&lt;br style=&quot;text-wrap-mode: nowrap;&quot;&gt;&lt;span style=&quot;text-wrap-mode: nowrap;&quot;&gt;+ delete() : void&lt;/span&gt;" vertex="1">
+          <mxGeometry height="50" width="330" y="146" as="geometry" />
+        </mxCell>
+        <mxCell id="o7bavxXOjXa0A28e-oyg-2" parent="1" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=26;fillColor=none;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" value="&lt;span style=&quot;font-size: 14px; font-weight: 700;&quot;&gt;LoanItem&lt;/span&gt;" vertex="1">
+          <mxGeometry height="260" width="350" x="975" y="450" as="geometry" />
+        </mxCell>
+        <mxCell id="clsLoanItemAttr" parent="o7bavxXOjXa0A28e-oyg-2" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=10;spacingTop=6;fontSize=12;" value="- id : int&#xa;- loan_id : int&#xa;- product_id : int&#xa;- quantity : int&#xa;- notes : String&#xa;- created_at : datetime&#xa;- updated_at : datetime" vertex="1">
+          <mxGeometry height="140" width="350" y="26" as="geometry" />
+        </mxCell>
+        <mxCell id="o7bavxXOjXa0A28e-oyg-4" parent="o7bavxXOjXa0A28e-oyg-2" style="html=1;whiteSpace=wrap;align=left;" value="&lt;span style=&quot;text-wrap-mode: nowrap;&quot;&gt;+ addItem() : void&lt;/span&gt;&lt;br style=&quot;text-wrap-mode: nowrap;&quot;&gt;&lt;span style=&quot;text-wrap-mode: nowrap;&quot;&gt;+ updateQty() : void&lt;/span&gt;&lt;br style=&quot;text-wrap-mode: nowrap;&quot;&gt;&lt;span style=&quot;text-wrap-mode: nowrap;&quot;&gt;+ removeItem() : void&lt;/span&gt;" vertex="1">
+          <mxGeometry height="94" width="350" y="166" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

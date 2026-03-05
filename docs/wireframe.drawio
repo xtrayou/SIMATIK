@@ -1,0 +1,873 @@
+<mxfile host="app.diagrams.net" agent="copilot" version="26.0.0">
+
+  <!-- ======================== PAGE 1: DASHBOARD ======================== -->
+  <diagram id="page-dashboard" name="Dashboard">
+    <mxGraphModel dx="1400" dy="900" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1400" pageHeight="1000" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <!-- Browser Frame -->
+        <mxCell id="browser" value="" style="shape=mxgraph.mockup.containers.browserWindow;sketch=1;curveFitting=1;jiggle=2;rounded=0;strokeColor=#666666;fillColor=#FFFFFF;mainText=;recursiveResize=0;strokeWidth=1;fontSize=17;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="20" y="10" width="1360" height="970" as="geometry" />
+        </mxCell>
+
+        <!-- Top URL Bar text -->
+        <mxCell id="urlText" value="localhost/simatik/" style="text;sketch=1;curveFitting=1;jiggle=2;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=12;fontColor=#999999;" vertex="1" parent="browser">
+          <mxGeometry x="250" y="27" width="400" height="20" as="geometry" />
+        </mxCell>
+
+        <!-- ===== SIDEBAR ===== -->
+        <mxCell id="sidebar" value="" style="rounded=0;whiteSpace=wrap;html=1;sketch=1;curveFitting=1;jiggle=2;fillColor=#F0F0F0;strokeColor=#CCCCCC;" vertex="1" parent="1">
+          <mxGeometry x="20" y="80" width="230" height="900" as="geometry" />
+        </mxCell>
+
+        <!-- Logo -->
+        <mxCell id="logo" value="Inventor-ssi&#xa;Inventory System" style="text;html=1;sketch=1;curveFitting=1;jiggle=2;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=14;fontStyle=1;fontColor=#435ebe;" vertex="1" parent="1">
+          <mxGeometry x="40" y="90" width="190" height="50" as="geometry" />
+        </mxCell>
+
+        <!-- Sidebar Menu Items -->
+        <mxCell id="menuTitle1" value="Dashboard" style="text;html=1;sketch=1;curveFitting=1;jiggle=2;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=10;fontColor=#999999;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="40" y="150" width="180" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="menuDash" value="▣  Dashboard" style="rounded=1;whiteSpace=wrap;html=1;sketch=1;curveFitting=1;jiggle=2;fillColor=#435ebe;strokeColor=#435ebe;fontColor=#FFFFFF;fontSize=12;fontStyle=1;align=left;spacingLeft=15;" vertex="1" parent="1">
+          <mxGeometry x="35" y="175" width="200" height="35" as="geometry" />
+        </mxCell>
+
+        <mxCell id="menuTitle2" value="Master Data" style="text;html=1;sketch=1;curveFitting=1;jiggle=2;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=10;fontColor=#999999;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="40" y="220" width="180" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="menuCat" value="▦  Kategori Produk" style="rounded=1;whiteSpace=wrap;html=1;sketch=1;curveFitting=1;jiggle=2;fillColor=none;strokeColor=none;fontColor=#333333;fontSize=12;align=left;spacingLeft=15;" vertex="1" parent="1">
+          <mxGeometry x="35" y="245" width="200" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="menuProd" value="📦  Produk" style="rounded=1;whiteSpace=wrap;html=1;sketch=1;curveFitting=1;jiggle=2;fillColor=none;strokeColor=none;fontColor=#333333;fontSize=12;align=left;spacingLeft=15;" vertex="1" parent="1">
+          <mxGeometry x="35" y="275" width="200" height="30" as="geometry" />
+        </mxCell>
+
+        <mxCell id="menuTitle3" value="Manajemen Stok" style="text;html=1;sketch=1;curveFitting=1;jiggle=2;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=10;fontColor=#999999;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="40" y="315" width="180" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="menuStok" value="⇄  Pergerakan Stok" style="rounded=1;whiteSpace=wrap;html=1;sketch=1;curveFitting=1;jiggle=2;fillColor=none;strokeColor=none;fontColor=#333333;fontSize=12;align=left;spacingLeft=15;" vertex="1" parent="1">
+          <mxGeometry x="35" y="340" width="200" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="menuAlert" value="⚠  Peringatan Stok" style="rounded=1;whiteSpace=wrap;html=1;sketch=1;curveFitting=1;jiggle=2;fillColor=none;strokeColor=none;fontColor=#333333;fontSize=12;align=left;spacingLeft=15;" vertex="1" parent="1">
+          <mxGeometry x="35" y="370" width="200" height="30" as="geometry" />
+        </mxCell>
+
+        <mxCell id="menuTitle4" value="Permintaan ATK" style="text;html=1;sketch=1;curveFitting=1;jiggle=2;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=10;fontColor=#999999;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="40" y="410" width="180" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="menuLoan" value="📋  Permintaan ATK" style="rounded=1;whiteSpace=wrap;html=1;sketch=1;curveFitting=1;jiggle=2;fillColor=none;strokeColor=none;fontColor=#333333;fontSize=12;align=left;spacingLeft=15;" vertex="1" parent="1">
+          <mxGeometry x="35" y="435" width="200" height="30" as="geometry" />
+        </mxCell>
+
+        <mxCell id="menuTitle5" value="Notifikasi" style="text;html=1;sketch=1;curveFitting=1;jiggle=2;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=10;fontColor=#999999;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="40" y="475" width="180" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="menuNotif" value="🔔  Notifikasi" style="rounded=1;whiteSpace=wrap;html=1;sketch=1;curveFitting=1;jiggle=2;fillColor=none;strokeColor=none;fontColor=#333333;fontSize=12;align=left;spacingLeft=15;" vertex="1" parent="1">
+          <mxGeometry x="35" y="500" width="200" height="30" as="geometry" />
+        </mxCell>
+
+        <mxCell id="menuTitle6" value="Laporan" style="text;html=1;sketch=1;curveFitting=1;jiggle=2;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=10;fontColor=#999999;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="40" y="540" width="180" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="menuReport" value="📊  Laporan" style="rounded=1;whiteSpace=wrap;html=1;sketch=1;curveFitting=1;jiggle=2;fillColor=none;strokeColor=none;fontColor=#333333;fontSize=12;align=left;spacingLeft=15;" vertex="1" parent="1">
+          <mxGeometry x="35" y="565" width="200" height="30" as="geometry" />
+        </mxCell>
+
+        <!-- ===== NAVBAR ===== -->
+        <mxCell id="navbar" value="" style="rounded=0;whiteSpace=wrap;html=1;sketch=1;curveFitting=1;jiggle=2;fillColor=#FFFFFF;strokeColor=#DDDDDD;" vertex="1" parent="1">
+          <mxGeometry x="250" y="80" width="1130" height="55" as="geometry" />
+        </mxCell>
+        <mxCell id="searchBox" value="🔍  Search..." style="rounded=1;whiteSpace=wrap;html=1;sketch=1;curveFitting=1;jiggle=2;fillColor=#F8F8F8;strokeColor=#CCCCCC;fontColor=#999999;fontSize=12;align=left;spacingLeft=10;" vertex="1" parent="1">
+          <mxGeometry x="270" y="93" width="250" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="adminName" value="🔔  Admin Name  ☐" style="text;html=1;sketch=1;curveFitting=1;jiggle=2;strokeColor=none;fillColor=none;align=right;verticalAlign=middle;fontSize=12;fontColor=#333333;" vertex="1" parent="1">
+          <mxGeometry x="1150" y="93" width="200" height="30" as="geometry" />
+        </mxCell>
+
+        <!-- ===== MAIN CONTENT ===== -->
+        <!-- Stat Cards Row -->
+        <mxCell id="statCard1" value="" style="rounded=1;whiteSpace=wrap;html=1;sketch=1;curveFitting=1;jiggle=2;fillColor=#FFFFFF;strokeColor=#DDDDDD;" vertex="1" parent="1">
+          <mxGeometry x="270" y="150" width="250" height="95" as="geometry" />
+        </mxCell>
+        <mxCell id="statIcon1" value="📦" style="text;html=1;sketch=1;curveFitting=1;jiggle=2;strokeColor=none;fillColor=#9b59b6;rounded=1;align=center;verticalAlign=middle;fontSize=22;" vertex="1" parent="1">
+          <mxGeometry x="285" y="165" width="45" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="statLabel1" value="Total Produk&#xa;&lt;b style='font-size:18px'&gt;156&lt;/b&gt;&#xa;&lt;small&gt;Produk aktif&lt;/small&gt;" style="text;html=1;sketch=1;curveFitting=1;jiggle=2;strokeColor=none;fillColor=none;align=left;verticalAlign=top;fontSize=11;fontColor=#666666;spacingTop=5;" vertex="1" parent="1">
+          <mxGeometry x="340" y="160" width="170" height="70" as="geometry" />
+        </mxCell>
+
+        <mxCell id="statCard2" value="" style="rounded=1;whiteSpace=wrap;html=1;sketch=1;curveFitting=1;jiggle=2;fillColor=#FFFFFF;strokeColor=#DDDDDD;" vertex="1" parent="1">
+          <mxGeometry x="535" y="150" width="250" height="95" as="geometry" />
+        </mxCell>
+        <mxCell id="statIcon2" value="▦" style="text;html=1;sketch=1;curveFitting=1;jiggle=2;strokeColor=none;fillColor=#3498db;rounded=1;align=center;verticalAlign=middle;fontSize=22;fontColor=#FFFFFF;" vertex="1" parent="1">
+          <mxGeometry x="550" y="165" width="45" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="statLabel2" value="Kategori&#xa;&lt;b style='font-size:18px'&gt;12&lt;/b&gt;&#xa;&lt;small&gt;Kategori aktif&lt;/small&gt;" style="text;html=1;sketch=1;curveFitting=1;jiggle=2;strokeColor=none;fillColor=none;align=left;verticalAlign=top;fontSize=11;fontColor=#666666;spacingTop=5;" vertex="1" parent="1">
+          <mxGeometry x="605" y="160" width="170" height="70" as="geometry" />
+        </mxCell>
+
+        <mxCell id="statCard3" value="" style="rounded=1;whiteSpace=wrap;html=1;sketch=1;curveFitting=1;jiggle=2;fillColor=#FFFFFF;strokeColor=#DDDDDD;" vertex="1" parent="1">
+          <mxGeometry x="800" y="150" width="270" height="95" as="geometry" />
+        </mxCell>
+        <mxCell id="statIcon3" value="$" style="text;html=1;sketch=1;curveFitting=1;jiggle=2;strokeColor=none;fillColor=#2ecc71;rounded=1;align=center;verticalAlign=middle;fontSize=22;fontColor=#FFFFFF;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="815" y="165" width="45" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="statLabel3" value="Nilai Inventory&#xa;&lt;b style='font-size:18px'&gt;Rp 24.5 jt&lt;/b&gt;&#xa;&lt;small&gt;Total valuasi&lt;/small&gt;" style="text;html=1;sketch=1;curveFitting=1;jiggle=2;strokeColor=none;fillColor=none;align=left;verticalAlign=top;fontSize=11;fontColor=#666666;spacingTop=5;" vertex="1" parent="1">
+          <mxGeometry x="870" y="160" width="180" height="70" as="geometry" />
+        </mxCell>
+
+        <mxCell id="statCard4" value="" style="rounded=1;whiteSpace=wrap;html=1;sketch=1;curveFitting=1;jiggle=2;fillColor=#FFFFFF;strokeColor=#e74c3c;" vertex="1" parent="1">
+          <mxGeometry x="1085" y="150" width="270" height="95" as="geometry" />
+        </mxCell>
+        <mxCell id="statIcon4" value="⚠" style="text;html=1;sketch=1;curveFitting=1;jiggle=2;strokeColor=none;fillColor=#e74c3c;rounded=1;align=center;verticalAlign=middle;fontSize=22;fontColor=#FFFFFF;" vertex="1" parent="1">
+          <mxGeometry x="1100" y="165" width="45" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="statLabel4" value="Stok Rendah&#xa;&lt;b style='font-size:18px;color:#e74c3c'&gt;8&lt;/b&gt;&#xa;&lt;small&gt;Perlu perhatian&lt;/small&gt;" style="text;html=1;sketch=1;curveFitting=1;jiggle=2;strokeColor=none;fillColor=none;align=left;verticalAlign=top;fontSize=11;fontColor=#666666;spacingTop=5;" vertex="1" parent="1">
+          <mxGeometry x="1155" y="160" width="180" height="70" as="geometry" />
+        </mxCell>
+
+        <!-- Quick Stats Bar -->
+        <mxCell id="quickStats" value="" style="rounded=1;whiteSpace=wrap;html=1;sketch=1;curveFitting=1;jiggle=2;fillColor=#FFFFFF;strokeColor=#DDDDDD;" vertex="1" parent="1">
+          <mxGeometry x="270" y="260" width="1085" height="85" as="geometry" />
+        </mxCell>
+        <mxCell id="qsTitle" value="⏱ Statistik Cepat" style="text;html=1;sketch=1;curveFitting=1;jiggle=2;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=13;fontStyle=1;fontColor=#333333;" vertex="1" parent="1">
+          <mxGeometry x="285" y="265" width="200" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="qs1" value="&lt;span style='font-size:18px;color:#17a2b8'&gt;&lt;b&gt;5&lt;/b&gt;&lt;/span&gt;&#xa;Transaksi Hari Ini" style="text;html=1;sketch=1;curveFitting=1;jiggle=2;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=10;fontColor=#666666;" vertex="1" parent="1">
+          <mxGeometry x="285" y="290" width="250" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="qs2" value="&lt;span style='font-size:18px;color:#28a745'&gt;&lt;b&gt;42&lt;/b&gt;&lt;/span&gt;&#xa;Barang Masuk (7 hari)" style="text;html=1;sketch=1;curveFitting=1;jiggle=2;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=10;fontColor=#666666;" vertex="1" parent="1">
+          <mxGeometry x="545" y="290" width="260" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="qs3" value="&lt;span style='font-size:18px;color:#dc3545'&gt;&lt;b&gt;18&lt;/b&gt;&lt;/span&gt;&#xa;Barang Keluar (7 hari)" style="text;html=1;sketch=1;curveFitting=1;jiggle=2;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=10;fontColor=#666666;" vertex="1" parent="1">
+          <mxGeometry x="815" y="290" width="260" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="qs4" value="&lt;span style='font-size:18px;color:#ffc107'&gt;&lt;b&gt;3&lt;/b&gt;&lt;/span&gt;&#xa;Stok Habis" style="text;html=1;sketch=1;curveFitting=1;jiggle=2;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=10;fontColor=#666666;" vertex="1" parent="1">
+          <mxGeometry x="1085" y="290" width="250" height="45" as="geometry" />
+        </mxCell>
+
+        <!-- Quick Actions -->
+        <mxCell id="qaCard" value="" style="rounded=1;whiteSpace=wrap;html=1;sketch=1;curveFitting=1;jiggle=2;fillColor=#FFFFFF;strokeColor=#DDDDDD;" vertex="1" parent="1">
+          <mxGeometry x="270" y="360" width="1085" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="qaTitle" value="⚡ Aksi Cepat" style="text;html=1;sketch=1;curveFitting=1;jiggle=2;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=13;fontStyle=1;fontColor=#333333;" vertex="1" parent="1">
+          <mxGeometry x="285" y="365" width="200" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="qaBtn1" value="↓ Barang Masuk" style="rounded=1;whiteSpace=wrap;html=1;sketch=1;curveFitting=1;jiggle=2;fillColor=#17a2b8;strokeColor=#17a2b8;fontColor=#FFFFFF;fontSize=12;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="290" y="395" width="240" height="35" as="geometry" />
+        </mxCell>
+        <mxCell id="qaBtn2" value="↑ Barang Keluar" style="rounded=1;whiteSpace=wrap;html=1;sketch=1;curveFitting=1;jiggle=2;fillColor=#ffc107;strokeColor=#ffc107;fontColor=#FFFFFF;fontSize=12;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="545" y="395" width="240" height="35" as="geometry" />
+        </mxCell>
+        <mxCell id="qaBtn3" value="+ Tambah Produk" style="rounded=1;whiteSpace=wrap;html=1;sketch=1;curveFitting=1;jiggle=2;fillColor=#28a745;strokeColor=#28a745;fontColor=#FFFFFF;fontSize=12;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="800" y="395" width="240" height="35" as="geometry" />
+        </mxCell>
+        <mxCell id="qaBtn4" value="📋 Permintaan ATK" style="rounded=1;whiteSpace=wrap;html=1;sketch=1;curveFitting=1;jiggle=2;fillColor=#6f42c1;strokeColor=#6f42c1;fontColor=#FFFFFF;fontSize=12;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="1055" y="395" width="240" height="35" as="geometry" />
+        </mxCell>
+
+        <!-- Stock Movement Chart -->
+        <mxCell id="chartCard" value="" style="rounded=1;whiteSpace=wrap;html=1;sketch=1;curveFitting=1;jiggle=2;fillColor=#FFFFFF;strokeColor=#DDDDDD;" vertex="1" parent="1">
+          <mxGeometry x="270" y="460" width="720" height="280" as="geometry" />
+        </mxCell>
+        <mxCell id="chartTitle" value="📈 Pergerakan Stok 6 Bulan Terakhir" style="text;html=1;sketch=1;curveFitting=1;jiggle=2;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=13;fontStyle=1;fontColor=#333333;" vertex="1" parent="1">
+          <mxGeometry x="285" y="468" width="350" height="25" as="geometry" />
+        </mxCell>
+        <!-- Chart Bars (simulated bar chart) -->
+        <mxCell id="bar1a" value="" style="rounded=0;whiteSpace=wrap;html=1;sketch=1;curveFitting=1;jiggle=2;fillColor=#28a745;strokeColor=none;" vertex="1" parent="1">
+          <mxGeometry x="330" y="560" width="35" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="bar1b" value="" style="rounded=0;whiteSpace=wrap;html=1;sketch=1;curveFitting=1;jiggle=2;fillColor=#dc3545;strokeColor=none;" vertex="1" parent="1">
+          <mxGeometry x="370" y="600" width="35" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="bar2a" value="" style="rounded=0;whiteSpace=wrap;html=1;sketch=1;curveFitting=1;jiggle=2;fillColor=#28a745;strokeColor=none;" vertex="1" parent="1">
+          <mxGeometry x="440" y="530" width="35" height="150" as="geometry" />
+        </mxCell>
+        <mxCell id="bar2b" value="" style="rounded=0;whiteSpace=wrap;html=1;sketch=1;curveFitting=1;jiggle=2;fillColor=#dc3545;strokeColor=none;" vertex="1" parent="1">
+          <mxGeometry x="480" y="580" width="35" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="bar3a" value="" style="rounded=0;whiteSpace=wrap;html=1;sketch=1;curveFitting=1;jiggle=2;fillColor=#28a745;strokeColor=none;" vertex="1" parent="1">
+          <mxGeometry x="550" y="550" width="35" height="130" as="geometry" />
+        </mxCell>
+        <mxCell id="bar3b" value="" style="rounded=0;whiteSpace=wrap;html=1;sketch=1;curveFitting=1;jiggle=2;fillColor=#dc3545;strokeColor=none;" vertex="1" parent="1">
+          <mxGeometry x="590" y="610" width="35" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="bar4a" value="" style="rounded=0;whiteSpace=wrap;html=1;sketch=1;curveFitting=1;jiggle=2;fillColor=#28a745;strokeColor=none;" vertex="1" parent="1">
+          <mxGeometry x="660" y="520" width="35" height="160" as="geometry" />
+        </mxCell>
+        <mxCell id="bar4b" value="" style="rounded=0;whiteSpace=wrap;html=1;sketch=1;curveFitting=1;jiggle=2;fillColor=#dc3545;strokeColor=none;" vertex="1" parent="1">
+          <mxGeometry x="700" y="570" width="35" height="110" as="geometry" />
+        </mxCell>
+        <mxCell id="bar5a" value="" style="rounded=0;whiteSpace=wrap;html=1;sketch=1;curveFitting=1;jiggle=2;fillColor=#28a745;strokeColor=none;" vertex="1" parent="1">
+          <mxGeometry x="770" y="540" width="35" height="140" as="geometry" />
+        </mxCell>
+        <mxCell id="bar5b" value="" style="rounded=0;whiteSpace=wrap;html=1;sketch=1;curveFitting=1;jiggle=2;fillColor=#dc3545;strokeColor=none;" vertex="1" parent="1">
+          <mxGeometry x="810" y="590" width="35" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="bar6a" value="" style="rounded=0;whiteSpace=wrap;html=1;sketch=1;curveFitting=1;jiggle=2;fillColor=#28a745;strokeColor=none;" vertex="1" parent="1">
+          <mxGeometry x="880" y="510" width="35" height="170" as="geometry" />
+        </mxCell>
+        <mxCell id="bar6b" value="" style="rounded=0;whiteSpace=wrap;html=1;sketch=1;curveFitting=1;jiggle=2;fillColor=#dc3545;strokeColor=none;" vertex="1" parent="1">
+          <mxGeometry x="920" y="560" width="35" height="120" as="geometry" />
+        </mxCell>
+        <!-- Chart labels -->
+        <mxCell id="chartLbl1" value="Sep" style="text;html=1;sketch=1;curveFitting=1;jiggle=2;strokeColor=none;fillColor=none;align=center;verticalAlign=top;fontSize=10;fontColor=#999999;" vertex="1" parent="1">
+          <mxGeometry x="330" y="690" width="75" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="chartLbl2" value="Oct" style="text;html=1;sketch=1;curveFitting=1;jiggle=2;strokeColor=none;fillColor=none;align=center;verticalAlign=top;fontSize=10;fontColor=#999999;" vertex="1" parent="1">
+          <mxGeometry x="440" y="690" width="75" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="chartLbl3" value="Nov" style="text;html=1;sketch=1;curveFitting=1;jiggle=2;strokeColor=none;fillColor=none;align=center;verticalAlign=top;fontSize=10;fontColor=#999999;" vertex="1" parent="1">
+          <mxGeometry x="550" y="690" width="75" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="chartLbl4" value="Dec" style="text;html=1;sketch=1;curveFitting=1;jiggle=2;strokeColor=none;fillColor=none;align=center;verticalAlign=top;fontSize=10;fontColor=#999999;" vertex="1" parent="1">
+          <mxGeometry x="660" y="690" width="75" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="chartLbl5" value="Jan" style="text;html=1;sketch=1;curveFitting=1;jiggle=2;strokeColor=none;fillColor=none;align=center;verticalAlign=top;fontSize=10;fontColor=#999999;" vertex="1" parent="1">
+          <mxGeometry x="770" y="690" width="75" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="chartLbl6" value="Feb" style="text;html=1;sketch=1;curveFitting=1;jiggle=2;strokeColor=none;fillColor=none;align=center;verticalAlign=top;fontSize=10;fontColor=#999999;" vertex="1" parent="1">
+          <mxGeometry x="880" y="690" width="75" height="20" as="geometry" />
+        </mxCell>
+        <!-- Chart Legend -->
+        <mxCell id="legendIn" value="■ Masuk" style="text;html=1;sketch=1;curveFitting=1;jiggle=2;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=11;fontColor=#28a745;" vertex="1" parent="1">
+          <mxGeometry x="285" y="720" width="80" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="legendOut" value="■ Keluar" style="text;html=1;sketch=1;curveFitting=1;jiggle=2;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=11;fontColor=#dc3545;" vertex="1" parent="1">
+          <mxGeometry x="375" y="720" width="80" height="20" as="geometry" />
+        </mxCell>
+
+        <!-- Pie Chart - Stock Status -->
+        <mxCell id="pieCard" value="" style="rounded=1;whiteSpace=wrap;html=1;sketch=1;curveFitting=1;jiggle=2;fillColor=#FFFFFF;strokeColor=#DDDDDD;" vertex="1" parent="1">
+          <mxGeometry x="1005" y="460" width="350" height="280" as="geometry" />
+        </mxCell>
+        <mxCell id="pieTitle" value="🥧 Status Stok" style="text;html=1;sketch=1;curveFitting=1;jiggle=2;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=13;fontStyle=1;fontColor=#333333;" vertex="1" parent="1">
+          <mxGeometry x="1020" y="468" width="200" height="25" as="geometry" />
+        </mxCell>
+        <!-- Pie circle -->
+        <mxCell id="pieCircle" value="" style="ellipse;whiteSpace=wrap;html=1;sketch=1;curveFitting=1;jiggle=2;fillColor=#28a745;strokeColor=#28a745;" vertex="1" parent="1">
+          <mxGeometry x="1090" y="510" width="150" height="150" as="geometry" />
+        </mxCell>
+        <mxCell id="pieSlice1" value="" style="shape=mxgraph.basic.pie;startAngle=0;endAngle=0.15;sketch=1;curveFitting=1;jiggle=2;fillColor=#dc3545;strokeColor=#dc3545;" vertex="1" parent="1">
+          <mxGeometry x="1090" y="510" width="150" height="150" as="geometry" />
+        </mxCell>
+        <mxCell id="pieSlice2" value="" style="shape=mxgraph.basic.pie;startAngle=0.15;endAngle=0.3;sketch=1;curveFitting=1;jiggle=2;fillColor=#ffc107;strokeColor=#ffc107;" vertex="1" parent="1">
+          <mxGeometry x="1090" y="510" width="150" height="150" as="geometry" />
+        </mxCell>
+        <!-- Pie legend -->
+        <mxCell id="pieLeg1" value="■ Normal: 145" style="text;html=1;sketch=1;curveFitting=1;jiggle=2;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=11;fontColor=#28a745;" vertex="1" parent="1">
+          <mxGeometry x="1020" y="675" width="100" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="pieLeg2" value="■ Rendah: 8" style="text;html=1;sketch=1;curveFitting=1;jiggle=2;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=11;fontColor=#ffc107;" vertex="1" parent="1">
+          <mxGeometry x="1130" y="675" width="100" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="pieLeg3" value="■ Habis: 3" style="text;html=1;sketch=1;curveFitting=1;jiggle=2;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=11;fontColor=#dc3545;" vertex="1" parent="1">
+          <mxGeometry x="1240" y="675" width="100" height="20" as="geometry" />
+        </mxCell>
+
+        <!-- Activity Table -->
+        <mxCell id="actCard" value="" style="rounded=1;whiteSpace=wrap;html=1;sketch=1;curveFitting=1;jiggle=2;fillColor=#FFFFFF;strokeColor=#DDDDDD;" vertex="1" parent="1">
+          <mxGeometry x="270" y="760" width="535" height="200" as="geometry" />
+        </mxCell>
+        <mxCell id="actTitle" value="🕐 Aktivitas Terbaru" style="text;html=1;sketch=1;curveFitting=1;jiggle=2;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=13;fontStyle=1;fontColor=#333333;" vertex="1" parent="1">
+          <mxGeometry x="285" y="768" width="250" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="actSeeAll" value="Lihat Semua" style="text;html=1;sketch=1;curveFitting=1;jiggle=2;strokeColor=#435ebe;fillColor=none;rounded=1;align=center;verticalAlign=middle;fontSize=11;fontColor=#435ebe;" vertex="1" parent="1">
+          <mxGeometry x="700" y="768" width="90" height="25" as="geometry" />
+        </mxCell>
+        <!-- Table Header -->
+        <mxCell id="actTH" value="Waktu          |  Produk              |  Tipe     |  Jumlah" style="text;html=1;sketch=1;curveFitting=1;jiggle=2;strokeColor=none;fillColor=#F8F8F8;align=left;verticalAlign=middle;fontSize=11;fontStyle=1;fontColor=#666666;spacingLeft=10;" vertex="1" parent="1">
+          <mxGeometry x="280" y="800" width="510" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="actR1" value="2 mnt lalu   |  Kertas A4           |  IN        |  +50" style="text;html=1;sketch=1;curveFitting=1;jiggle=2;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=11;fontColor=#333333;spacingLeft=10;" vertex="1" parent="1">
+          <mxGeometry x="280" y="828" width="510" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="actR2" value="15 mnt lalu  |  Pulpen Pilot         |  OUT     |  -12" style="text;html=1;sketch=1;curveFitting=1;jiggle=2;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=11;fontColor=#333333;spacingLeft=10;" vertex="1" parent="1">
+          <mxGeometry x="280" y="856" width="510" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="actR3" value="1 jam lalu    |  Stapler Kenko      |  IN        |  +20" style="text;html=1;sketch=1;curveFitting=1;jiggle=2;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=11;fontColor=#333333;spacingLeft=10;" vertex="1" parent="1">
+          <mxGeometry x="280" y="884" width="510" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="actR4" value="3 jam lalu    |  Tinta Printer HP    |  OUT     |  -5" style="text;html=1;sketch=1;curveFitting=1;jiggle=2;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=11;fontColor=#333333;spacingLeft=10;" vertex="1" parent="1">
+          <mxGeometry x="280" y="912" width="510" height="25" as="geometry" />
+        </mxCell>
+
+        <!-- Low Stock Table -->
+        <mxCell id="lowCard" value="" style="rounded=1;whiteSpace=wrap;html=1;sketch=1;curveFitting=1;jiggle=2;fillColor=#FFFFFF;strokeColor=#DDDDDD;" vertex="1" parent="1">
+          <mxGeometry x="820" y="760" width="535" height="200" as="geometry" />
+        </mxCell>
+        <mxCell id="lowTitle" value="⚠ Produk Stok Rendah" style="text;html=1;sketch=1;curveFitting=1;jiggle=2;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=13;fontStyle=1;fontColor=#333333;" vertex="1" parent="1">
+          <mxGeometry x="835" y="768" width="250" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="lowSeeAll" value="Lihat Semua" style="text;html=1;sketch=1;curveFitting=1;jiggle=2;strokeColor=#ffc107;fillColor=none;rounded=1;align=center;verticalAlign=middle;fontSize=11;fontColor=#ffc107;" vertex="1" parent="1">
+          <mxGeometry x="1250" y="768" width="90" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="lowTH" value="Produk                   |  Stok  |  Min  |  Status" style="text;html=1;sketch=1;curveFitting=1;jiggle=2;strokeColor=none;fillColor=#F8F8F8;align=left;verticalAlign=middle;fontSize=11;fontStyle=1;fontColor=#666666;spacingLeft=10;" vertex="1" parent="1">
+          <mxGeometry x="830" y="800" width="510" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="lowR1" value="Map Plastik              |    3     |  10   |  ⚠ Rendah" style="text;html=1;sketch=1;curveFitting=1;jiggle=2;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=11;fontColor=#333333;spacingLeft=10;" vertex="1" parent="1">
+          <mxGeometry x="830" y="828" width="510" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="lowR2" value="Tinta Printer Canon  |    0     |    5   |  ❌ Habis" style="text;html=1;sketch=1;curveFitting=1;jiggle=2;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=11;fontColor=#333333;spacingLeft=10;" vertex="1" parent="1">
+          <mxGeometry x="830" y="856" width="510" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="lowR3" value="Amplop Coklat          |    7     |  15   |  ⚠ Rendah" style="text;html=1;sketch=1;curveFitting=1;jiggle=2;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=11;fontColor=#333333;spacingLeft=10;" vertex="1" parent="1">
+          <mxGeometry x="830" y="884" width="510" height="25" as="geometry" />
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+
+  <!-- ======================== PAGE 2: PRODUK ======================== -->
+  <diagram id="page-products" name="Halaman Produk">
+    <mxGraphModel dx="1400" dy="900" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1400" pageHeight="1000" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <!-- Browser Frame -->
+        <mxCell id="p2browser" value="" style="shape=mxgraph.mockup.containers.browserWindow;sketch=1;curveFitting=1;jiggle=2;rounded=0;strokeColor=#666666;fillColor=#FFFFFF;mainText=;recursiveResize=0;strokeWidth=1;fontSize=17;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="20" y="10" width="1360" height="970" as="geometry" />
+        </mxCell>
+        <mxCell id="p2url" value="localhost/simatik/products" style="text;sketch=1;curveFitting=1;jiggle=2;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=12;fontColor=#999999;" vertex="1" parent="p2browser">
+          <mxGeometry x="250" y="27" width="400" height="20" as="geometry" />
+        </mxCell>
+
+        <!-- Sidebar (simplified) -->
+        <mxCell id="p2sidebar" value="" style="rounded=0;whiteSpace=wrap;html=1;sketch=1;curveFitting=1;jiggle=2;fillColor=#F0F0F0;strokeColor=#CCCCCC;" vertex="1" parent="1">
+          <mxGeometry x="20" y="80" width="230" height="900" as="geometry" />
+        </mxCell>
+        <mxCell id="p2logo" value="Inventor-ssi&#xa;Inventory System" style="text;html=1;sketch=1;curveFitting=1;jiggle=2;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=14;fontStyle=1;fontColor=#435ebe;" vertex="1" parent="1">
+          <mxGeometry x="40" y="90" width="190" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="p2menuDash" value="▣  Dashboard" style="rounded=1;whiteSpace=wrap;html=1;sketch=1;curveFitting=1;jiggle=2;fillColor=none;strokeColor=none;fontColor=#333333;fontSize=12;align=left;spacingLeft=15;" vertex="1" parent="1">
+          <mxGeometry x="35" y="175" width="200" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="p2menuProd" value="📦  Produk" style="rounded=1;whiteSpace=wrap;html=1;sketch=1;curveFitting=1;jiggle=2;fillColor=#435ebe;strokeColor=#435ebe;fontColor=#FFFFFF;fontSize=12;fontStyle=1;align=left;spacingLeft=15;" vertex="1" parent="1">
+          <mxGeometry x="35" y="275" width="200" height="35" as="geometry" />
+        </mxCell>
+
+        <!-- Navbar -->
+        <mxCell id="p2navbar" value="" style="rounded=0;whiteSpace=wrap;html=1;sketch=1;curveFitting=1;jiggle=2;fillColor=#FFFFFF;strokeColor=#DDDDDD;" vertex="1" parent="1">
+          <mxGeometry x="250" y="80" width="1130" height="55" as="geometry" />
+        </mxCell>
+        <mxCell id="p2search" value="🔍  Search..." style="rounded=1;whiteSpace=wrap;html=1;sketch=1;curveFitting=1;jiggle=2;fillColor=#F8F8F8;strokeColor=#CCCCCC;fontColor=#999999;fontSize=12;align=left;spacingLeft=10;" vertex="1" parent="1">
+          <mxGeometry x="270" y="93" width="250" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="p2admin" value="🔔  Admin Name  ☐" style="text;html=1;sketch=1;curveFitting=1;jiggle=2;strokeColor=none;fillColor=none;align=right;verticalAlign=middle;fontSize=12;fontColor=#333333;" vertex="1" parent="1">
+          <mxGeometry x="1150" y="93" width="200" height="30" as="geometry" />
+        </mxCell>
+
+        <!-- Page Title -->
+        <mxCell id="p2title" value="📦 Daftar Produk" style="text;html=1;sketch=1;curveFitting=1;jiggle=2;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=20;fontStyle=1;fontColor=#333333;" vertex="1" parent="1">
+          <mxGeometry x="270" y="150" width="300" height="35" as="geometry" />
+        </mxCell>
+
+        <!-- Filter/Action Bar -->
+        <mxCell id="p2filterBar" value="" style="rounded=1;whiteSpace=wrap;html=1;sketch=1;curveFitting=1;jiggle=2;fillColor=#FFFFFF;strokeColor=#DDDDDD;" vertex="1" parent="1">
+          <mxGeometry x="270" y="195" width="1085" height="55" as="geometry" />
+        </mxCell>
+        <mxCell id="p2searchProd" value="🔍 Cari produk..." style="rounded=1;whiteSpace=wrap;html=1;sketch=1;curveFitting=1;jiggle=2;fillColor=#F8F8F8;strokeColor=#CCCCCC;fontColor=#999999;fontSize=12;align=left;spacingLeft=10;" vertex="1" parent="1">
+          <mxGeometry x="285" y="207" width="250" height="32" as="geometry" />
+        </mxCell>
+        <mxCell id="p2filterCat" value="▼  Semua Kategori" style="rounded=1;whiteSpace=wrap;html=1;sketch=1;curveFitting=1;jiggle=2;fillColor=#F8F8F8;strokeColor=#CCCCCC;fontColor=#666666;fontSize=12;align=left;spacingLeft=10;" vertex="1" parent="1">
+          <mxGeometry x="550" y="207" width="180" height="32" as="geometry" />
+        </mxCell>
+        <mxCell id="p2filterStatus" value="▼  Semua Status" style="rounded=1;whiteSpace=wrap;html=1;sketch=1;curveFitting=1;jiggle=2;fillColor=#F8F8F8;strokeColor=#CCCCCC;fontColor=#666666;fontSize=12;align=left;spacingLeft=10;" vertex="1" parent="1">
+          <mxGeometry x="745" y="207" width="160" height="32" as="geometry" />
+        </mxCell>
+        <mxCell id="p2addBtn" value="+ Tambah Produk" style="rounded=1;whiteSpace=wrap;html=1;sketch=1;curveFitting=1;jiggle=2;fillColor=#435ebe;strokeColor=#435ebe;fontColor=#FFFFFF;fontSize=13;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="1160" y="207" width="180" height="32" as="geometry" />
+        </mxCell>
+
+        <!-- Products Table -->
+        <mxCell id="p2table" value="" style="rounded=1;whiteSpace=wrap;html=1;sketch=1;curveFitting=1;jiggle=2;fillColor=#FFFFFF;strokeColor=#DDDDDD;" vertex="1" parent="1">
+          <mxGeometry x="270" y="265" width="1085" height="620" as="geometry" />
+        </mxCell>
+        <!-- Table Header -->
+        <mxCell id="p2th" value="" style="rounded=0;whiteSpace=wrap;html=1;sketch=1;curveFitting=1;jiggle=2;fillColor=#F8F8F8;strokeColor=#EEEEEE;" vertex="1" parent="1">
+          <mxGeometry x="280" y="275" width="1065" height="35" as="geometry" />
+        </mxCell>
+        <mxCell id="p2thText" value="☐  |  No  |  SKU           |  Nama Produk              |  Kategori         |  Harga            |  Stok  |  Min  |  Status   |  Aksi" style="text;html=1;sketch=1;curveFitting=1;jiggle=2;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=11;fontStyle=1;fontColor=#666666;spacingLeft=8;" vertex="1" parent="1">
+          <mxGeometry x="280" y="275" width="1065" height="35" as="geometry" />
+        </mxCell>
+        <!-- Row 1 -->
+        <mxCell id="p2r1" value="☐  |  1    |  ATK-001   |  Kertas HVS A4             |  Kertas            |  Rp 45.000   |  120  |  20   |  ✅ Aktif  |  👁 ✏ 🗑" style="text;html=1;sketch=1;curveFitting=1;jiggle=2;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=11;fontColor=#333333;spacingLeft=8;" vertex="1" parent="1">
+          <mxGeometry x="280" y="315" width="1065" height="35" as="geometry" />
+        </mxCell>
+        <mxCell id="p2line1" value="" style="endArrow=none;html=1;sketch=1;curveFitting=1;jiggle=2;strokeColor=#EEEEEE;strokeWidth=1;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="280" y="350" as="sourcePoint" />
+            <mxPoint x="1345" y="350" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <!-- Row 2 -->
+        <mxCell id="p2r2" value="☐  |  2    |  ATK-002   |  Pulpen Pilot G-1           |  Alat Tulis        |  Rp 12.000   |   85   |  15   |  ✅ Aktif  |  👁 ✏ 🗑" style="text;html=1;sketch=1;curveFitting=1;jiggle=2;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=11;fontColor=#333333;spacingLeft=8;" vertex="1" parent="1">
+          <mxGeometry x="280" y="355" width="1065" height="35" as="geometry" />
+        </mxCell>
+        <mxCell id="p2line2" value="" style="endArrow=none;html=1;sketch=1;curveFitting=1;jiggle=2;strokeColor=#EEEEEE;strokeWidth=1;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="280" y="390" as="sourcePoint" />
+            <mxPoint x="1345" y="390" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <!-- Row 3 -->
+        <mxCell id="p2r3" value="☐  |  3    |  ATK-003   |  Stapler Kenko HD-10  |  Perlengkapan  |  Rp 35.000   |    3    |  10   |  ⚠ Rendah |  👁 ✏ 🗑" style="text;html=1;sketch=1;curveFitting=1;jiggle=2;strokeColor=none;fillColor=#FFF3CD;align=left;verticalAlign=middle;fontSize=11;fontColor=#333333;spacingLeft=8;" vertex="1" parent="1">
+          <mxGeometry x="280" y="395" width="1065" height="35" as="geometry" />
+        </mxCell>
+        <mxCell id="p2line3" value="" style="endArrow=none;html=1;sketch=1;curveFitting=1;jiggle=2;strokeColor=#EEEEEE;strokeWidth=1;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="280" y="430" as="sourcePoint" />
+            <mxPoint x="1345" y="430" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <!-- Row 4 -->
+        <mxCell id="p2r4" value="☐  |  4    |  ATK-004   |  Map Plastik F4             |  Perlengkapan  |  Rp 5.000     |    0    |   5    |  ❌ Habis   |  👁 ✏ 🗑" style="text;html=1;sketch=1;curveFitting=1;jiggle=2;strokeColor=none;fillColor=#F8D7DA;align=left;verticalAlign=middle;fontSize=11;fontColor=#333333;spacingLeft=8;" vertex="1" parent="1">
+          <mxGeometry x="280" y="435" width="1065" height="35" as="geometry" />
+        </mxCell>
+        <mxCell id="p2line4" value="" style="endArrow=none;html=1;sketch=1;curveFitting=1;jiggle=2;strokeColor=#EEEEEE;strokeWidth=1;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="280" y="470" as="sourcePoint" />
+            <mxPoint x="1345" y="470" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <!-- Row 5 -->
+        <mxCell id="p2r5" value="☐  |  5    |  ATK-005   |  Tinta Printer HP 680     |  Tinta               |  Rp 89.000   |  25   |  10   |  ✅ Aktif  |  👁 ✏ 🗑" style="text;html=1;sketch=1;curveFitting=1;jiggle=2;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=11;fontColor=#333333;spacingLeft=8;" vertex="1" parent="1">
+          <mxGeometry x="280" y="475" width="1065" height="35" as="geometry" />
+        </mxCell>
+        <mxCell id="p2line5" value="" style="endArrow=none;html=1;sketch=1;curveFitting=1;jiggle=2;strokeColor=#EEEEEE;strokeWidth=1;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="280" y="510" as="sourcePoint" />
+            <mxPoint x="1345" y="510" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Pagination -->
+        <mxCell id="p2paging" value="◄  1  [ 2 ]  3  4  5  ►                    Menampilkan 1-10 dari 156 produk" style="text;html=1;sketch=1;curveFitting=1;jiggle=2;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=11;fontColor=#666666;" vertex="1" parent="1">
+          <mxGeometry x="500" y="840" width="600" height="30" as="geometry" />
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+
+  <!-- ======================== PAGE 3: STOK MASUK ======================== -->
+  <diagram id="page-stock-in" name="Stok Masuk">
+    <mxGraphModel dx="1400" dy="900" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1400" pageHeight="1000" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <!-- Browser Frame -->
+        <mxCell id="p3browser" value="" style="shape=mxgraph.mockup.containers.browserWindow;sketch=1;curveFitting=1;jiggle=2;rounded=0;strokeColor=#666666;fillColor=#FFFFFF;mainText=;recursiveResize=0;strokeWidth=1;fontSize=17;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="20" y="10" width="1360" height="970" as="geometry" />
+        </mxCell>
+        <mxCell id="p3url" value="localhost/simatik/stock/in" style="text;sketch=1;curveFitting=1;jiggle=2;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=12;fontColor=#999999;" vertex="1" parent="p3browser">
+          <mxGeometry x="250" y="27" width="400" height="20" as="geometry" />
+        </mxCell>
+
+        <!-- Sidebar -->
+        <mxCell id="p3sidebar" value="" style="rounded=0;whiteSpace=wrap;html=1;sketch=1;curveFitting=1;jiggle=2;fillColor=#F0F0F0;strokeColor=#CCCCCC;" vertex="1" parent="1">
+          <mxGeometry x="20" y="80" width="230" height="900" as="geometry" />
+        </mxCell>
+        <mxCell id="p3logo" value="Inventor-ssi&#xa;Inventory System" style="text;html=1;sketch=1;curveFitting=1;jiggle=2;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=14;fontStyle=1;fontColor=#435ebe;" vertex="1" parent="1">
+          <mxGeometry x="40" y="90" width="190" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="p3menuStok" value="⇄  Pergerakan Stok" style="rounded=1;whiteSpace=wrap;html=1;sketch=1;curveFitting=1;jiggle=2;fillColor=#435ebe;strokeColor=#435ebe;fontColor=#FFFFFF;fontSize=12;fontStyle=1;align=left;spacingLeft=15;" vertex="1" parent="1">
+          <mxGeometry x="35" y="340" width="200" height="35" as="geometry" />
+        </mxCell>
+        <mxCell id="p3subIn" value="  ↓  Barang Masuk" style="rounded=0;whiteSpace=wrap;html=1;sketch=1;curveFitting=1;jiggle=2;fillColor=#e8ecf4;strokeColor=none;fontColor=#435ebe;fontSize=11;fontStyle=1;align=left;spacingLeft=30;" vertex="1" parent="1">
+          <mxGeometry x="35" y="380" width="200" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="p3subOut" value="  ↑  Barang Keluar" style="rounded=0;whiteSpace=wrap;html=1;sketch=1;curveFitting=1;jiggle=2;fillColor=none;strokeColor=none;fontColor=#666666;fontSize=11;align=left;spacingLeft=30;" vertex="1" parent="1">
+          <mxGeometry x="35" y="408" width="200" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="p3subHist" value="  🕐  Riwayat" style="rounded=0;whiteSpace=wrap;html=1;sketch=1;curveFitting=1;jiggle=2;fillColor=none;strokeColor=none;fontColor=#666666;fontSize=11;align=left;spacingLeft=30;" vertex="1" parent="1">
+          <mxGeometry x="35" y="436" width="200" height="28" as="geometry" />
+        </mxCell>
+
+        <!-- Navbar -->
+        <mxCell id="p3navbar" value="" style="rounded=0;whiteSpace=wrap;html=1;sketch=1;curveFitting=1;jiggle=2;fillColor=#FFFFFF;strokeColor=#DDDDDD;" vertex="1" parent="1">
+          <mxGeometry x="250" y="80" width="1130" height="55" as="geometry" />
+        </mxCell>
+        <mxCell id="p3searchBox" value="🔍  Search..." style="rounded=1;whiteSpace=wrap;html=1;sketch=1;curveFitting=1;jiggle=2;fillColor=#F8F8F8;strokeColor=#CCCCCC;fontColor=#999999;fontSize=12;align=left;spacingLeft=10;" vertex="1" parent="1">
+          <mxGeometry x="270" y="93" width="250" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="p3admin" value="🔔  Admin Name  ☐" style="text;html=1;sketch=1;curveFitting=1;jiggle=2;strokeColor=none;fillColor=none;align=right;verticalAlign=middle;fontSize=12;fontColor=#333333;" vertex="1" parent="1">
+          <mxGeometry x="1150" y="93" width="200" height="30" as="geometry" />
+        </mxCell>
+
+        <!-- Page Title -->
+        <mxCell id="p3title" value="↓ Barang Masuk (Stock In)" style="text;html=1;sketch=1;curveFitting=1;jiggle=2;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=20;fontStyle=1;fontColor=#333333;" vertex="1" parent="1">
+          <mxGeometry x="270" y="150" width="400" height="35" as="geometry" />
+        </mxCell>
+
+        <!-- Form Card -->
+        <mxCell id="p3form" value="" style="rounded=1;whiteSpace=wrap;html=1;sketch=1;curveFitting=1;jiggle=2;fillColor=#FFFFFF;strokeColor=#DDDDDD;" vertex="1" parent="1">
+          <mxGeometry x="270" y="200" width="750" height="550" as="geometry" />
+        </mxCell>
+        <mxCell id="p3formTitle" value="Form Input Barang Masuk" style="text;html=1;sketch=1;curveFitting=1;jiggle=2;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=15;fontStyle=1;fontColor=#333333;" vertex="1" parent="1">
+          <mxGeometry x="290" y="210" width="350" height="30" as="geometry" />
+        </mxCell>
+
+        <!-- Pilih Produk -->
+        <mxCell id="p3lbl1" value="Pilih Produk *" style="text;html=1;sketch=1;curveFitting=1;jiggle=2;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=12;fontStyle=1;fontColor=#333333;" vertex="1" parent="1">
+          <mxGeometry x="290" y="255" width="200" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="p3inp1" value="▼  -- Pilih Produk --" style="rounded=1;whiteSpace=wrap;html=1;sketch=1;curveFitting=1;jiggle=2;fillColor=#FFFFFF;strokeColor=#CCCCCC;fontColor=#999999;fontSize=12;align=left;spacingLeft=10;" vertex="1" parent="1">
+          <mxGeometry x="290" y="282" width="700" height="38" as="geometry" />
+        </mxCell>
+
+        <!-- Product Info Card (shown after select) -->
+        <mxCell id="p3info" value="" style="rounded=1;whiteSpace=wrap;html=1;sketch=1;curveFitting=1;jiggle=2;fillColor=#E8F4FD;strokeColor=#B8DAFF;" vertex="1" parent="1">
+          <mxGeometry x="290" y="330" width="700" height="55" as="geometry" />
+        </mxCell>
+        <mxCell id="p3infoText" value="ℹ  Kertas HVS A4  |  SKU: ATK-001  |  Stok Saat Ini: &lt;b&gt;120&lt;/b&gt;  |  Min Stok: 20  |  Satuan: Rim" style="text;html=1;sketch=1;curveFitting=1;jiggle=2;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=11;fontColor=#0c5460;spacingLeft=10;" vertex="1" parent="1">
+          <mxGeometry x="290" y="330" width="700" height="55" as="geometry" />
+        </mxCell>
+
+        <!-- Jumlah -->
+        <mxCell id="p3lbl2" value="Jumlah Masuk *" style="text;html=1;sketch=1;curveFitting=1;jiggle=2;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=12;fontStyle=1;fontColor=#333333;" vertex="1" parent="1">
+          <mxGeometry x="290" y="400" width="200" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="p3inp2" value="50" style="rounded=1;whiteSpace=wrap;html=1;sketch=1;curveFitting=1;jiggle=2;fillColor=#FFFFFF;strokeColor=#CCCCCC;fontColor=#333333;fontSize=12;align=left;spacingLeft=10;" vertex="1" parent="1">
+          <mxGeometry x="290" y="427" width="330" height="38" as="geometry" />
+        </mxCell>
+
+        <!-- No Referensi -->
+        <mxCell id="p3lbl3" value="No. Referensi" style="text;html=1;sketch=1;curveFitting=1;jiggle=2;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=12;fontStyle=1;fontColor=#333333;" vertex="1" parent="1">
+          <mxGeometry x="660" y="400" width="200" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="p3inp3" value="INV/2026/03/001" style="rounded=1;whiteSpace=wrap;html=1;sketch=1;curveFitting=1;jiggle=2;fillColor=#FFFFFF;strokeColor=#CCCCCC;fontColor=#333333;fontSize=12;align=left;spacingLeft=10;" vertex="1" parent="1">
+          <mxGeometry x="660" y="427" width="330" height="38" as="geometry" />
+        </mxCell>
+
+        <!-- Catatan -->
+        <mxCell id="p3lbl4" value="Catatan" style="text;html=1;sketch=1;curveFitting=1;jiggle=2;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=12;fontStyle=1;fontColor=#333333;" vertex="1" parent="1">
+          <mxGeometry x="290" y="480" width="200" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="p3inp4" value="Pembelian rutin bulanan dari supplier X" style="rounded=1;whiteSpace=wrap;html=1;sketch=1;curveFitting=1;jiggle=2;fillColor=#FFFFFF;strokeColor=#CCCCCC;fontColor=#333333;fontSize=12;align=left;verticalAlign=top;spacingLeft=10;spacingTop=10;" vertex="1" parent="1">
+          <mxGeometry x="290" y="507" width="700" height="90" as="geometry" />
+        </mxCell>
+
+        <!-- Summary -->
+        <mxCell id="p3summary" value="" style="rounded=1;whiteSpace=wrap;html=1;sketch=1;curveFitting=1;jiggle=2;fillColor=#D4EDDA;strokeColor=#C3E6CB;" vertex="1" parent="1">
+          <mxGeometry x="290" y="610" width="700" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="p3sumText" value="📊 Stok setelah penambahan:  120 + 50 = &lt;b&gt;170&lt;/b&gt; Rim" style="text;html=1;sketch=1;curveFitting=1;jiggle=2;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=12;fontColor=#155724;spacingLeft=10;" vertex="1" parent="1">
+          <mxGeometry x="290" y="610" width="700" height="45" as="geometry" />
+        </mxCell>
+
+        <!-- Buttons -->
+        <mxCell id="p3btnSubmit" value="✓ Simpan Stok Masuk" style="rounded=1;whiteSpace=wrap;html=1;sketch=1;curveFitting=1;jiggle=2;fillColor=#28a745;strokeColor=#28a745;fontColor=#FFFFFF;fontSize=14;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="290" y="675" width="240" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="p3btnCancel" value="Batal" style="rounded=1;whiteSpace=wrap;html=1;sketch=1;curveFitting=1;jiggle=2;fillColor=#6c757d;strokeColor=#6c757d;fontColor=#FFFFFF;fontSize=14;" vertex="1" parent="1">
+          <mxGeometry x="545" y="675" width="120" height="45" as="geometry" />
+        </mxCell>
+
+        <!-- Riwayat Terakhir Panel -->
+        <mxCell id="p3hist" value="" style="rounded=1;whiteSpace=wrap;html=1;sketch=1;curveFitting=1;jiggle=2;fillColor=#FFFFFF;strokeColor=#DDDDDD;" vertex="1" parent="1">
+          <mxGeometry x="1040" y="200" width="315" height="400" as="geometry" />
+        </mxCell>
+        <mxCell id="p3histTitle" value="🕐 Riwayat Masuk Terakhir" style="text;html=1;sketch=1;curveFitting=1;jiggle=2;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=13;fontStyle=1;fontColor=#333333;" vertex="1" parent="1">
+          <mxGeometry x="1055" y="210" width="280" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="p3h1" value="Kertas HVS A4&#xa;+50 | 2 Mar 2026" style="text;html=1;sketch=1;curveFitting=1;jiggle=2;strokeColor=none;fillColor=#F0FFF0;rounded=1;align=left;verticalAlign=middle;fontSize=11;fontColor=#333333;spacingLeft=10;" vertex="1" parent="1">
+          <mxGeometry x="1055" y="250" width="285" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="p3h2" value="Pulpen Pilot G-1&#xa;+100 | 1 Mar 2026" style="text;html=1;sketch=1;curveFitting=1;jiggle=2;strokeColor=none;fillColor=#F0FFF0;rounded=1;align=left;verticalAlign=middle;fontSize=11;fontColor=#333333;spacingLeft=10;" vertex="1" parent="1">
+          <mxGeometry x="1055" y="305" width="285" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="p3h3" value="Stapler Kenko HD-10&#xa;+30 | 28 Feb 2026" style="text;html=1;sketch=1;curveFitting=1;jiggle=2;strokeColor=none;fillColor=#F0FFF0;rounded=1;align=left;verticalAlign=middle;fontSize=11;fontColor=#333333;spacingLeft=10;" vertex="1" parent="1">
+          <mxGeometry x="1055" y="360" width="285" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="p3h4" value="Tinta Printer HP 680&#xa;+15 | 27 Feb 2026" style="text;html=1;sketch=1;curveFitting=1;jiggle=2;strokeColor=none;fillColor=#F0FFF0;rounded=1;align=left;verticalAlign=middle;fontSize=11;fontColor=#333333;spacingLeft=10;" vertex="1" parent="1">
+          <mxGeometry x="1055" y="415" width="285" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="p3histAll" value="Lihat Semua Riwayat →" style="text;html=1;sketch=1;curveFitting=1;jiggle=2;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=11;fontColor=#435ebe;fontStyle=4;" vertex="1" parent="1">
+          <mxGeometry x="1090" y="480" width="220" height="25" as="geometry" />
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+
+  <!-- ======================== PAGE 4: PERMINTAAN ATK ======================== -->
+  <diagram id="page-loans" name="Permintaan ATK">
+    <mxGraphModel dx="1400" dy="900" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1400" pageHeight="1000" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <!-- Browser Frame -->
+        <mxCell id="p4browser" value="" style="shape=mxgraph.mockup.containers.browserWindow;sketch=1;curveFitting=1;jiggle=2;rounded=0;strokeColor=#666666;fillColor=#FFFFFF;mainText=;recursiveResize=0;strokeWidth=1;fontSize=17;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="20" y="10" width="1360" height="970" as="geometry" />
+        </mxCell>
+        <mxCell id="p4url" value="localhost/simatik/loans" style="text;sketch=1;curveFitting=1;jiggle=2;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=12;fontColor=#999999;" vertex="1" parent="p4browser">
+          <mxGeometry x="250" y="27" width="400" height="20" as="geometry" />
+        </mxCell>
+
+        <!-- Sidebar -->
+        <mxCell id="p4sidebar" value="" style="rounded=0;whiteSpace=wrap;html=1;sketch=1;curveFitting=1;jiggle=2;fillColor=#F0F0F0;strokeColor=#CCCCCC;" vertex="1" parent="1">
+          <mxGeometry x="20" y="80" width="230" height="900" as="geometry" />
+        </mxCell>
+        <mxCell id="p4logo" value="Inventor-ssi&#xa;Inventory System" style="text;html=1;sketch=1;curveFitting=1;jiggle=2;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=14;fontStyle=1;fontColor=#435ebe;" vertex="1" parent="1">
+          <mxGeometry x="40" y="90" width="190" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="p4menuLoan" value="📋  Permintaan ATK" style="rounded=1;whiteSpace=wrap;html=1;sketch=1;curveFitting=1;jiggle=2;fillColor=#435ebe;strokeColor=#435ebe;fontColor=#FFFFFF;fontSize=12;fontStyle=1;align=left;spacingLeft=15;" vertex="1" parent="1">
+          <mxGeometry x="35" y="435" width="200" height="35" as="geometry" />
+        </mxCell>
+
+        <!-- Navbar -->
+        <mxCell id="p4navbar" value="" style="rounded=0;whiteSpace=wrap;html=1;sketch=1;curveFitting=1;jiggle=2;fillColor=#FFFFFF;strokeColor=#DDDDDD;" vertex="1" parent="1">
+          <mxGeometry x="250" y="80" width="1130" height="55" as="geometry" />
+        </mxCell>
+        <mxCell id="p4search" value="🔍  Search..." style="rounded=1;whiteSpace=wrap;html=1;sketch=1;curveFitting=1;jiggle=2;fillColor=#F8F8F8;strokeColor=#CCCCCC;fontColor=#999999;fontSize=12;align=left;spacingLeft=10;" vertex="1" parent="1">
+          <mxGeometry x="270" y="93" width="250" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="p4admin" value="🔔  Admin Name  ☐" style="text;html=1;sketch=1;curveFitting=1;jiggle=2;strokeColor=none;fillColor=none;align=right;verticalAlign=middle;fontSize=12;fontColor=#333333;" vertex="1" parent="1">
+          <mxGeometry x="1150" y="93" width="200" height="30" as="geometry" />
+        </mxCell>
+
+        <!-- Page Title -->
+        <mxCell id="p4title" value="📋 Daftar Permintaan ATK" style="text;html=1;sketch=1;curveFitting=1;jiggle=2;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=20;fontStyle=1;fontColor=#333333;" vertex="1" parent="1">
+          <mxGeometry x="270" y="150" width="400" height="35" as="geometry" />
+        </mxCell>
+
+        <!-- Stats Cards -->
+        <mxCell id="p4stat1" value="" style="rounded=1;whiteSpace=wrap;html=1;sketch=1;curveFitting=1;jiggle=2;fillColor=#FFF3CD;strokeColor=#FFEEBA;" vertex="1" parent="1">
+          <mxGeometry x="270" y="195" width="250" height="65" as="geometry" />
+        </mxCell>
+        <mxCell id="p4stat1T" value="⏳ Menunggu&#xa;&lt;b style='font-size:20px'&gt;5&lt;/b&gt;" style="text;html=1;sketch=1;curveFitting=1;jiggle=2;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=12;fontColor=#856404;" vertex="1" parent="1">
+          <mxGeometry x="270" y="195" width="250" height="65" as="geometry" />
+        </mxCell>
+
+        <mxCell id="p4stat2" value="" style="rounded=1;whiteSpace=wrap;html=1;sketch=1;curveFitting=1;jiggle=2;fillColor=#D4EDDA;strokeColor=#C3E6CB;" vertex="1" parent="1">
+          <mxGeometry x="535" y="195" width="250" height="65" as="geometry" />
+        </mxCell>
+        <mxCell id="p4stat2T" value="✅ Disetujui&#xa;&lt;b style='font-size:20px'&gt;23&lt;/b&gt;" style="text;html=1;sketch=1;curveFitting=1;jiggle=2;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=12;fontColor=#155724;" vertex="1" parent="1">
+          <mxGeometry x="535" y="195" width="250" height="65" as="geometry" />
+        </mxCell>
+
+        <mxCell id="p4stat3" value="" style="rounded=1;whiteSpace=wrap;html=1;sketch=1;curveFitting=1;jiggle=2;fillColor=#CCE5FF;strokeColor=#B8DAFF;" vertex="1" parent="1">
+          <mxGeometry x="800" y="195" width="250" height="65" as="geometry" />
+        </mxCell>
+        <mxCell id="p4stat3T" value="🔄 Dikembalikan&#xa;&lt;b style='font-size:20px'&gt;18&lt;/b&gt;" style="text;html=1;sketch=1;curveFitting=1;jiggle=2;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=12;fontColor=#004085;" vertex="1" parent="1">
+          <mxGeometry x="800" y="195" width="250" height="65" as="geometry" />
+        </mxCell>
+
+        <!-- Add Button -->
+        <mxCell id="p4addBtn" value="+ Buat Permintaan" style="rounded=1;whiteSpace=wrap;html=1;sketch=1;curveFitting=1;jiggle=2;fillColor=#435ebe;strokeColor=#435ebe;fontColor=#FFFFFF;fontSize=13;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="1160" y="215" width="195" height="35" as="geometry" />
+        </mxCell>
+
+        <!-- Filter Bar -->
+        <mxCell id="p4filterBar" value="" style="rounded=1;whiteSpace=wrap;html=1;sketch=1;curveFitting=1;jiggle=2;fillColor=#FFFFFF;strokeColor=#DDDDDD;" vertex="1" parent="1">
+          <mxGeometry x="270" y="275" width="1085" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="p4fSearch" value="🔍 Cari nama peminjam..." style="rounded=1;whiteSpace=wrap;html=1;sketch=1;curveFitting=1;jiggle=2;fillColor=#F8F8F8;strokeColor=#CCCCCC;fontColor=#999999;fontSize=12;align=left;spacingLeft=10;" vertex="1" parent="1">
+          <mxGeometry x="285" y="285" width="260" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="p4fStatus" value="▼  Semua Status" style="rounded=1;whiteSpace=wrap;html=1;sketch=1;curveFitting=1;jiggle=2;fillColor=#F8F8F8;strokeColor=#CCCCCC;fontColor=#666666;fontSize=12;align=left;spacingLeft=10;" vertex="1" parent="1">
+          <mxGeometry x="560" y="285" width="170" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="p4fDate" value="📅  Tanggal: Semua" style="rounded=1;whiteSpace=wrap;html=1;sketch=1;curveFitting=1;jiggle=2;fillColor=#F8F8F8;strokeColor=#CCCCCC;fontColor=#666666;fontSize=12;align=left;spacingLeft=10;" vertex="1" parent="1">
+          <mxGeometry x="745" y="285" width="180" height="30" as="geometry" />
+        </mxCell>
+
+        <!-- Loans Table -->
+        <mxCell id="p4table" value="" style="rounded=1;whiteSpace=wrap;html=1;sketch=1;curveFitting=1;jiggle=2;fillColor=#FFFFFF;strokeColor=#DDDDDD;" vertex="1" parent="1">
+          <mxGeometry x="270" y="340" width="1085" height="530" as="geometry" />
+        </mxCell>
+        <!-- Table Header -->
+        <mxCell id="p4th" value="" style="rounded=0;whiteSpace=wrap;html=1;sketch=1;curveFitting=1;jiggle=2;fillColor=#F8F8F8;strokeColor=#EEEEEE;" vertex="1" parent="1">
+          <mxGeometry x="280" y="350" width="1065" height="35" as="geometry" />
+        </mxCell>
+        <mxCell id="p4thText" value="No  |  Peminjam                  |  Unit / Bagian  |  Tgl Pinjam    |  Tgl Kembali  |  Status          |  Items  |  Aksi" style="text;html=1;sketch=1;curveFitting=1;jiggle=2;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=11;fontStyle=1;fontColor=#666666;spacingLeft=8;" vertex="1" parent="1">
+          <mxGeometry x="280" y="350" width="1065" height="35" as="geometry" />
+        </mxCell>
+        <!-- Row 1 -->
+        <mxCell id="p4r1" value="1    |  Ahmad Fauzi              |  IT Division      |  2 Mar 2026  |  9 Mar 2026  |  ⏳ Pending     |  3 item  |  👁 ✓ ✗" style="text;html=1;sketch=1;curveFitting=1;jiggle=2;strokeColor=none;fillColor=#FFF8E1;align=left;verticalAlign=middle;fontSize=11;fontColor=#333333;spacingLeft=8;" vertex="1" parent="1">
+          <mxGeometry x="280" y="390" width="1065" height="35" as="geometry" />
+        </mxCell>
+        <!-- Row 2 -->
+        <mxCell id="p4r2" value="2    |  Siti Nurhaliza              |  HR Dept          |  1 Mar 2026  |  8 Mar 2026  |  ⏳ Pending     |  2 item  |  👁 ✓ ✗" style="text;html=1;sketch=1;curveFitting=1;jiggle=2;strokeColor=none;fillColor=#FFF8E1;align=left;verticalAlign=middle;fontSize=11;fontColor=#333333;spacingLeft=8;" vertex="1" parent="1">
+          <mxGeometry x="280" y="430" width="1065" height="35" as="geometry" />
+        </mxCell>
+        <!-- Row 3 -->
+        <mxCell id="p4r3" value="3    |  Budi Santoso                |  Finance           |  28 Feb 2026  |  7 Mar 2026  |  ✅ Approved  |  5 item  |  👁 🔄" style="text;html=1;sketch=1;curveFitting=1;jiggle=2;strokeColor=none;fillColor=#E8F5E9;align=left;verticalAlign=middle;fontSize=11;fontColor=#333333;spacingLeft=8;" vertex="1" parent="1">
+          <mxGeometry x="280" y="470" width="1065" height="35" as="geometry" />
+        </mxCell>
+        <!-- Row 4 -->
+        <mxCell id="p4r4" value="4    |  Dewi Lestari                 |  Marketing       |  25 Feb 2026  |  4 Mar 2026  |  🔄 Returned  |  2 item  |  👁" style="text;html=1;sketch=1;curveFitting=1;jiggle=2;strokeColor=none;fillColor=#E3F2FD;align=left;verticalAlign=middle;fontSize=11;fontColor=#333333;spacingLeft=8;" vertex="1" parent="1">
+          <mxGeometry x="280" y="510" width="1065" height="35" as="geometry" />
+        </mxCell>
+        <!-- Row 5 -->
+        <mxCell id="p4r5" value="5    |  Rudi Hermawan            |  Operations      |  20 Feb 2026  |   -                  |  ❌ Canceled   |  1 item  |  👁" style="text;html=1;sketch=1;curveFitting=1;jiggle=2;strokeColor=none;fillColor=#FFEBEE;align=left;verticalAlign=middle;fontSize=11;fontColor=#333333;spacingLeft=8;" vertex="1" parent="1">
+          <mxGeometry x="280" y="550" width="1065" height="35" as="geometry" />
+        </mxCell>
+
+        <!-- Pagination -->
+        <mxCell id="p4paging" value="◄  [ 1 ]  2  3  ►                    Menampilkan 1-10 dari 28 permintaan" style="text;html=1;sketch=1;curveFitting=1;jiggle=2;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=11;fontColor=#666666;" vertex="1" parent="1">
+          <mxGeometry x="500" y="830" width="600" height="30" as="geometry" />
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+
+  <!-- ======================== PAGE 5: FORM PERMINTAAN ATK ======================== -->
+  <diagram id="page-loan-create" name="Form Permintaan ATK">
+    <mxGraphModel dx="1400" dy="900" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1400" pageHeight="1000" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <!-- Browser Frame -->
+        <mxCell id="p5browser" value="" style="shape=mxgraph.mockup.containers.browserWindow;sketch=1;curveFitting=1;jiggle=2;rounded=0;strokeColor=#666666;fillColor=#FFFFFF;mainText=;recursiveResize=0;strokeWidth=1;fontSize=17;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="20" y="10" width="1360" height="970" as="geometry" />
+        </mxCell>
+        <mxCell id="p5url" value="localhost/simatik/loans/create" style="text;sketch=1;curveFitting=1;jiggle=2;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=12;fontColor=#999999;" vertex="1" parent="p5browser">
+          <mxGeometry x="250" y="27" width="400" height="20" as="geometry" />
+        </mxCell>
+
+        <!-- Sidebar -->
+        <mxCell id="p5sidebar" value="" style="rounded=0;whiteSpace=wrap;html=1;sketch=1;curveFitting=1;jiggle=2;fillColor=#F0F0F0;strokeColor=#CCCCCC;" vertex="1" parent="1">
+          <mxGeometry x="20" y="80" width="230" height="900" as="geometry" />
+        </mxCell>
+        <mxCell id="p5logo" value="Inventor-ssi&#xa;Inventory System" style="text;html=1;sketch=1;curveFitting=1;jiggle=2;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=14;fontStyle=1;fontColor=#435ebe;" vertex="1" parent="1">
+          <mxGeometry x="40" y="90" width="190" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="p5menuLoan" value="📋  Permintaan ATK" style="rounded=1;whiteSpace=wrap;html=1;sketch=1;curveFitting=1;jiggle=2;fillColor=#435ebe;strokeColor=#435ebe;fontColor=#FFFFFF;fontSize=12;fontStyle=1;align=left;spacingLeft=15;" vertex="1" parent="1">
+          <mxGeometry x="35" y="435" width="200" height="35" as="geometry" />
+        </mxCell>
+
+        <!-- Navbar -->
+        <mxCell id="p5navbar" value="" style="rounded=0;whiteSpace=wrap;html=1;sketch=1;curveFitting=1;jiggle=2;fillColor=#FFFFFF;strokeColor=#DDDDDD;" vertex="1" parent="1">
+          <mxGeometry x="250" y="80" width="1130" height="55" as="geometry" />
+        </mxCell>
+        <mxCell id="p5searchBox" value="🔍  Search..." style="rounded=1;whiteSpace=wrap;html=1;sketch=1;curveFitting=1;jiggle=2;fillColor=#F8F8F8;strokeColor=#CCCCCC;fontColor=#999999;fontSize=12;align=left;spacingLeft=10;" vertex="1" parent="1">
+          <mxGeometry x="270" y="93" width="250" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="p5admin" value="🔔  Admin Name  ☐" style="text;html=1;sketch=1;curveFitting=1;jiggle=2;strokeColor=none;fillColor=none;align=right;verticalAlign=middle;fontSize=12;fontColor=#333333;" vertex="1" parent="1">
+          <mxGeometry x="1150" y="93" width="200" height="30" as="geometry" />
+        </mxCell>
+
+        <!-- Page Title -->
+        <mxCell id="p5title" value="📋 Buat Permintaan ATK Baru" style="text;html=1;sketch=1;curveFitting=1;jiggle=2;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=20;fontStyle=1;fontColor=#333333;" vertex="1" parent="1">
+          <mxGeometry x="270" y="150" width="450" height="35" as="geometry" />
+        </mxCell>
+
+        <!-- Form Card - Borrower Info -->
+        <mxCell id="p5form1" value="" style="rounded=1;whiteSpace=wrap;html=1;sketch=1;curveFitting=1;jiggle=2;fillColor=#FFFFFF;strokeColor=#DDDDDD;" vertex="1" parent="1">
+          <mxGeometry x="270" y="200" width="1085" height="195" as="geometry" />
+        </mxCell>
+        <mxCell id="p5form1Title" value="👤 Data Peminjam" style="text;html=1;sketch=1;curveFitting=1;jiggle=2;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=15;fontStyle=1;fontColor=#333333;" vertex="1" parent="1">
+          <mxGeometry x="290" y="210" width="300" height="30" as="geometry" />
+        </mxCell>
+
+        <!-- Row 1: Name + ID -->
+        <mxCell id="p5lbl1" value="Nama Peminjam *" style="text;html=1;sketch=1;curveFitting=1;jiggle=2;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=12;fontStyle=1;fontColor=#333333;" vertex="1" parent="1">
+          <mxGeometry x="290" y="250" width="200" height="22" as="geometry" />
+        </mxCell>
+        <mxCell id="p5inp1" value="Ahmad Fauzi" style="rounded=1;whiteSpace=wrap;html=1;sketch=1;curveFitting=1;jiggle=2;fillColor=#FFFFFF;strokeColor=#CCCCCC;fontColor=#333333;fontSize=12;align=left;spacingLeft=10;" vertex="1" parent="1">
+          <mxGeometry x="290" y="274" width="350" height="35" as="geometry" />
+        </mxCell>
+        <mxCell id="p5lbl2" value="NIP / ID *" style="text;html=1;sketch=1;curveFitting=1;jiggle=2;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=12;fontStyle=1;fontColor=#333333;" vertex="1" parent="1">
+          <mxGeometry x="670" y="250" width="200" height="22" as="geometry" />
+        </mxCell>
+        <mxCell id="p5inp2" value="198503212010011002" style="rounded=1;whiteSpace=wrap;html=1;sketch=1;curveFitting=1;jiggle=2;fillColor=#FFFFFF;strokeColor=#CCCCCC;fontColor=#333333;fontSize=12;align=left;spacingLeft=10;" vertex="1" parent="1">
+          <mxGeometry x="670" y="274" width="350" height="35" as="geometry" />
+        </mxCell>
+
+        <!-- Row 2: Unit + Contact -->
+        <mxCell id="p5lbl3" value="Unit / Bagian *" style="text;html=1;sketch=1;curveFitting=1;jiggle=2;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=12;fontStyle=1;fontColor=#333333;" vertex="1" parent="1">
+          <mxGeometry x="290" y="320" width="200" height="22" as="geometry" />
+        </mxCell>
+        <mxCell id="p5inp3" value="IT Division" style="rounded=1;whiteSpace=wrap;html=1;sketch=1;curveFitting=1;jiggle=2;fillColor=#FFFFFF;strokeColor=#CCCCCC;fontColor=#333333;fontSize=12;align=left;spacingLeft=10;" vertex="1" parent="1">
+          <mxGeometry x="290" y="344" width="350" height="35" as="geometry" />
+        </mxCell>
+        <mxCell id="p5lbl4" value="Kontak *" style="text;html=1;sketch=1;curveFitting=1;jiggle=2;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=12;fontStyle=1;fontColor=#333333;" vertex="1" parent="1">
+          <mxGeometry x="670" y="320" width="200" height="22" as="geometry" />
+        </mxCell>
+        <mxCell id="p5inp4" value="081234567890" style="rounded=1;whiteSpace=wrap;html=1;sketch=1;curveFitting=1;jiggle=2;fillColor=#FFFFFF;strokeColor=#CCCCCC;fontColor=#333333;fontSize=12;align=left;spacingLeft=10;" vertex="1" parent="1">
+          <mxGeometry x="670" y="344" width="350" height="35" as="geometry" />
+        </mxCell>
+
+        <!-- Form Card - Loan Details -->
+        <mxCell id="p5form2" value="" style="rounded=1;whiteSpace=wrap;html=1;sketch=1;curveFitting=1;jiggle=2;fillColor=#FFFFFF;strokeColor=#DDDDDD;" vertex="1" parent="1">
+          <mxGeometry x="270" y="410" width="1085" height="130" as="geometry" />
+        </mxCell>
+        <mxCell id="p5form2Title" value="📅 Detail Peminjaman" style="text;html=1;sketch=1;curveFitting=1;jiggle=2;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=15;fontStyle=1;fontColor=#333333;" vertex="1" parent="1">
+          <mxGeometry x="290" y="420" width="300" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="p5lbl5" value="Tgl Pinjam *" style="text;html=1;sketch=1;curveFitting=1;jiggle=2;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=12;fontStyle=1;fontColor=#333333;" vertex="1" parent="1">
+          <mxGeometry x="290" y="460" width="200" height="22" as="geometry" />
+        </mxCell>
+        <mxCell id="p5inp5" value="📅  02/03/2026" style="rounded=1;whiteSpace=wrap;html=1;sketch=1;curveFitting=1;jiggle=2;fillColor=#FFFFFF;strokeColor=#CCCCCC;fontColor=#333333;fontSize=12;align=left;spacingLeft=10;" vertex="1" parent="1">
+          <mxGeometry x="290" y="484" width="250" height="35" as="geometry" />
+        </mxCell>
+        <mxCell id="p5lbl6" value="Tgl Kembali *" style="text;html=1;sketch=1;curveFitting=1;jiggle=2;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=12;fontStyle=1;fontColor=#333333;" vertex="1" parent="1">
+          <mxGeometry x="570" y="460" width="200" height="22" as="geometry" />
+        </mxCell>
+        <mxCell id="p5inp6" value="📅  09/03/2026" style="rounded=1;whiteSpace=wrap;html=1;sketch=1;curveFitting=1;jiggle=2;fillColor=#FFFFFF;strokeColor=#CCCCCC;fontColor=#333333;fontSize=12;align=left;spacingLeft=10;" vertex="1" parent="1">
+          <mxGeometry x="570" y="484" width="250" height="35" as="geometry" />
+        </mxCell>
+        <mxCell id="p5lbl7" value="Catatan" style="text;html=1;sketch=1;curveFitting=1;jiggle=2;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=12;fontStyle=1;fontColor=#333333;" vertex="1" parent="1">
+          <mxGeometry x="850" y="460" width="200" height="22" as="geometry" />
+        </mxCell>
+        <mxCell id="p5inp7" value="Untuk kebutuhan project" style="rounded=1;whiteSpace=wrap;html=1;sketch=1;curveFitting=1;jiggle=2;fillColor=#FFFFFF;strokeColor=#CCCCCC;fontColor=#333333;fontSize=12;align=left;spacingLeft=10;" vertex="1" parent="1">
+          <mxGeometry x="850" y="484" width="490" height="35" as="geometry" />
+        </mxCell>
+
+        <!-- Items Card -->
+        <mxCell id="p5form3" value="" style="rounded=1;whiteSpace=wrap;html=1;sketch=1;curveFitting=1;jiggle=2;fillColor=#FFFFFF;strokeColor=#DDDDDD;" vertex="1" parent="1">
+          <mxGeometry x="270" y="555" width="1085" height="260" as="geometry" />
+        </mxCell>
+        <mxCell id="p5form3Title" value="📦 Item yang Dipinjam" style="text;html=1;sketch=1;curveFitting=1;jiggle=2;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=15;fontStyle=1;fontColor=#333333;" vertex="1" parent="1">
+          <mxGeometry x="290" y="565" width="300" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="p5addItem" value="+ Tambah Item" style="rounded=1;whiteSpace=wrap;html=1;sketch=1;curveFitting=1;jiggle=2;fillColor=#435ebe;strokeColor=#435ebe;fontColor=#FFFFFF;fontSize=11;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="1200" y="567" width="140" height="28" as="geometry" />
+        </mxCell>
+
+        <!-- Items Table -->
+        <mxCell id="p5ith" value="" style="rounded=0;whiteSpace=wrap;html=1;sketch=1;curveFitting=1;jiggle=2;fillColor=#F8F8F8;strokeColor=#EEEEEE;" vertex="1" parent="1">
+          <mxGeometry x="280" y="605" width="1065" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="p5ithText" value="  No  |  Produk                                                |  Stok Tersedia  |  Qty Pinjam  |  Catatan              |  Aksi" style="text;html=1;sketch=1;curveFitting=1;jiggle=2;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=11;fontStyle=1;fontColor=#666666;spacingLeft=8;" vertex="1" parent="1">
+          <mxGeometry x="280" y="605" width="1065" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="p5ir1" value="  1     |  ▼ Kertas HVS A4                                  |         120           |  [ 10 ]          |  Untuk cetak        |  🗑" style="text;html=1;sketch=1;curveFitting=1;jiggle=2;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=11;fontColor=#333333;spacingLeft=8;" vertex="1" parent="1">
+          <mxGeometry x="280" y="640" width="1065" height="35" as="geometry" />
+        </mxCell>
+        <mxCell id="p5ir2" value="  2     |  ▼ Pulpen Pilot G-1                               |           85            |  [ 5 ]             |                             |  🗑" style="text;html=1;sketch=1;curveFitting=1;jiggle=2;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=11;fontColor=#333333;spacingLeft=8;" vertex="1" parent="1">
+          <mxGeometry x="280" y="680" width="1065" height="35" as="geometry" />
+        </mxCell>
+        <mxCell id="p5ir3" value="  3     |  ▼ Stapler Kenko HD-10                       |             3             |  [ 1 ]             |                             |  🗑" style="text;html=1;sketch=1;curveFitting=1;jiggle=2;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=11;fontColor=#333333;spacingLeft=8;" vertex="1" parent="1">
+          <mxGeometry x="280" y="720" width="1065" height="35" as="geometry" />
+        </mxCell>
+
+        <!-- Summary -->
+        <mxCell id="p5totalItems" value="Total: &lt;b&gt;3 item&lt;/b&gt;  |  Total qty: &lt;b&gt;16 unit&lt;/b&gt;" style="text;html=1;sketch=1;curveFitting=1;jiggle=2;strokeColor=none;fillColor=#E8F4FD;rounded=1;align=left;verticalAlign=middle;fontSize=12;fontColor=#0c5460;spacingLeft=15;" vertex="1" parent="1">
+          <mxGeometry x="280" y="770" width="1065" height="30" as="geometry" />
+        </mxCell>
+
+        <!-- Buttons -->
+        <mxCell id="p5btnSubmit" value="📋 Ajukan Permintaan" style="rounded=1;whiteSpace=wrap;html=1;sketch=1;curveFitting=1;jiggle=2;fillColor=#435ebe;strokeColor=#435ebe;fontColor=#FFFFFF;fontSize=14;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="270" y="830" width="250" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="p5btnCancel" value="Batal" style="rounded=1;whiteSpace=wrap;html=1;sketch=1;curveFitting=1;jiggle=2;fillColor=#6c757d;strokeColor=#6c757d;fontColor=#FFFFFF;fontSize=14;" vertex="1" parent="1">
+          <mxGeometry x="535" y="830" width="120" height="45" as="geometry" />
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+
+</mxfile>

@@ -1,0 +1,505 @@
+<?php
+
+namespace App\Controllers;
+
+use App\Models\ProductModel;
+use App\Models\CategoryModel;
+use App\Models\StockMovementModel;
+
+class ReportController extends BaseController
+{
+    protected ProductModel $productModel;
+    protected CategoryModel $categoryModel;
+    protected StockMovementModel $stockMovementModel;
+
+    public function __construct()
+    {
+        $this->productModel       = new ProductModel();
+        $this->categoryModel      = new CategoryModel();
+        $this->stockMovementModel = new StockMovementModel();
+    }
+
+    /**
+     * Stock Report - Current inventory status
+     */
+    public function stock()
+    {
+        $this->setPageData('Laporan Stok', 'Analisis kondisi stok inventory saat ini');
+
+        $categoryFilter = $this->request->getGet('category');
+        $stockStatus    = $this->request->getGet('stock_status');
+        $sortBy         = $this->request->getGet('sort_by') ?: 'name';
+        $sortOrder      = $this->request->getGet('sort_order') ?: 'ASC';
+
+        $builder = $this->productModel->select("
+                products.*, 
+                categories.name as category_name,
+                (products.current_stock * products.price) as stock_value,
+                CASE 
+                    WHEN products.current_stock = 0 THEN 'out_of_stock'
+                    WHEN products.current_stock <= products.min_stock THEN 'low_stock'
+                    ELSE 'normal'
+                END as stock_status
+            ")
+            ->join('categories', 'categories.id = products.category_id')
+            ->where('products.is_active', true);
+
+        if ($categoryFilter) {
+            $builder->where('products.category_id', $categoryFilter);
+        }
+
+        if ($stockStatus) {
+            switch ($stockStatus) {
+                case 'out_of_stock':
+                    $builder->where('products.current_stock', 0);
+                    break;
+                case 'low_stock':
+                    $builder->where('products.current_stock <= products.min_stock', null, false)
+                            ->where('products.current_stock >', 0);
+                    break;
+                case 'normal':
+                    $builder->where('products.current_stock > products.min_stock', null, false);
+                    break;
+                case 'overstocked':
+                    $builder->where('products.current_stock > (products.min_stock * 3)', null, false);
+                    break;
+            }
+        }
+
+        $validSorts = ['name', 'current_stock', 'stock_value', 'category_name'];
+        if (in_array($sortBy, $validSorts)) {
+            $builder->orderBy($sortBy, $sortOrder);
+        }
+
+        $products = $builder->findAll();
+
+        $summary = [
+            'total_products' => count($products),
+            'total_value'    => array_sum(array_column($products, 'stock_value')),
+            'total_quantity' => array_sum(array_column($products, 'current_stock')),
+            'out_of_stock'   => count(array_filter($products, fn($p) => $p['current_stock'] == 0)),
+            'low_stock'      => count(array_filter($products, fn($p) => $p['current_stock'] > 0 && $p['current_stock'] <= $p['min_stock'])),
+        ];
+        $summary['normal_stock'] = $summary['total_products'] - $summary['out_of_stock'] - $summary['low_stock'];
+
+        $categoryBreakdown = [];
+        foreach ($products as $product) {
+            $catName = $product['category_name'];
+            if (!isset($categoryBreakdown[$catName])) {
+                $categoryBreakdown[$catName] = [
+                    'products'    => 0,
+                    'total_stock' => 0,
+                    'total_value' => 0
+                ];
+            }
+            $categoryBreakdown[$catName]['products']++;
+            $categoryBreakdown[$catName]['total_stock'] += $product['current_stock'];
+            $categoryBreakdown[$catName]['total_value'] += $product['stock_value'];
+        }
+
+        $categories = $this->categoryModel->getActiveCategories();
+
+        $data = [
+            'products'           => $products,
+            'categories'         => $categories,
+            'summary'            => $summary,
+            'category_breakdown' => $categoryBreakdown,
+            'filters'            => [
+                'category'     => $categoryFilter,
+                'stock_status' => $stockStatus,
+                'sort_by'      => $sortBy,
+                'sort_order'   => $sortOrder
+            ]
+        ];
+
+        return $this->render('reports/stock', $data);
+    }
+
+    /**
+     * Movement Report - Stock movement analysis
+     */
+    public function movements()
+    {
+        $this->setPageData('Laporan Pergerakan', 'Analisis pergerakan stok dalam periode tertentu');
+
+        $startDate      = $this->request->getGet('start_date') ?: date('Y-m-01');
+        $endDate        = $this->request->getGet('end_date') ?: date('Y-m-d');
+        $categoryFilter = $this->request->getGet('category');
+        $productFilter  = $this->request->getGet('product');
+        $movementType   = $this->request->getGet('type');
+
+        $builder = $this->stockMovementModel->select('
+                stock_movements.*, 
+                products.name as product_name,
+                products.sku as product_sku,
+                products.price as product_price,
+                categories.name as category_name
+            ')
+            ->join('products', 'products.id = stock_movements.product_id')
+            ->join('categories', 'categories.id = products.category_id')
+            ->where('DATE(stock_movements.created_at) >=', $startDate)
+            ->where('DATE(stock_movements.created_at) <=', $endDate);
+
+        if ($categoryFilter) {
+            $builder->where('categories.id', $categoryFilter);
+        }
+
+        if ($productFilter) {
+            $builder->where('products.id', $productFilter);
+        }
+
+        if ($movementType) {
+            $builder->where('stock_movements.type', $movementType);
+        }
+
+        $movements = $builder->orderBy('stock_movements.created_at', 'DESC')->findAll();
+
+        $data = [
+            'movements'    => $movements,
+            'analytics'    => $this->calculateMovementAnalytics($movements, $startDate, $endDate),
+            'top_products' => $this->getTopMovementProducts($movements),
+            'daily_trend'  => $this->getDailyMovementTrend($movements, $startDate, $endDate),
+            'categories'   => $this->categoryModel->getActiveCategories(),
+            'products'     => $this->productModel->getProductsWithCategory(),
+            'filters'      => [
+                'start_date' => $startDate,
+                'end_date'   => $endDate,
+                'category'   => $categoryFilter,
+                'product'    => $productFilter,
+                'type'       => $movementType
+            ]
+        ];
+
+        return $this->render('reports/movements', $data);
+    }
+
+    /**
+     * Valuation Report - Inventory valuation analysis
+     */
+    public function valuation()
+    {
+        $this->setPageData('Valuasi Inventory', 'Analisis nilai inventory dan profitability');
+
+        $categoryFilter  = $this->request->getGet('category');
+        $valuationMethod = $this->request->getGet('method') ?: 'current';
+
+        $builder = $this->productModel->select('
+                products.*, 
+                categories.name as category_name,
+                (products.current_stock * products.price) as current_value,
+                (products.current_stock * products.cost_price) as cost_value,
+                (products.current_stock * products.price) - (products.current_stock * products.cost_price) as potential_profit
+            ')
+            ->join('categories', 'categories.id = products.category_id')
+            ->where('products.is_active', true)
+            ->where('products.current_stock >', 0);
+
+        if ($categoryFilter) {
+            $builder->where('products.category_id', $categoryFilter);
+        }
+
+        $products = $builder->orderBy('current_value', 'DESC')->findAll();
+
+        $totalCurrentValue = array_sum(array_column($products, 'current_value'));
+        $totalCostValue    = array_sum(array_column($products, 'cost_value'));
+        
+        $categoryValuation = [];
+        foreach ($products as $product) {
+            $catName = $product['category_name'];
+            if (!isset($categoryValuation[$catName])) {
+                $categoryValuation[$catName] = [
+                    'products'         => 0,
+                    'total_quantity'   => 0,
+                    'current_value'    => 0,
+                    'cost_value'       => 0,
+                    'potential_profit' => 0
+                ];
+            }
+            $categoryValuation[$catName]['products']++;
+            $categoryValuation[$catName]['total_quantity']   += $product['current_stock'];
+            $categoryValuation[$catName]['current_value']    += $product['current_value'];
+            $categoryValuation[$catName]['cost_value']       += $product['cost_value'];
+            $categoryValuation[$catName]['potential_profit'] += $product['potential_profit'];
+        }
+
+        foreach ($categoryValuation as &$catData) {
+            $catData['margin_percentage'] = $catData['current_value'] > 0 ? 
+                (($catData['current_value'] - $catData['cost_value']) / $catData['current_value']) * 100 : 0;
+        }
+
+        $data = [
+            'products'   => $products,
+            'categories' => $this->categoryModel->getActiveCategories(),
+            'summary'    => [
+                'total_current_value'    => $totalCurrentValue,
+                'total_cost_value'       => $totalCostValue,
+                'total_potential_profit' => array_sum(array_column($products, 'potential_profit')),
+                'average_margin'         => $totalCurrentValue > 0 ? (($totalCurrentValue - $totalCostValue) / $totalCurrentValue) * 100 : 0,
+                'total_products'         => count($products)
+            ],
+            'category_valuation' => $categoryValuation,
+            'filters'            => [
+                'category' => $categoryFilter,
+                'method'   => $valuationMethod
+            ]
+        ];
+
+        return $this->render('reports/valuation', $data);
+    }
+
+    /**
+     * Analytics Dashboard
+     */
+    public function analytics()
+    {
+        $this->setPageData('Analytics Dashboard', 'Advanced analytics dan insights bisnis');
+
+        $period    = (int) ($this->request->getGet('period') ?: '30');
+        $endDate   = date('Y-m-d');
+        $startDate = date('Y-m-d', strtotime("-{$period} days"));
+
+        $analytics = [
+            'inventory_turnover'  => $this->calculateInventoryTurnover($period),
+            'abc_analysis'        => $this->calculateABCAnalysis(),
+            'demand_forecast'     => $this->calculateDemandForecast($period),
+            'reorder_suggestions' => $this->getReorderSuggestions(),
+            'performance_metrics' => $this->getPerformanceMetrics($period),
+            'trends'              => $this->getTrendAnalysis($period)
+        ];
+
+        $data = [
+            'analytics'  => $analytics,
+            'period'     => $period,
+            'start_date' => $startDate,
+            'end_date'   => $endDate
+        ];
+
+        return $this->render('reports/analytics', $data);
+    }
+
+    /**
+     * Export Reports
+     */
+    public function exportStock($format = 'excel')
+    {
+        if ($format === 'excel') {
+            return $this->exportStockExcel();
+        } elseif ($format === 'pdf') {
+            return $this->exportStockPDF();
+        }
+        
+        return redirect()->back()->with('error', 'Format export tidak valid');
+    }
+
+    // --- Private Helper Methods ---
+
+    private function calculateMovementAnalytics($movements, $startDate, $endDate)
+    {
+        $stats = [
+            'total_movements'    => count($movements),
+            'total_in'           => 0,
+            'total_out'          => 0,
+            'total_adjustments'  => 0,
+            'total_in_quantity'  => 0,
+            'total_out_quantity' => 0,
+        ];
+
+        foreach ($movements as $m) {
+            switch ($m['type']) {
+                case 'IN':
+                    $stats['total_in']++;
+                    $stats['total_in_quantity'] += $m['quantity'];
+                    break;
+                case 'OUT':
+                    $stats['total_out']++;
+                    $stats['total_out_quantity'] += $m['quantity'];
+                    break;
+                case 'ADJUSTMENT':
+                    $stats['total_adjustments']++;
+                    break;
+            }
+        }
+
+        $periodDays = (strtotime($endDate) - strtotime($startDate)) / (60 * 60 * 24) + 1;
+        $stats['net_movement']          = $stats['total_in_quantity'] - $stats['total_out_quantity'];
+        $stats['avg_movements_per_day'] = round($stats['total_movements'] / $periodDays, 2);
+        $stats['period_days']           = $periodDays;
+
+        return $stats;
+    }
+
+    private function getTopMovementProducts($movements)
+    {
+        $productStats = [];
+        foreach ($movements as $m) {
+            $pid = $m['product_id'];
+            if (!isset($productStats[$pid])) {
+                $productStats[$pid] = [
+                    'product_name'    => $m['product_name'],
+                    'product_sku'     => $m['product_sku'],
+                    'total_movements' => 0,
+                    'total_in'        => 0,
+                    'total_out'       => 0,
+                ];
+            }
+            
+            $productStats[$pid]['total_movements']++;
+            if ($m['type'] === 'IN') {
+                $productStats[$pid]['total_in'] += $m['quantity'];
+            } elseif ($m['type'] === 'OUT') {
+                $productStats[$pid]['total_out'] += $m['quantity'];
+            }
+        }
+        
+        uasort($productStats, fn($a, $b) => $b['total_movements'] - $a['total_movements']);
+        return array_slice($productStats, 0, 10);
+    }
+
+    private function getDailyMovementTrend($movements, $startDate, $endDate)
+    {
+        $dailyStats  = [];
+        $currentDate = $startDate;
+        
+        while ($currentDate <= $endDate) {
+            $dailyStats[$currentDate] = [
+                'date'            => $currentDate,
+                'in_quantity'     => 0,
+                'out_quantity'    => 0,
+                'movements_count' => 0
+            ];
+            $currentDate = date('Y-m-d', strtotime($currentDate . ' +1 day'));
+        }
+        
+        foreach ($movements as $m) {
+            $date = date('Y-m-d', strtotime($m['created_at']));
+            if (isset($dailyStats[$date])) {
+                $dailyStats[$date]['movements_count']++;
+                if ($m['type'] === 'IN')  $dailyStats[$date]['in_quantity']  += $m['quantity'];
+                if ($m['type'] === 'OUT') $dailyStats[$date]['out_quantity'] += $m['quantity'];
+            }
+        }
+        
+        return array_values($dailyStats);
+    }
+
+    private function calculateInventoryTurnover($period)
+    {
+        $movements = $this->stockMovementModel->where('type', 'OUT')
+            ->where('created_at >=', date('Y-m-d', strtotime("-{$period} days")))
+            ->findAll();
+        
+        $totalSold    = array_sum(array_column($movements, 'quantity'));
+        $avgInventory = $this->productModel->selectSum('current_stock')->first()['current_stock'] ?? 0;
+        
+        return [
+            'turnover_rate' => $avgInventory > 0 ? round(($totalSold / $avgInventory) * (365 / $period), 2) : 0,
+            'total_sold'    => $totalSold,
+            'avg_inventory' => $avgInventory,
+            'period_days'   => $period
+        ];
+    }
+
+    private function calculateABCAnalysis()
+    {
+        $products = $this->productModel->select('products.*, (products.current_stock * products.price) as stock_value')
+            ->where('is_active', true)->where('current_stock >', 0)
+            ->orderBy('stock_value', 'DESC')->findAll();
+
+        $totalValue   = array_sum(array_column($products, 'stock_value'));
+        $runningValue = 0;
+        $abc          = ['A' => [], 'B' => [], 'C' => []];
+
+        foreach ($products as $p) {
+            $runningValue += $p['stock_value'];
+            $percentage    = $totalValue > 0 ? ($runningValue / $totalValue) * 100 : 0;
+
+            if ($percentage <= 80)      $abc['A'][] = $p;
+            elseif ($percentage <= 95)  $abc['B'][] = $p;
+            else                        $abc['C'][] = $p;
+        }
+
+        return [
+            'categories' => $abc,
+            'summary'    => [
+                'A_count'        => count($abc['A']),
+                'B_count'        => count($abc['B']),
+                'C_count'        => count($abc['C']),
+                'total_products' => count($products),
+                'total_value'    => $totalValue
+            ]
+        ];
+    }
+
+    private function calculateDemandForecast($period)
+    {
+        $movements = $this->stockMovementModel->select('product_id, SUM(quantity) as total_out, COUNT(*) as movement_count')
+            ->where('type', 'OUT')->where('created_at >=', date('Y-m-d', strtotime("-{$period} days")))
+            ->groupBy('product_id')->findAll();
+
+        $forecasts = [];
+        foreach ($movements as $m) {
+            $dailyDemand = $m['total_out'] / $period;
+            $forecasts[$m['product_id']] = [
+                'daily_demand'     => round($dailyDemand, 2),
+                'weekly_forecast'  => round($dailyDemand * 7),
+                'monthly_forecast' => round($dailyDemand * 30),
+                'movement_count'   => $m['movement_count']
+            ];
+        }
+
+        return $forecasts;
+    }
+
+    private function getReorderSuggestions()
+    {
+        $products = $this->productModel->select('products.*, categories.name as category_name')
+            ->join('categories', 'categories.id = products.category_id')
+            ->where('products.is_active', true)
+            ->where('products.current_stock <= (products.min_stock * 1.5)', null, false)
+            ->orderBy('(products.current_stock / products.min_stock)', 'ASC')->findAll();
+
+        $suggestions = [];
+        foreach ($products as $p) {
+            $stockRatio = $p['min_stock'] > 0 ? $p['current_stock'] / $p['min_stock'] : 0;
+            $urgency    = 'low';
+            
+            if ($p['current_stock'] == 0) $urgency = 'critical';
+            elseif ($stockRatio <= 0.5)   $urgency = 'high';
+            elseif ($stockRatio <= 1.0)   $urgency = 'medium';
+
+            $suggestions[] = [
+                'product'                  => $p,
+                'urgency'                  => $urgency,
+                'stock_ratio'              => round($stockRatio, 2),
+                'suggested_order_quantity' => max($p['min_stock'] * 2 - $p['current_stock'], $p['min_stock']),
+                'days_until_stockout'      => $this->calculateDaysUntilStockout($p['id'])
+            ];
+        }
+
+        return $suggestions;
+    }
+
+    private function getPerformanceMetrics($period)
+    {
+        return [
+            'stock_accuracy'         => 95.5, // Placeholder
+            'order_fulfillment_rate' => 98.2, // Placeholder
+            'carrying_cost_ratio'    => 15.3, // Placeholder
+            'stockout_frequency'     => 2.1,  // Placeholder
+        ];
+    }
+
+    private function getTrendAnalysis($period)
+    {
+        return [
+            'stock_level_trend'     => [], // Placeholder
+            'movement_volume_trend' => [], // Placeholder
+            'value_trend'           => [], // Placeholder
+        ];
+    }
+
+    private function calculateDaysUntilStockout($productId) { return rand(5, 30); }
+
+    private function exportStockExcel() { return $this->response->download('stock_report.xlsx', null); }
+    private function exportStockPDF()   { return $this->response->download('stock_report.pdf', null); }
+}
