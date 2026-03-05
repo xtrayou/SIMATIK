@@ -96,6 +96,7 @@ $routes->group('loans', function ($routes) {
     $routes->post('store', 'LoanController::store');
     $routes->get('show/(:num)', 'LoanController::show/$1');
     $routes->post('approve/(:num)', 'LoanController::approve/$1');
+    $routes->post('distribute/(:num)', 'LoanController::distribute/$1');
     $routes->post('cancel/(:num)', 'LoanController::cancel/$1');
 });
 

@@ -40,9 +40,9 @@
     <div class="col-12">
         <div class="card shadow-sm border-0">
             <div class="card-body p-0">
-                <?php if (session()->getFlashdata('sukses')): ?>
+                <?php if (session()->getFlashdata('success')): ?>
                     <div class="alert alert-success m-3 alert-dismissible fade show" role="alert">
-                        <?= session()->getFlashdata('sukses') ?>
+                        <?= session()->getFlashdata('success') ?>
                         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                     </div>
                 <?php endif; ?>
@@ -61,33 +61,45 @@
                             </thead>
                             <tbody>
                                 <?php foreach ($daftarPinjaman as $p): ?>
-                                <tr>
-                                    <td class="ps-4 fw-bold text-muted">#<?= $p['id'] ?></td>
-                                    <td>
-                                        <div class="fw-bold"><?= esc($p['borrower_name']) ?></div>
-                                        <div class="text-muted small"><?= esc($p['borrower_unit']) ?></div>
-                                    </td>
-                                    <td><?= date('d/m/Y', strtotime($p['loan_date'])) ?></td>
-                                    <td>
-                                        <?php 
-                                        $badgeClass = 'bg-secondary';
-                                        $statusLabel = 'Diajukan';
-                                        
-                                        switch($p['status']) {
-                                            case 'requested': $badgeClass = 'bg-info'; $statusLabel = 'Diajukan'; break;
-                                            case 'approved': $badgeClass = 'bg-primary'; $statusLabel = 'Disetujui'; break;
-                                            case 'distributed': $badgeClass = 'bg-success'; $statusLabel = 'Didistribusikan'; break;
-                                            case 'cancelled': $badgeClass = 'bg-danger'; $statusLabel = 'Dibatalkan'; break;
-                                        }
-                                        ?>
-                                        <span class="badge rounded-pill <?= $badgeClass ?>"><?= $statusLabel ?></span>
-                                    </td>
-                                    <td class="text-center">
-                                        <a href="<?= base_url('/loans/show/' . $p['id']) ?>" class="btn btn-sm btn-outline-primary px-3">
-                                            Detail
-                                        </a>
-                                    </td>
-                                </tr>
+                                    <tr>
+                                        <td class="ps-4 fw-bold text-muted">#<?= $p['id'] ?></td>
+                                        <td>
+                                            <div class="fw-bold"><?= esc($p['borrower_name']) ?></div>
+                                            <div class="text-muted small"><?= esc($p['borrower_unit']) ?></div>
+                                        </td>
+                                        <td><?= date('d/m/Y', strtotime($p['loan_date'])) ?></td>
+                                        <td>
+                                            <?php
+                                            $badgeClass = 'bg-secondary';
+                                            $statusLabel = 'Diajukan';
+
+                                            switch ($p['status']) {
+                                                case 'requested':
+                                                    $badgeClass = 'bg-info';
+                                                    $statusLabel = 'Diajukan';
+                                                    break;
+                                                case 'approved':
+                                                    $badgeClass = 'bg-primary';
+                                                    $statusLabel = 'Disetujui';
+                                                    break;
+                                                case 'distributed':
+                                                    $badgeClass = 'bg-success';
+                                                    $statusLabel = 'Didistribusikan';
+                                                    break;
+                                                case 'cancelled':
+                                                    $badgeClass = 'bg-danger';
+                                                    $statusLabel = 'Dibatalkan';
+                                                    break;
+                                            }
+                                            ?>
+                                            <span class="badge rounded-pill <?= $badgeClass ?>"><?= $statusLabel ?></span>
+                                        </td>
+                                        <td class="text-center">
+                                            <a href="<?= base_url('/loans/show/' . $p['id']) ?>" class="btn btn-sm btn-outline-primary px-3">
+                                                Detail
+                                            </a>
+                                        </td>
+                                    </tr>
                                 <?php endforeach ?>
                             </tbody>
                         </table>
@@ -107,13 +119,15 @@
 
 <?= $this->section('scripts') ?>
 <script>
-$(document).ready(function() {
-    $('#loansTable').DataTable({
-        language: {
-            url: '//cdn.datatables.net/plug-ins/1.13.7/i18n/id.json'
-        },
-        order: [[0, 'desc']]
+    $(document).ready(function() {
+        $('#loansTable').DataTable({
+            language: {
+                url: '//cdn.datatables.net/plug-ins/1.13.7/i18n/id.json'
+            },
+            order: [
+                [0, 'desc']
+            ]
+        });
     });
-});
 </script>
 <?= $this->endSection() ?>
