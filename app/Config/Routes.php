@@ -17,9 +17,6 @@ $routes->get('auth/logout',  'AuthController::logout');
 $routes->get('dashboard', 'DashboardController::index');
 $routes->get('api/dashboard/stats', 'Api\DashboardController::getStats');
 
-//testing
-$routes->get('test', 'TestController::testModels');
-
 //category
 $routes->group('categories', function ($routes) {
     $routes->get('/', 'CategoryController::index');
