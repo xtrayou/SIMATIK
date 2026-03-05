@@ -321,7 +321,7 @@
 <?= $this->endSection(); ?>
 <?= $this->section('breadcrumb'); ?>
 <ol class="breadcumb">
-    <li class="breadcrumb-item"><a href="<?= base_url('/'); ?>">Dashboard</a></li>
+    <li class="breadcrumb-item"><a href="<?= base_url('dashboard'); ?>">Dashboard</a></li>
     <li class="breadcrumb-item"><a href="<?= base_url('/reports/stock'); ?>">Reports</a></li>
     <li class="breadcrumb-item active" aria-current="page">>Stock Report</a></li>
 </ol>

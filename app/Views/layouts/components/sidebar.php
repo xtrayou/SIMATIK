@@ -4,7 +4,7 @@
         <div class="sidebar-header position-relative">
             <div class="d-flex justify-content-between align-items-center">
                 <div class="logo">
-                    <a href="<?= base_url('/') ?>">
+                    <a href="<?= base_url('dashboard') ?>">
                         <h4><i class="bi bi-box-seam-fill"></i> SIMA<span style="color: #435ebe;">TIK</span></h4>
                         <span class="fw-bold" style="font-size: 0.75rem; color: #6c757d;">Sistem Inventaris ATK</span>
                     </a>
@@ -36,8 +36,8 @@
 
                 <!-- Dashboard -->
                 <li class="sidebar-title">Dashboard</li>
-                <li class="sidebar-item <?= (uri_string() == '' || uri_string() == '/') ? 'active' : '' ?>">
-                    <a href="<?= base_url('/') ?>" class='sidebar-link'>
+                <li class="sidebar-item <?= (strpos(uri_string(), 'dashboard') !== false || uri_string() == '' || uri_string() == '/') ? 'active' : '' ?>">
+                    <a href="<?= base_url('dashboard') ?>" class='sidebar-link'>
                         <i class="bi bi-grid-fill"></i>
                         <span>Dashboard</span>
                     </a>

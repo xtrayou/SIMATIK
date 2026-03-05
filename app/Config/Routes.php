@@ -6,15 +6,16 @@ use CodeIgniter\Router\RouteCollection;
  * @var RouteCollection $routes
  */
 
-// ── Landing Page ─────────────────────────────────────────────────────
-$routes->get('/', 'HomeController::index');
+// ── Landing Page (redirect to dashboard) ────────────────────────────
+$routes->get('/', 'DashboardController::index', ['filter' => 'auth']);
 
 // ── Auth ─────────────────────────────────────────────────────────────
-$routes->match(['GET', 'POST'], 'auth/login',  'AuthController::login');
-$routes->get('auth/logout',  'AuthController::logout');
+$routes->get('login', 'AuthController::index');
+$routes->post('login', 'AuthController::login');
+$routes->get('logout', 'AuthController::logout');
 
 // ── Dashboard ────────────────────────────────────────────────────────
-$routes->get('dashboard', 'DashboardController::index');
+$routes->get('dashboard', 'DashboardController::index', ['filter' => 'auth']);
 $routes->get('api/dashboard/stats', 'Api\DashboardController::getStats');
 
 //category
