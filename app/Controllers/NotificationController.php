@@ -42,7 +42,7 @@ class NotificationController extends BaseController
         $notification = $this->notificationModel->find($id);
 
         if (!$notification) {
-            return redirect()->to('/notifications')->with('galat', 'Notifikasi tidak ditemukan.');
+            return redirect()->to('/notifications')->with('error', 'Notifikasi tidak ditemukan.');
         }
 
         $userId = session()->get('userId');
@@ -70,7 +70,7 @@ class NotificationController extends BaseController
             return $this->jsonResponse(['status' => true, 'message' => 'Semua notifikasi telah dibaca.']);
         }
 
-        return redirect()->to('/notifications')->with('sukses', 'Semua notifikasi telah ditandai dibaca.');
+        return redirect()->to('/notifications')->with('success', 'Semua notifikasi telah ditandai dibaca.');
     }
 
     /**
@@ -90,7 +90,7 @@ class NotificationController extends BaseController
             return $this->jsonResponse(['status' => true, 'message' => 'Notifikasi dihapus.']);
         }
 
-        return redirect()->to('/notifications')->with('sukses', 'Notifikasi dihapus.');
+        return redirect()->to('/notifications')->with('success', 'Notifikasi dihapus.');
     }
 
     /**

@@ -129,10 +129,10 @@ class LoanController extends BaseController
                 log_message('error', 'Gagal kirim notifikasi permintaan baru: ' . $e->getMessage());
             }
 
-            return redirect()->to($redirectUrl)->with('sukses', 'Permintaan berhasil diajukan.');
+            return redirect()->to($redirectUrl)->with('success', 'Permintaan berhasil diajukan.');
         } catch (Exception $e) {
             $db->transRollback();
-            return redirect()->back()->withInput()->with('galat', $e->getMessage());
+            return redirect()->back()->withInput()->with('error', $e->getMessage());
         }
     }
 
@@ -144,7 +144,7 @@ class LoanController extends BaseController
         $loan = $this->loanModel->getLoanWithItems((int)$id);
 
         if (!$loan) {
-            return redirect()->to('/loans')->with('galat', 'Data tidak ditemukan.');
+            return redirect()->to('/loans')->with('error', 'Data tidak ditemukan.');
         }
 
         $this->setPageData('Detail Permintaan', 'Review detail permintaan ATK');

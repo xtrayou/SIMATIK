@@ -114,10 +114,10 @@ class StockController extends BaseController
                 log_message('error', 'Gagal kirim notifikasi stok masuk: ' . $e->getMessage());
             }
 
-            return redirect()->to('/stock/in')->with('sukses', "Berhasil memproses $successCount item barang masuk.");
+            return redirect()->to('/stock/in')->with('success', "Berhasil memproses $successCount item barang masuk.");
         } catch (Exception $e) {
             $db->transRollback();
-            return redirect()->back()->withInput()->with('galat', $e->getMessage());
+            return redirect()->back()->withInput()->with('error', $e->getMessage());
         }
     }
 
@@ -218,10 +218,10 @@ class StockController extends BaseController
                 log_message('error', 'Gagal kirim notifikasi stok keluar: ' . $e->getMessage());
             }
 
-            return redirect()->to('/stock/out')->with('sukses', "Berhasil memproses $successCount item barang keluar.");
+            return redirect()->to('/stock/out')->with('success', "Berhasil memproses $successCount item barang keluar.");
         } catch (Exception $e) {
             $db->transRollback();
-            return redirect()->back()->withInput()->with('galat', $e->getMessage());
+            return redirect()->back()->withInput()->with('error', $e->getMessage());
         }
     }
 
@@ -350,7 +350,7 @@ class StockController extends BaseController
         $globalNotes = $this->request->getPost('global_notes') ?: 'Penyesuaian stok manual';
 
         if (empty($adjustments)) {
-            return redirect()->back()->with('galat', 'Tidak ada data penyesuaian yang dikirim.');
+            return redirect()->back()->with('error', 'Tidak ada data penyesuaian yang dikirim.');
         }
 
         $db = \Config\Database::connect();
@@ -392,10 +392,10 @@ class StockController extends BaseController
                 log_message('error', 'Gagal kirim notifikasi penyesuaian: ' . $e->getMessage());
             }
 
-            return redirect()->to('/stock/adjustment')->with('sukses', "Berhasil menyesuaikan $successCount item stok.");
+            return redirect()->to('/stock/adjustment')->with('success', "Berhasil menyesuaikan $successCount item stok.");
         } catch (Exception $e) {
             $db->transRollback();
-            return redirect()->back()->with('galat', $e->getMessage());
+            return redirect()->back()->with('error', $e->getMessage());
         }
     }
 

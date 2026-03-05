@@ -134,10 +134,10 @@ class ProductController extends BaseController
                 throw new Exception('Gagal menyimpan ke database');
             }
 
-            return redirect()->to('/products')->with('sukses', 'Produk berhasil ditambahkan.');
+            return redirect()->to('/products')->with('success', 'Produk berhasil ditambahkan.');
         } catch (Exception $e) {
             $db->transRollback();
-            return redirect()->back()->withInput()->with('galat', $e->getMessage());
+            return redirect()->back()->withInput()->with('error', $e->getMessage());
         }
     }
 
@@ -149,7 +149,7 @@ class ProductController extends BaseController
         $product = $this->productModel->getProductWithCategory((int)$id);
 
         if (!$product) {
-            return redirect()->to('/products')->with('galat', 'Produk tidak ditemukan.');
+            return redirect()->to('/products')->with('error', 'Produk tidak ditemukan.');
         }
 
         $this->setPageData('Detail Produk', $product['name']);
@@ -181,7 +181,7 @@ class ProductController extends BaseController
         $product = $this->productModel->find($id);
 
         if (!$product) {
-            return redirect()->to('/products')->with('galat', 'Produk tidak ditemukan.');
+            return redirect()->to('/products')->with('error', 'Produk tidak ditemukan.');
         }
 
         $this->setPageData('Edit Produk', $product['name']);
@@ -224,10 +224,10 @@ class ProductController extends BaseController
         ];
 
         if ($this->productModel->update($id, $payload)) {
-            return redirect()->to('/products')->with('sukses', 'Data produk berhasil diperbarui.');
+            return redirect()->to('/products')->with('success', 'Data produk berhasil diperbarui.');
         }
 
-        return redirect()->back()->withInput()->with('galat', 'Gagal memperbarui data.');
+        return redirect()->back()->withInput()->with('error', 'Gagal memperbarui data.');
     }
 
     /**

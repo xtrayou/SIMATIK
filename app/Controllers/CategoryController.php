@@ -53,7 +53,7 @@ class CategoryController extends BaseController
         }
 
         return redirect()->to('/categories')
-            ->with('galat', 'Kategori tidak ditemukan');
+            ->with('error', 'Kategori tidak ditemukan');
     }
 
     /**
@@ -116,10 +116,10 @@ class CategoryController extends BaseController
         if ($error) return $error;
 
         if ($this->categoryModel->insert($this->getFormData())) {
-            return redirect()->to('/categories')->with('sukses', 'Kategori berhasil ditambahkan');
+            return redirect()->to('/categories')->with('success', 'Kategori berhasil ditambahkan');
         }
 
-        return redirect()->back()->withInput()->with('galat', 'Gagal menambahkan kategori');
+        return redirect()->back()->withInput()->with('error', 'Gagal menambahkan kategori');
     }
 
     public function edit($id)
@@ -148,28 +148,28 @@ class CategoryController extends BaseController
         if ($error) return $error;
 
         if ($this->categoryModel->update($id, $this->getFormData())) {
-            return redirect()->to('/categories')->with('sukses', 'Kategori berhasil diperbarui');
+            return redirect()->to('/categories')->with('success', 'Kategori berhasil diperbarui');
         }
 
-        return redirect()->back()->withInput()->with('galat', 'Gagal memperbarui kategori');
+        return redirect()->back()->withInput()->with('error', 'Gagal memperbarui kategori');
     }
 
     public function delete($id): RedirectResponse
     {
         $category = $this->categoryModel->find($id);
         if (!$category) {
-            return redirect()->to('/categories')->with('galat', 'Kategori tidak ditemukan');
+            return redirect()->to('/categories')->with('error', 'Kategori tidak ditemukan');
         }
 
         if ($this->categoryModel->canDelete((int) $id) === false) {
             return redirect()->to('/categories')
-                ->with('galat', 'Kategori tidak bisa dihapus karena masih digunakan oleh produk');
+                ->with('error', 'Kategori tidak bisa dihapus karena masih digunakan oleh produk');
         }
 
         if ($this->categoryModel->delete($id)) {
-            return redirect()->to('/categories')->with('sukses', 'Kategori berhasil dihapus');
+            return redirect()->to('/categories')->with('success', 'Kategori berhasil dihapus');
         }
 
-        return redirect()->to('/categories')->with('galat', 'Gagal menghapus kategori');
+        return redirect()->to('/categories')->with('error', 'Gagal menghapus kategori');
     }
 }

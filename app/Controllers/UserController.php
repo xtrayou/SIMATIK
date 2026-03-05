@@ -85,10 +85,10 @@ class UserController extends BaseController
         ];
 
         if ($this->userModel->insert($data)) {
-            return redirect()->to('/users')->with('sukses', 'User berhasil ditambahkan');
+            return redirect()->to('/users')->with('success', 'User berhasil ditambahkan');
         }
 
-        return redirect()->back()->withInput()->with('galat', 'Gagal menambahkan user');
+        return redirect()->back()->withInput()->with('error', 'Gagal menambahkan user');
     }
 
     /**
@@ -98,7 +98,7 @@ class UserController extends BaseController
     {
         $user = $this->userModel->find($id);
         if (!$user) {
-            return redirect()->to('/users')->with('galat', 'User tidak ditemukan');
+            return redirect()->to('/users')->with('error', 'User tidak ditemukan');
         }
 
         $this->setPageData('Edit User', 'Edit: ' . $user['name']);
@@ -116,7 +116,7 @@ class UserController extends BaseController
     {
         $user = $this->userModel->find($id);
         if (!$user) {
-            return redirect()->to('/users')->with('galat', 'User tidak ditemukan');
+            return redirect()->to('/users')->with('error', 'User tidak ditemukan');
         }
 
         $rules = [
@@ -149,10 +149,10 @@ class UserController extends BaseController
         }
 
         if ($this->userModel->update($id, $data)) {
-            return redirect()->to('/users')->with('sukses', 'User berhasil diperbarui');
+            return redirect()->to('/users')->with('success', 'User berhasil diperbarui');
         }
 
-        return redirect()->back()->withInput()->with('galat', 'Gagal memperbarui user');
+        return redirect()->back()->withInput()->with('error', 'Gagal memperbarui user');
     }
 
     /**
@@ -162,18 +162,18 @@ class UserController extends BaseController
     {
         $user = $this->userModel->find($id);
         if (!$user) {
-            return redirect()->to('/users')->with('galat', 'User tidak ditemukan');
+            return redirect()->to('/users')->with('error', 'User tidak ditemukan');
         }
 
         // Prevent deleting own account
         if ((int) $id === (int) session('userId')) {
-            return redirect()->to('/users')->with('galat', 'Tidak dapat menghapus akun sendiri');
+            return redirect()->to('/users')->with('error', 'Tidak dapat menghapus akun sendiri');
         }
 
         if ($this->userModel->delete($id)) {
-            return redirect()->to('/users')->with('sukses', 'User berhasil dihapus');
+            return redirect()->to('/users')->with('success', 'User berhasil dihapus');
         }
 
-        return redirect()->to('/users')->with('galat', 'Gagal menghapus user');
+        return redirect()->to('/users')->with('error', 'Gagal menghapus user');
     }
 }

@@ -128,7 +128,7 @@ class SettingController extends BaseController
         session()->set('app_settings', $current);
 
         return redirect()->to('/settings')
-            ->with('sukses', 'Pengaturan berhasil disimpan')
+            ->with('success', 'Pengaturan berhasil disimpan')
             ->with('active_tab', $tab);
     }
 
