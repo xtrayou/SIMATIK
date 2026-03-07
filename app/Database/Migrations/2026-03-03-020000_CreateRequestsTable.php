@@ -4,7 +4,7 @@ namespace App\Database\Migrations;
 
 use CodeIgniter\Database\Migration;
 
-class CreateLoansTable extends Migration
+class CreateRequestsTable extends Migration
 {
     public function up()
     {
@@ -35,7 +35,7 @@ class CreateLoansTable extends Migration
                 'constraint' => 100,
                 'null' => true,
             ],
-            'loan_date' => [
+            'request_date' => [
                 'type' => 'DATE',
                 'null' => false,
             ],
@@ -64,14 +64,14 @@ class CreateLoansTable extends Migration
 
         $this->forge->addPrimaryKey('id');
         $this->forge->addKey('status');
-        $this->forge->addKey('loan_date');
+        $this->forge->addKey('request_date');
         $this->forge->addKey('created_at');
 
-        $this->forge->createTable('loans');
+        $this->forge->createTable('requests');
     }
 
     public function down()
     {
-        $this->forge->dropTable('loans');
+        $this->forge->dropTable('requests');
     }
 }

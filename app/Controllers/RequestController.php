@@ -2,52 +2,52 @@
 
 namespace App\Controllers;
 
-use App\Models\LoanModel;
-use App\Models\LoanItemModel;
+use App\Models\RequestModel;
+use App\Models\RequestItemModel;
 use App\Models\ProductModel;
 use App\Models\StockMovementModel;
 use App\Models\NotificationModel;
 use Exception;
 
-class LoanController extends BaseController
+class RequestController extends BaseController
 {
-    protected LoanModel $loanModel;
-    protected LoanItemModel $loanItemModel;
+    protected RequestModel $requestModel;
+    protected RequestItemModel $requestItemModel;
     protected ProductModel $productModel;
     protected StockMovementModel $stockMovementModel;
     protected NotificationModel $notificationModel;
 
     public function __construct()
     {
-        $this->loanModel          = new LoanModel();
-        $this->loanItemModel      = new LoanItemModel();
+        $this->requestModel       = new RequestModel();
+        $this->requestItemModel   = new RequestItemModel();
         $this->productModel       = new ProductModel();
         $this->stockMovementModel = new StockMovementModel();
         $this->notificationModel  = new NotificationModel();
     }
 
     /**
-     * Show loan/request list
+     * Show request list
      */
     public function index()
     {
         $this->setPageData('Daftar Permintaan', 'Manajemen permintaan dan distribusi ATK');
 
         $status = $this->request->getGet('status');
-        $builder = $this->loanModel->orderBy('created_at', 'DESC');
+        $builder = $this->requestModel->orderBy('created_at', 'DESC');
 
         if ($status) {
             $builder->where('status', $status);
         }
 
-        $loans = $builder->findAll();
+        $requests = $builder->findAll();
 
         $data = [
-            'daftarPinjaman' => $loans,
+            'daftarPinjaman' => $requests,
             'filterStatus'   => $status
         ];
 
-        return $this->render('loans/index', $data);
+        return $this->render('requests/index', $data);
     }
 
     /**
@@ -63,7 +63,7 @@ class LoanController extends BaseController
             'daftarProduk' => $products
         ];
 
-        return $this->render('loans/create', $data);
+        return $this->render('requests/create', $data);
     }
 
     /**
@@ -77,7 +77,7 @@ class LoanController extends BaseController
             'email'         => 'required|valid_email',
             'product_id'    => 'required',
             'quantity'      => 'required',
-            'loan_date'     => 'required|valid_date',
+            'request_date'  => 'required|valid_date',
         ];
 
         if (!$this->validate($rules)) {
@@ -88,12 +88,12 @@ class LoanController extends BaseController
         $db->transStart();
 
         try {
-            $loanId = $this->loanModel->insert([
+            $requestId = $this->requestModel->insert([
                 'borrower_name'       => $this->request->getPost('borrower_name'),
                 'borrower_identifier' => $this->request->getPost('borrower_identifier'),
                 'borrower_unit'       => $this->request->getPost('borrower_unit'),
                 'email'               => $this->request->getPost('email'),
-                'loan_date'           => $this->request->getPost('loan_date') ?: date('Y-m-d'),
+                'request_date'        => $this->request->getPost('request_date') ?: date('Y-m-d'),
                 'status'              => 'requested',
                 'notes'               => $this->request->getPost('notes'),
             ]);
@@ -104,8 +104,8 @@ class LoanController extends BaseController
             foreach ($productIds as $index => $pid) {
                 if (empty($pid) || empty($quantities[$index])) continue;
 
-                $this->loanItemModel->insert([
-                    'loan_id'    => $loanId,
+                $this->requestItemModel->insert([
+                    'request_id' => $requestId,
                     'product_id' => $pid,
                     'quantity'   => $quantities[$index],
                 ]);
@@ -117,13 +117,13 @@ class LoanController extends BaseController
                 throw new Exception('Gagal menyimpan data ke database.');
             }
 
-            $redirectUrl = $this->request->getPost('_redirect') ?: '/loans';
+            $redirectUrl = $this->request->getPost('_redirect') ?: '/requests';
 
             // Kirim notifikasi permintaan baru
             try {
-                $loanData = $this->loanModel->find($loanId);
-                if ($loanData) {
-                    $this->notificationModel->createNewLoanNotification($loanData);
+                $requestData = $this->requestModel->find($requestId);
+                if ($requestData) {
+                    $this->notificationModel->createNewRequestNotification($requestData);
                 }
             } catch (\Throwable $e) {
                 log_message('error', 'Gagal kirim notifikasi permintaan baru: ' . $e->getMessage());
@@ -141,15 +141,15 @@ class LoanController extends BaseController
      */
     public function show($id)
     {
-        $loan = $this->loanModel->getLoanWithItems((int)$id);
+        $requestData = $this->requestModel->getRequestWithItems((int)$id);
 
-        if (!$loan) {
-            return redirect()->to('/loans')->with('error', 'Data tidak ditemukan.');
+        if (!$requestData) {
+            return redirect()->to('/requests')->with('error', 'Data tidak ditemukan.');
         }
 
         $this->setPageData('Detail Permintaan', 'Review detail permintaan ATK');
 
-        return $this->render('loans/show', ['pinjaman' => $loan]);
+        return $this->render('requests/show', ['pinjaman' => $requestData]);
     }
 
     /**
@@ -157,13 +157,13 @@ class LoanController extends BaseController
      */
     public function approve($id)
     {
-        $loan = $this->loanModel->find($id);
-        if (!$loan) return $this->jsonResponse(['status' => false, 'message' => 'Data tidak ditemukan'], 404);
+        $requestData = $this->requestModel->find($id);
+        if (!$requestData) return $this->jsonResponse(['status' => false, 'message' => 'Data tidak ditemukan'], 404);
 
-        if ($this->loanModel->update($id, ['status' => 'approved'])) {
+        if ($this->requestModel->update($id, ['status' => 'approved'])) {
             // Kirim notifikasi disetujui
             try {
-                $this->notificationModel->createLoanApprovedNotification($loan);
+                $this->notificationModel->createRequestApprovedNotification($requestData);
             } catch (\Throwable $e) {
                 log_message('error', 'Gagal kirim notifikasi approve: ' . $e->getMessage());
             }
@@ -178,10 +178,10 @@ class LoanController extends BaseController
      */
     public function distribute($id)
     {
-        $loan = $this->loanModel->find($id);
-        if (!$loan) return $this->jsonResponse(['status' => false, 'message' => 'Data tidak ditemukan'], 404);
+        $requestData = $this->requestModel->find($id);
+        if (!$requestData) return $this->jsonResponse(['status' => false, 'message' => 'Data tidak ditemukan'], 404);
 
-        $items = $this->loanItemModel->where('loan_id', $id)->findAll();
+        $items = $this->requestItemModel->where('request_id', $id)->findAll();
 
         $db = \Config\Database::connect();
         $db->transStart();
@@ -198,7 +198,7 @@ class LoanController extends BaseController
                 ]);
             }
 
-            $this->loanModel->update($id, ['status' => 'distributed']);
+            $this->requestModel->update($id, ['status' => 'distributed']);
             $db->transComplete();
 
             if ($db->transStatus() === false) throw new Exception('Gagal memproses mutasi stok.');
@@ -230,17 +230,17 @@ class LoanController extends BaseController
      */
     public function cancel($id)
     {
-        $loan = $this->loanModel->find($id);
-        if (!$loan) return $this->jsonResponse(['status' => false, 'message' => 'Data tidak ditemukan'], 404);
+        $requestData = $this->requestModel->find($id);
+        if (!$requestData) return $this->jsonResponse(['status' => false, 'message' => 'Data tidak ditemukan'], 404);
 
-        if ($loan['status'] == 'distributed') {
+        if ($requestData['status'] == 'distributed') {
             return $this->jsonResponse(['status' => false, 'message' => 'Tidak bisa membatalkan permintaan yang sudah didistribusikan.'], 400);
         }
 
-        if ($this->loanModel->update($id, ['status' => 'cancelled'])) {
+        if ($this->requestModel->update($id, ['status' => 'cancelled'])) {
             // Kirim notifikasi dibatalkan
             try {
-                $this->notificationModel->createLoanCancelledNotification($loan);
+                $this->notificationModel->createRequestCancelledNotification($requestData);
             } catch (\Throwable $e) {
                 log_message('error', 'Gagal kirim notifikasi cancel: ' . $e->getMessage());
             }

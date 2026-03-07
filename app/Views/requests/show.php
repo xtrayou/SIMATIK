@@ -8,15 +8,27 @@
         <div class="card shadow-sm border-0 mb-4">
             <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
                 <h5 class="mb-0 fw-bold">Detail Permintaan #<?= $pinjaman['id'] ?></h5>
-                <?php 
+                <?php
                 $badgeClass = 'bg-secondary';
                 $statusLabel = 'Diajukan';
-                
-                switch($pinjaman['status']) {
-                    case 'requested': $badgeClass = 'bg-info'; $statusLabel = 'Diajukan'; break;
-                    case 'approved': $badgeClass = 'bg-primary'; $statusLabel = 'Disetujui'; break;
-                    case 'distributed': $badgeClass = 'bg-success'; $statusLabel = 'Didistribusikan'; break;
-                    case 'cancelled': $badgeClass = 'bg-danger'; $statusLabel = 'Dibatalkan'; break;
+
+                switch ($pinjaman['status']) {
+                    case 'requested':
+                        $badgeClass = 'bg-info';
+                        $statusLabel = 'Diajukan';
+                        break;
+                    case 'approved':
+                        $badgeClass = 'bg-primary';
+                        $statusLabel = 'Disetujui';
+                        break;
+                    case 'distributed':
+                        $badgeClass = 'bg-success';
+                        $statusLabel = 'Didistribusikan';
+                        break;
+                    case 'cancelled':
+                        $badgeClass = 'bg-danger';
+                        $statusLabel = 'Dibatalkan';
+                        break;
                 }
                 ?>
                 <span class="badge rounded-pill <?= $badgeClass ?> px-3 py-2 fs-6 text-uppercase"><?= $statusLabel ?></span>
@@ -42,7 +54,7 @@
                         <h6 class="text-muted text-uppercase small fw-bold mb-3">Detail Pengajuan</h6>
                         <div class="mb-2">
                             <label class="text-muted small d-block">Tanggal Permintaan</label>
-                            <span class="fw-bold"><?= date('d F Y', strtotime($pinjaman['loan_date'])) ?></span>
+                            <span class="fw-bold"><?= date('d F Y', strtotime($pinjaman['request_date'])) ?></span>
                         </div>
                         <div class="mb-2">
                             <label class="text-muted small d-block">Email</label>
@@ -72,12 +84,12 @@
                         </thead>
                         <tbody>
                             <?php foreach (($pinjaman['items'] ?? []) as $item): ?>
-                            <tr>
-                                <td class="ps-3 fw-bold text-primary"><?= esc($item['product_name']) ?></td>
-                                <td class="text-center"><code><?= esc($item['sku']) ?></code></td>
-                                <td class="text-center fw-bold fs-5"><?= number_format($item['quantity']) ?></td>
-                                <td class="text-center text-muted"><?= esc($item['unit'] ?? 'Pcs') ?></td>
-                            </tr>
+                                <tr>
+                                    <td class="ps-3 fw-bold text-primary"><?= esc($item['product_name']) ?></td>
+                                    <td class="text-center"><code><?= esc($item['sku']) ?></code></td>
+                                    <td class="text-center fw-bold fs-5"><?= number_format($item['quantity']) ?></td>
+                                    <td class="text-center text-muted"><?= esc($item['unit'] ?? 'Pcs') ?></td>
+                                </tr>
                             <?php endforeach; ?>
                         </tbody>
                     </table>
@@ -148,7 +160,7 @@
         if (confirm(pesanCek)) {
             const btn = event.target;
             const originalHtml = btn.innerHTML;
-            
+
             btn.disabled = true;
             btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Memproses...';
 
@@ -179,24 +191,35 @@
     }
 
     $('#btn-approve').on('click', function() {
-        jalankanAksi('<?= base_url('loans/approve/' . $pinjaman['id']) ?>', 'Setujui permintaan ini?');
+        jalankanAksi('<?= base_url('requests/approve/' . $pinjaman['id']) ?>', 'Setujui permintaan ini?');
     });
 
     $('#btn-distribute').on('click', function() {
-        jalankanAksi('<?= base_url('loans/distribute/' . $pinjaman['id']) ?>', 'Lanjutkan distribusi? Tindakan ini akan memotong stok barang.');
+        jalankanAksi('<?= base_url('requests/distribute/' . $pinjaman['id']) ?>', 'Lanjutkan distribusi? Tindakan ini akan memotong stok barang.');
     });
 
     $('#btn-cancel').on('click', function() {
-        jalankanAksi('<?= base_url('loans/cancel/' . $pinjaman['id']) ?>', 'Apakah Anda yakin ingin membatalkan permintaan ini?');
+        jalankanAksi('<?= base_url('requests/cancel/' . $pinjaman['id']) ?>', 'Apakah Anda yakin ingin membatalkan permintaan ini?');
     });
 </script>
 <?= $this->endSection() ?>
 
 <?= $this->section('styles') ?>
 <style>
-    .bg-light-info { background-color: rgba(13, 202, 240, 0.1); }
-    .bg-light-warning { background-color: rgba(255, 193, 7, 0.1); }
-    .bg-light-success { background-color: rgba(25, 135, 84, 0.1); }
-    .italic { font-style: italic; }
+    .bg-light-info {
+        background-color: rgba(13, 202, 240, 0.1);
+    }
+
+    .bg-light-warning {
+        background-color: rgba(255, 193, 7, 0.1);
+    }
+
+    .bg-light-success {
+        background-color: rgba(25, 135, 84, 0.1);
+    }
+
+    .italic {
+        font-style: italic;
+    }
 </style>
 <?= $this->endSection() ?>

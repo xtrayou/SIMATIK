@@ -47,8 +47,8 @@
                 </button>
             </li>
             <li class="nav-item" role="presentation">
-                <button class="nav-link <?= $activeTab === 'loan' ? 'active' : '' ?>" id="loan-tab" data-bs-toggle="tab" data-bs-target="#loan" type="button" role="tab">
-                    <i class="bi bi-calendar-event me-1"></i>Peminjaman
+                <button class="nav-link <?= $activeTab === 'request' ? 'active' : '' ?>" id="request-tab" data-bs-toggle="tab" data-bs-target="#request" type="button" role="tab">
+                    <i class="bi bi-calendar-event me-1"></i>Permintaan
                 </button>
             </li>
             <li class="nav-item" role="presentation">
@@ -234,70 +234,70 @@
     <!-- ============================================ -->
     <!-- 3. PEMINJAMAN -->
     <!-- ============================================ -->
-    <div class="tab-pane fade <?= $activeTab === 'loan' ? 'show active' : '' ?>" id="loan" role="tabpanel">
+    <div class="tab-pane fade <?= $activeTab === 'request' ? 'show active' : '' ?>" id="request" role="tabpanel">
         <div class="card border-top-0 rounded-top-0">
             <div class="card-header">
-                <h5 class="mb-0"><i class="bi bi-calendar-event-fill me-2 text-info"></i>Pengaturan Peminjaman</h5>
-                <p class="text-muted mb-0 small">Atur durasi, batas item, persetujuan, dan denda peminjaman</p>
+                <h5 class="mb-0"><i class="bi bi-calendar-event-fill me-2 text-info"></i>Pengaturan Permintaan</h5>
+                <p class="text-muted mb-0 small">Atur durasi, batas item, persetujuan, dan denda permintaan</p>
             </div>
             <div class="card-body">
                 <form action="<?= base_url('/settings/update') ?>" method="POST">
                     <?= csrf_field() ?>
-                    <input type="hidden" name="_tab" value="loan">
+                    <input type="hidden" name="_tab" value="request">
 
                     <div class="row">
                         <div class="col-md-6 mb-3">
-                            <label for="loan_max_days" class="form-label">Maks. Hari Peminjaman <span class="text-danger">*</span></label>
+                            <label for="request_max_days" class="form-label">Maks. Hari Permintaan <span class="text-danger">*</span></label>
                             <div class="input-group">
-                                <input type="number" class="form-control" id="loan_max_days" name="loan_max_days" value="<?= esc($settings['loan_max_days']) ?>" min="1">
+                                <input type="number" class="form-control" id="request_max_days" name="request_max_days" value="<?= esc($settings['request_max_days']) ?>" min="1">
                                 <span class="input-group-text">hari</span>
                             </div>
                         </div>
                         <div class="col-md-6 mb-3">
-                            <label for="loan_max_items" class="form-label">Maks. Item per Transaksi <span class="text-danger">*</span></label>
+                            <label for="request_max_items" class="form-label">Maks. Item per Transaksi <span class="text-danger">*</span></label>
                             <div class="input-group">
-                                <input type="number" class="form-control" id="loan_max_items" name="loan_max_items" value="<?= esc($settings['loan_max_items']) ?>" min="1">
+                                <input type="number" class="form-control" id="request_max_items" name="request_max_items" value="<?= esc($settings['request_max_items']) ?>" min="1">
                                 <span class="input-group-text">barang</span>
                             </div>
                         </div>
                     </div>
 
                     <div class="mb-3">
-                        <label for="loan_late_fee" class="form-label">Denda Keterlambatan per Hari</label>
+                        <label for="request_late_fee" class="form-label">Denda Keterlambatan per Hari</label>
                         <div class="input-group">
                             <span class="input-group-text">Rp</span>
-                            <input type="number" class="form-control" id="loan_late_fee" name="loan_late_fee" value="<?= esc($settings['loan_late_fee']) ?>" min="0">
+                            <input type="number" class="form-control" id="request_late_fee" name="request_late_fee" value="<?= esc($settings['request_late_fee']) ?>" min="0">
                             <span class="input-group-text">/ hari</span>
                         </div>
                         <div class="form-text">Isi 0 jika tidak ada denda</div>
                     </div>
 
                     <hr class="my-3">
-                    <h6 class="text-muted mb-3"><i class="bi bi-toggles me-1"></i>Kebijakan Peminjaman</h6>
+                    <h6 class="text-muted mb-3"><i class="bi bi-toggles me-1"></i>Kebijakan Permintaan</h6>
 
                     <div class="row">
                         <div class="col-md-6 mb-3">
                             <div class="form-check form-switch">
-                                <input class="form-check-input" type="checkbox" id="loan_require_approval" name="loan_require_approval" value="1" <?= $settings['loan_require_approval'] ? 'checked' : '' ?>>
-                                <label class="form-check-label" for="loan_require_approval">
+                                <input class="form-check-input" type="checkbox" id="request_require_approval" name="request_require_approval" value="1" <?= $settings['request_require_approval'] ? 'checked' : '' ?>>
+                                <label class="form-check-label" for="request_require_approval">
                                     <i class="bi bi-check2-circle me-1"></i>Perlu Persetujuan Admin
                                 </label>
                             </div>
-                            <div class="form-text ms-4">Peminjaman harus disetujui admin sebelum bisa diambil</div>
+                            <div class="form-text ms-4">Permintaan harus disetujui admin sebelum bisa diambil</div>
                         </div>
                         <div class="col-md-6 mb-3">
                             <div class="form-check form-switch">
-                                <input class="form-check-input" type="checkbox" id="loan_allow_extend" name="loan_allow_extend" value="1" <?= $settings['loan_allow_extend'] ? 'checked' : '' ?>>
-                                <label class="form-check-label" for="loan_allow_extend">
-                                    <i class="bi bi-arrow-repeat me-1"></i>Boleh Perpanjang Peminjaman
+                                <input class="form-check-input" type="checkbox" id="request_allow_extend" name="request_allow_extend" value="1" <?= $settings['request_allow_extend'] ? 'checked' : '' ?>>
+                                <label class="form-check-label" for="request_allow_extend">
+                                    <i class="bi bi-arrow-repeat me-1"></i>Boleh Perpanjang Permintaan
                                 </label>
                             </div>
-                            <div class="form-text ms-4">Peminjam bisa mengajukan perpanjangan waktu</div>
+                            <div class="form-text ms-4">Pemohon bisa mengajukan perpanjangan waktu</div>
                         </div>
                     </div>
 
                     <div class="text-end">
-                        <button type="submit" class="btn btn-info text-white"><i class="bi bi-save me-1"></i>Simpan Pengaturan Peminjaman</button>
+                        <button type="submit" class="btn btn-info text-white"><i class="bi bi-save me-1"></i>Simpan Pengaturan Permintaan</button>
                     </div>
                 </form>
             </div>
@@ -413,10 +413,10 @@
                             <div class="card border h-100">
                                 <div class="card-body text-center py-4">
                                     <i class="bi bi-box-arrow-up-right text-info fs-1 mb-2 d-block"></i>
-                                    <h6>Peminjaman Baru</h6>
-                                    <p class="text-muted small mb-3">Email saat ada pengajuan peminjaman baru</p>
+                                    <h6>Permintaan Baru</h6>
+                                    <p class="text-muted small mb-3">Email saat ada pengajuan permintaan baru</p>
                                     <div class="form-check form-switch d-flex justify-content-center">
-                                        <input class="form-check-input" type="checkbox" id="notify_email_new_loan" name="notify_email_new_loan" value="1" <?= $settings['notify_email_new_loan'] ? 'checked' : '' ?>>
+                                        <input class="form-check-input" type="checkbox" id="notify_email_new_request" name="notify_email_new_request" value="1" <?= $settings['notify_email_new_request'] ? 'checked' : '' ?>>
                                     </div>
                                 </div>
                             </div>

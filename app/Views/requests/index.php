@@ -25,7 +25,7 @@
                                 <i class="bi bi-filter"></i>
                             </button>
                         </form>
-                        <a href="<?= base_url('/loans/create') ?>" class="btn btn-primary btn-sm px-3">
+                        <a href="<?= base_url('/requests/create') ?>" class="btn btn-primary btn-sm px-3">
                             <i class="bi bi-plus-lg me-1"></i> Buat Baru
                         </a>
                     </div>
@@ -49,7 +49,7 @@
 
                 <?php if (!empty($daftarPinjaman)): ?>
                     <div class="table-responsive">
-                        <table class="table table-hover align-middle mb-0" id="loansTable">
+                        <table class="table table-hover align-middle mb-0" id="requestsTable">
                             <thead class="bg-light">
                                 <tr>
                                     <th class="ps-4" width="60">ID</th>
@@ -67,7 +67,7 @@
                                             <div class="fw-bold"><?= esc($p['borrower_name']) ?></div>
                                             <div class="text-muted small"><?= esc($p['borrower_unit']) ?></div>
                                         </td>
-                                        <td><?= date('d/m/Y', strtotime($p['loan_date'])) ?></td>
+                                        <td><?= date('d/m/Y', strtotime($p['request_date'])) ?></td>
                                         <td>
                                             <?php
                                             $badgeClass = 'bg-secondary';
@@ -95,7 +95,7 @@
                                             <span class="badge rounded-pill <?= $badgeClass ?>"><?= $statusLabel ?></span>
                                         </td>
                                         <td class="text-center">
-                                            <a href="<?= base_url('/loans/show/' . $p['id']) ?>" class="btn btn-sm btn-outline-primary px-3">
+                                            <a href="<?= base_url('/requests/show/' . $p['id']) ?>" class="btn btn-sm btn-outline-primary px-3">
                                                 Detail
                                             </a>
                                         </td>
@@ -120,7 +120,7 @@
 <?= $this->section('scripts') ?>
 <script>
     $(document).ready(function() {
-        $('#loansTable').DataTable({
+        $('#requestsTable').DataTable({
             language: {
                 url: '//cdn.datatables.net/plug-ins/1.13.7/i18n/id.json'
             },

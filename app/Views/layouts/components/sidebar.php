@@ -96,8 +96,8 @@
                 <!-- Permintaan ATK -->
                 <li class="sidebar-title">Permintaan ATK</li>
 
-                <li class="sidebar-item <?= (strpos(uri_string(), 'loans') !== false) ? 'active' : '' ?>">
-                    <a href="<?= base_url('/loans') ?>" class='sidebar-link'>
+                <li class="sidebar-item <?= (strpos(uri_string(), 'requests') !== false) ? 'active' : '' ?>">
+                    <a href="<?= base_url('/requests') ?>" class='sidebar-link'>
                         <i class="bi bi-journal-arrow-down"></i>
                         <span>Permintaan ATK</span>
                     </a>

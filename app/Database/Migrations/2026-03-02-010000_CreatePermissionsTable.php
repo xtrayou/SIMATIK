@@ -25,7 +25,7 @@ class CreatePermissionsTable extends Migration
             'group' => [
                 'type'       => 'VARCHAR',
                 'constraint' => 50,
-                'comment'    => 'Grup menu: categories, products, stock, loans, reports, users, settings',
+                'comment'    => 'Grup menu: categories, products, stock, requests, reports, users, settings',
             ],
             'description' => [
                 'type'       => 'VARCHAR',
@@ -83,11 +83,11 @@ class CreatePermissionsTable extends Migration
             ['name' => 'stock.history',    'group' => 'stock', 'description' => 'Lihat riwayat stok'],
             ['name' => 'stock.alerts',     'group' => 'stock', 'description' => 'Lihat peringatan stok'],
 
-            // Loans / Permintaan ATK
-            ['name' => 'loans.view',    'group' => 'loans', 'description' => 'Melihat daftar permintaan'],
-            ['name' => 'loans.create',  'group' => 'loans', 'description' => 'Membuat permintaan baru'],
-            ['name' => 'loans.approve', 'group' => 'loans', 'description' => 'Menyetujui permintaan'],
-            ['name' => 'loans.cancel',  'group' => 'loans', 'description' => 'Membatalkan permintaan'],
+            // Requests / Permintaan ATK
+            ['name' => 'requests.view',    'group' => 'requests', 'description' => 'Melihat daftar permintaan'],
+            ['name' => 'requests.create',  'group' => 'requests', 'description' => 'Membuat permintaan baru'],
+            ['name' => 'requests.approve', 'group' => 'requests', 'description' => 'Menyetujui permintaan'],
+            ['name' => 'requests.cancel',  'group' => 'requests', 'description' => 'Membatalkan permintaan'],
 
             // Reports
             ['name' => 'reports.view',   'group' => 'reports', 'description' => 'Melihat laporan'],
@@ -130,8 +130,8 @@ class CreatePermissionsTable extends Migration
             'stock.out',
             'stock.history',
             'stock.alerts',
-            'loans.view',
-            'loans.create',
+            'requests.view',
+            'requests.create',
             'reports.view',
             'notifications.view',
         ];

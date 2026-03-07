@@ -29,12 +29,12 @@ class SettingController extends BaseController
             'auto_update_stock'      => 1,
             'notify_low_stock'       => 1,
 
-            // 3. Peminjaman
-            'loan_max_days'          => 7,
-            'loan_max_items'         => 5,
-            'loan_require_approval'  => 1,
-            'loan_late_fee'          => 0,
-            'loan_allow_extend'      => 0,
+            // 3. Permintaan
+            'request_max_days'          => 7,
+            'request_max_items'         => 5,
+            'request_require_approval'  => 1,
+            'request_late_fee'          => 0,
+            'request_allow_extend'      => 0,
 
             // 4. Pengguna & Akses
             'enable_multi_role'      => 0,
@@ -45,7 +45,7 @@ class SettingController extends BaseController
 
             // 5. Notifikasi
             'notify_email_low_stock'    => 1,
-            'notify_email_new_loan'     => 1,
+            'notify_email_new_request'     => 1,
             'notify_email_overdue'      => 1,
             'notify_dashboard'          => 1,
             'notify_due_reminder_days'  => 1,
@@ -96,11 +96,16 @@ class SettingController extends BaseController
 
         // Handle checkboxes / toggles (not sent if unchecked)
         $toggleFields = [
-            'auto_update_stock', 'notify_low_stock',
-            'loan_require_approval', 'loan_allow_extend',
-            'enable_multi_role', 'enable_audit_log',
-            'notify_email_low_stock', 'notify_email_new_loan',
-            'notify_email_overdue', 'notify_dashboard',
+            'auto_update_stock',
+            'notify_low_stock',
+            'request_require_approval',
+            'request_allow_extend',
+            'enable_multi_role',
+            'enable_audit_log',
+            'notify_email_low_stock',
+            'notify_email_new_request',
+            'notify_email_overdue',
+            'notify_dashboard',
         ];
 
         foreach ($fields as $field) {
@@ -152,10 +157,10 @@ class SettingController extends BaseController
                 'items_per_page'           => 'required|integer|in_list[10,25,50,100]',
                 'default_unit'             => 'required|in_list[pcs,box,rim,lusin,pak,set,unit,roll]',
             ],
-            'loan' => [
-                'loan_max_days'  => 'required|integer|greater_than[0]',
-                'loan_max_items' => 'required|integer|greater_than[0]',
-                'loan_late_fee'  => 'permit_empty|integer|greater_than_equal_to[0]',
+            'request' => [
+                'request_max_days'  => 'required|integer|greater_than[0]',
+                'request_max_items' => 'required|integer|greater_than[0]',
+                'request_late_fee'  => 'permit_empty|integer|greater_than_equal_to[0]',
             ],
             'access' => [
                 'default_role'       => 'required|in_list[petugas,admin]',

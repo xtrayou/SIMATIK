@@ -168,19 +168,19 @@ class NotificationModel extends Model
     /**
      * Notifikasi: permintaan ATK baru
      */
-    public function createNewLoanNotification(array $loan): int|false
+    public function createNewRequestNotification(array $request): int|false
     {
-        $loanId = $loan['id'] ?? 0;
+        $requestId = $request['id'] ?? 0;
 
         return $this->insert([
-            'type'           => 'new_loan',
+            'type'           => 'new_request',
             'title'          => 'Permintaan ATK Baru',
-            'message'        => "Permintaan baru dari {$loan['borrower_name']} - Unit {$loan['borrower_unit']}.",
+            'message'        => "Permintaan baru dari {$request['borrower_name']} - Unit {$request['borrower_unit']}.",
             'icon'           => 'bi-journal-arrow-down',
             'color'          => 'info',
-            'url'            => "/loans/show/{$loanId}",
-            'reference_type' => 'loan',
-            'reference_id'   => $loanId,
+            'url'            => "/requests/show/{$requestId}",
+            'reference_type' => 'request',
+            'reference_id'   => $requestId,
             'for_role'       => 'admin',
         ]);
     }
@@ -188,19 +188,19 @@ class NotificationModel extends Model
     /**
      * Notifikasi: permintaan disetujui
      */
-    public function createLoanApprovedNotification(array $loan): int|false
+    public function createRequestApprovedNotification(array $request): int|false
     {
-        $loanId = $loan['id'] ?? 0;
+        $requestId = $request['id'] ?? 0;
 
         return $this->insert([
-            'type'           => 'loan_approved',
+            'type'           => 'request_approved',
             'title'          => 'Permintaan Disetujui',
-            'message'        => "Permintaan #{$loanId} dari {$loan['borrower_name']} telah disetujui.",
+            'message'        => "Permintaan #{$requestId} dari {$request['borrower_name']} telah disetujui.",
             'icon'           => 'bi-check-circle-fill',
             'color'          => 'success',
-            'url'            => "/loans/show/{$loanId}",
-            'reference_type' => 'loan',
-            'reference_id'   => $loanId,
+            'url'            => "/requests/show/{$requestId}",
+            'reference_type' => 'request',
+            'reference_id'   => $requestId,
             'for_role'       => 'all',
         ]);
     }
@@ -208,19 +208,19 @@ class NotificationModel extends Model
     /**
      * Notifikasi: permintaan dibatalkan
      */
-    public function createLoanCancelledNotification(array $loan): int|false
+    public function createRequestCancelledNotification(array $request): int|false
     {
-        $loanId = $loan['id'] ?? 0;
+        $requestId = $request['id'] ?? 0;
 
         return $this->insert([
-            'type'           => 'loan_cancelled',
+            'type'           => 'request_cancelled',
             'title'          => 'Permintaan Dibatalkan',
-            'message'        => "Permintaan #{$loanId} dari {$loan['borrower_name']} telah dibatalkan.",
+            'message'        => "Permintaan #{$requestId} dari {$request['borrower_name']} telah dibatalkan.",
             'icon'           => 'bi-x-circle',
             'color'          => 'secondary',
-            'url'            => "/loans/show/{$loanId}",
-            'reference_type' => 'loan',
-            'reference_id'   => $loanId,
+            'url'            => "/requests/show/{$requestId}",
+            'reference_type' => 'request',
+            'reference_id'   => $requestId,
             'for_role'       => 'all',
         ]);
     }

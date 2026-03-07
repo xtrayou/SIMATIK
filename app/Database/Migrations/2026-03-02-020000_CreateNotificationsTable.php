@@ -17,7 +17,7 @@ class CreateNotificationsTable extends Migration
             ],
             'type' => [
                 'type'       => 'ENUM',
-                'constraint' => ['low_stock', 'out_of_stock', 'new_loan', 'loan_approved', 'loan_cancelled', 'stock_in', 'stock_out', 'system'],
+                'constraint' => ['low_stock', 'out_of_stock', 'new_request', 'request_approved', 'request_cancelled', 'stock_in', 'stock_out', 'system'],
                 'comment'    => 'Jenis notifikasi',
             ],
             'title' => [
@@ -49,7 +49,7 @@ class CreateNotificationsTable extends Migration
                 'type'       => 'VARCHAR',
                 'constraint' => 50,
                 'null'       => true,
-                'comment'    => 'Tipe referensi: product, loan, stock_movement',
+                'comment'    => 'Tipe referensi: product, request, stock_movement',
             ],
             'reference_id' => [
                 'type'       => 'INT',

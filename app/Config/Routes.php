@@ -90,14 +90,14 @@ $routes->group('api/products', function ($routes) {
 });
 
 // Permintaan ATK
-$routes->group('loans', function ($routes) {
-    $routes->get('/', 'LoanController::index');
-    $routes->get('create', 'LoanController::create');
-    $routes->post('store', 'LoanController::store');
-    $routes->get('show/(:num)', 'LoanController::show/$1');
-    $routes->post('approve/(:num)', 'LoanController::approve/$1');
-    $routes->post('distribute/(:num)', 'LoanController::distribute/$1');
-    $routes->post('cancel/(:num)', 'LoanController::cancel/$1');
+$routes->group('requests', function ($routes) {
+    $routes->get('/', 'RequestController::index');
+    $routes->get('create', 'RequestController::create');
+    $routes->post('store', 'RequestController::store');
+    $routes->get('show/(:num)', 'RequestController::show/$1');
+    $routes->post('approve/(:num)', 'RequestController::approve/$1');
+    $routes->post('distribute/(:num)', 'RequestController::distribute/$1');
+    $routes->post('cancel/(:num)', 'RequestController::cancel/$1');
 });
 
 // Users Management

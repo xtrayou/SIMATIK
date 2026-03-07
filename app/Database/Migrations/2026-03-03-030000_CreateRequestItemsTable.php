@@ -4,7 +4,7 @@ namespace App\Database\Migrations;
 
 use CodeIgniter\Database\Migration;
 
-class CreateLoanItemsTable extends Migration
+class CreateRequestItemsTable extends Migration
 {
     public function up()
     {
@@ -15,7 +15,7 @@ class CreateLoanItemsTable extends Migration
                 'unsigned' => true,
                 'auto_increment' => true,
             ],
-            'loan_id' => [
+            'request_id' => [
                 'type' => 'INT',
                 'constraint' => 11,
                 'unsigned' => true,
@@ -47,16 +47,16 @@ class CreateLoanItemsTable extends Migration
         ]);
 
         $this->forge->addPrimaryKey('id');
-        $this->forge->addKey('loan_id');
+        $this->forge->addKey('request_id');
         $this->forge->addKey('product_id');
-        $this->forge->addForeignKey('loan_id', 'loans', 'id', 'CASCADE', 'CASCADE');
+        $this->forge->addForeignKey('request_id', 'requests', 'id', 'CASCADE', 'CASCADE');
         $this->forge->addForeignKey('product_id', 'products', 'id', 'RESTRICT', 'CASCADE');
 
-        $this->forge->createTable('loan_items');
+        $this->forge->createTable('request_items');
     }
 
     public function down()
     {
-        $this->forge->dropTable('loan_items');
+        $this->forge->dropTable('request_items');
     }
 }

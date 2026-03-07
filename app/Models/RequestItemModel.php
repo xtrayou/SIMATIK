@@ -4,13 +4,13 @@ namespace App\Models;
 
 use CodeIgniter\Model;
 
-class LoanItemModel extends Model
+class RequestItemModel extends Model
 {
-    protected $table = 'loan_items';
+    protected $table = 'request_items';
     protected $primaryKey = 'id';
 
     protected $allowedFields = [
-        'loan_id',
+        'request_id',
         'product_id',
         'quantity',
         'notes',

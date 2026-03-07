@@ -1199,7 +1199,7 @@
             <div class="row g-4">
                 <div class="col-lg-7" data-aos="fade-right">
                     <div class="peminjaman-card">
-                        <form class="peminjaman-form" action="<?= base_url('loans/store') ?>" method="post">
+                        <form class="peminjaman-form" action="<?= base_url('requests/store') ?>" method="post">
                             <?= csrf_field() ?>
 
                             <div class="row">
