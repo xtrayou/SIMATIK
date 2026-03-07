@@ -4,7 +4,7 @@ namespace App\Models;
 
 use CodeIgniter\Model;
 
-class RequestModel extends Model
+class PermintaanModel extends Model
 {
     protected $table = 'requests';
     protected $primaryKey = 'id';
@@ -34,8 +34,8 @@ class RequestModel extends Model
             return null;
         }
 
-        $requestItemModel = new RequestItemModel();
-        $request['items'] = $requestItemModel->select('request_items.*, products.name as product_name, products.sku as product_sku, products.unit')
+        $modelItemPermintaan = new ItemPermintaanModel();
+        $request['items'] = $modelItemPermintaan->select('request_items.*, products.name as product_name, products.sku as product_sku, products.unit')
             ->join('products', 'products.id = request_items.product_id')
             ->where('request_items.request_id', $id)
             ->findAll();

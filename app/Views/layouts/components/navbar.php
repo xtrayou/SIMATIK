@@ -80,16 +80,16 @@
                                 id="notification-badge">
                                 <?php
                                 $navRole = session()->get('role') ?? 'staff';
-                                $navNotifModel = new \App\Models\NotificationModel();
+                                $modelNotifNav = new \App\Models\NotifikasiModel();
                                 $navNotifCount = 0;
                                 $navNotifications = [];
                                 try {
-                                    $navNotifCount = $navNotifModel->countUnreadForRole($navRole);
-                                    $navNotifications = $navNotifModel->getUnreadForRole($navRole, 5);
+                                    $navNotifCount = $modelNotifNav->countUnreadForRole($navRole);
+                                    $navNotifications = $modelNotifNav->getUnreadForRole($navRole, 5);
                                 } catch (\Exception $e) {
                                     // Tabel belum ada, fallback ke low stock
-                                    $productModel = new \App\Models\ProductModel();
-                                    $navNotifCount = count($productModel->getLowStockProducts());
+                                    $modelProduk = new \App\Models\ProdukModel();
+                                    $navNotifCount = count($modelProduk->getLowStockProducts());
                                 }
                                 echo $navNotifCount > 0 ? $navNotifCount : '';
                                 ?>

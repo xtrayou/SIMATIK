@@ -4,7 +4,7 @@ namespace App\Controllers;
 
 use App\Controllers\BaseController;
 
-class SettingController extends BaseController
+class PengaturanController extends BaseController
 {
     /**
      * Default settings configuration

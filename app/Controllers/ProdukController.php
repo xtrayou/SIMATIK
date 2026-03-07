@@ -4,24 +4,24 @@ namespace App\Controllers;
 
 use Dompdf\Dompdf;
 use Dompdf\Options;
-use App\Models\ProductModel;
-use App\Models\CategoryModel;
-use App\Models\StockMovementModel;
+use App\Models\ProdukModel;
+use App\Models\KategoriModel;
+use App\Models\MutasiStokModel;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use Exception;
 
-class ProductController extends BaseController
+class ProdukController extends BaseController
 {
-    protected ProductModel $productModel;
-    protected CategoryModel $categoryModel;
-    protected StockMovementModel $stockMovementModel;
+    protected ProdukModel $modelProduk;
+    protected KategoriModel $modelKategori;
+    protected MutasiStokModel $modelMutasiStok;
 
     public function __construct()
     {
-        $this->productModel = new ProductModel();
-        $this->categoryModel = new CategoryModel();
-        $this->stockMovementModel = new StockMovementModel();
+        $this->modelProduk = new ProdukModel();
+        $this->modelKategori = new KategoriModel();
+        $this->modelMutasiStok = new MutasiStokModel();
     }
 
     /**
@@ -35,13 +35,13 @@ class ProductController extends BaseController
         $category    = $this->request->getGet('category');
         $stockStatus = $this->request->getGet('stock_status');
 
-        $products = $this->productModel->getFilteredProducts([
+        $products = $this->modelProduk->getFilteredProducts([
             'search'       => $search,
             'category'     => $category,
             'stock_status' => $stockStatus
         ]);
 
-        $categories = $this->categoryModel->getActiveCategories();
+        $categories = $this->modelKategori->getActiveCategories();
 
         $data = [
             'daftarProduk'   => $products,
@@ -75,7 +75,7 @@ class ProductController extends BaseController
                 'unit'          => 'Pcs',
                 'is_active'     => 1
             ],
-            'daftarKategori' => $this->categoryModel->getActiveCategories(),
+            'daftarKategori' => $this->modelKategori->getActiveCategories(),
         ];
 
         return $this->render('products/create', $data);
@@ -117,9 +117,9 @@ class ProductController extends BaseController
         $db->transStart();
 
         try {
-            $productId = $this->productModel->insert($payload);
+            $productId = $this->modelProduk->insert($payload);
 
-            $this->stockMovementModel->insert([
+            $this->modelMutasiStok->insert([
                 'product_id'   => $productId,
                 'type'         => 'IN',
                 'quantity'     => (int) $this->request->getPost('current_stock') ?: 0,
@@ -146,7 +146,7 @@ class ProductController extends BaseController
      */
     public function show($id)
     {
-        $product = $this->productModel->getProductWithCategory((int)$id);
+        $product = $this->modelProduk->getProductWithCategory((int)$id);
 
         if (!$product) {
             return redirect()->to('/products')->with('error', 'Produk tidak ditemukan.');
@@ -154,14 +154,14 @@ class ProductController extends BaseController
 
         $this->setPageData('Detail Produk', $product['name']);
 
-        $stockHistory = $this->stockMovementModel->where('product_id', $id)
+        $stockHistory = $this->modelMutasiStok->where('product_id', $id)
             ->orderBy('created_at', 'DESC')
             ->limit(10)
             ->findAll();
 
         $stats = [
-            'total_masuk'  => $this->stockMovementModel->where('product_id', $id)->where('type', 'IN')->selectSum('quantity', 'total')->first()['total'] ?? 0,
-            'total_keluar' => $this->stockMovementModel->where('product_id', $id)->where('type', 'OUT')->selectSum('quantity', 'total')->first()['total'] ?? 0,
+            'total_masuk'  => $this->modelMutasiStok->where('product_id', $id)->where('type', 'IN')->selectSum('quantity', 'total')->first()['total'] ?? 0,
+            'total_keluar' => $this->modelMutasiStok->where('product_id', $id)->where('type', 'OUT')->selectSum('quantity', 'total')->first()['total'] ?? 0,
         ];
 
         $data = [
@@ -178,7 +178,7 @@ class ProductController extends BaseController
      */
     public function edit($id)
     {
-        $product = $this->productModel->find($id);
+        $product = $this->modelProduk->find($id);
 
         if (!$product) {
             return redirect()->to('/products')->with('error', 'Produk tidak ditemukan.');
@@ -188,7 +188,7 @@ class ProductController extends BaseController
 
         $data = [
             'produk'         => $product,
-            'daftarKategori' => $this->categoryModel->getActiveCategories(),
+            'daftarKategori' => $this->modelKategori->getActiveCategories(),
         ];
 
         return $this->render('products/edit', $data);
@@ -223,7 +223,7 @@ class ProductController extends BaseController
             'unit'        => $this->request->getPost('unit'),
         ];
 
-        if ($this->productModel->update($id, $payload)) {
+        if ($this->modelProduk->update($id, $payload)) {
             return redirect()->to('/products')->with('success', 'Data produk berhasil diperbarui.');
         }
 
@@ -235,13 +235,13 @@ class ProductController extends BaseController
      */
     public function delete($id)
     {
-        $movementCount = $this->stockMovementModel->where('product_id', $id)->countAllResults();
+        $movementCount = $this->modelMutasiStok->where('product_id', $id)->countAllResults();
 
         if ($movementCount > 0) {
             return $this->jsonResponse(['status' => false, 'message' => 'Produk tidak bisa dihapus karena sudah memiliki riwayat transaksi.'], 400);
         }
 
-        if ($this->productModel->delete($id)) {
+        if ($this->modelProduk->delete($id)) {
             return $this->jsonResponse(['status' => true, 'message' => 'Produk berhasil dihapus.']);
         }
 
@@ -253,7 +253,7 @@ class ProductController extends BaseController
      */
     public function exportExcel()
     {
-        $products = $this->productModel->getProductsWithCategory();
+        $products = $this->modelProduk->getProductsWithCategory();
 
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
@@ -294,7 +294,7 @@ class ProductController extends BaseController
      */
     public function exportPdf()
     {
-        $products = $this->productModel->getProductsWithCategory();
+        $products = $this->modelProduk->getProductsWithCategory();
 
         $html = "<h2>Laporan Inventaris Barang</h2>";
         $html .= "<table border='1' width='100%' cellpadding='5' style='border-collapse:collapse;'>

@@ -4,7 +4,7 @@ namespace App\Models;
 
 use CodeIgniter\Model;
 
-class CategoryModel extends Model
+class KategoriModel extends Model
 {
     protected $table = 'categories';
     protected $primaryKey = 'id';
@@ -86,8 +86,8 @@ class CategoryModel extends Model
      */
     public function canDelete(int $id): bool
     {
-        $productModel = new ProductModel();
-        $productCount = $productModel->where('category_id', $id)->countAllResults();
+        $modelProduk = new ProdukModel();
+        $productCount = $modelProduk->where('category_id', $id)->countAllResults();
 
         return $productCount === 0;
     }

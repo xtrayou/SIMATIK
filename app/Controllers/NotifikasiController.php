@@ -2,15 +2,15 @@
 
 namespace App\Controllers;
 
-use App\Models\NotificationModel;
+use App\Models\NotifikasiModel;
 
-class NotificationController extends BaseController
+class NotifikasiController extends BaseController
 {
-    protected NotificationModel $notificationModel;
+    protected NotifikasiModel $modelNotifikasi;
 
     public function __construct()
     {
-        $this->notificationModel = new NotificationModel();
+        $this->modelNotifikasi = new NotifikasiModel();
     }
 
     /**
@@ -22,13 +22,13 @@ class NotificationController extends BaseController
 
         $role = session()->get('role') ?? 'staff';
 
-        $notifications = $this->notificationModel->getForRole($role, 20);
-        $pager = $this->notificationModel->pager;
+        $notifications = $this->modelNotifikasi->getForRole($role, 20);
+        $pager = $this->modelNotifikasi->pager;
 
         $data = [
             'notifications' => $notifications,
             'pager'         => $pager,
-            'unreadCount'   => $this->notificationModel->countUnreadForRole($role),
+            'unreadCount'   => $this->modelNotifikasi->countUnreadForRole($role),
         ];
 
         return $this->render('notifications/index', $data);
@@ -39,14 +39,14 @@ class NotificationController extends BaseController
      */
     public function read($id)
     {
-        $notification = $this->notificationModel->find($id);
+        $notification = $this->modelNotifikasi->find($id);
 
         if (!$notification) {
             return redirect()->to('/notifications')->with('error', 'Notifikasi tidak ditemukan.');
         }
 
         $userId = session()->get('userId');
-        $this->notificationModel->markAsRead($id, $userId);
+        $this->modelNotifikasi->markAsRead($id, $userId);
 
         // Redirect ke URL tujuan jika tersedia
         if (!empty($notification['url'])) {
@@ -64,7 +64,7 @@ class NotificationController extends BaseController
         $role   = session()->get('role') ?? 'staff';
         $userId = session()->get('userId');
 
-        $this->notificationModel->markAllAsRead($role, $userId);
+        $this->modelNotifikasi->markAllAsRead($role, $userId);
 
         if ($this->isAjax()) {
             return $this->jsonResponse(['status' => true, 'message' => 'Semua notifikasi telah dibaca.']);
@@ -78,13 +78,13 @@ class NotificationController extends BaseController
      */
     public function delete($id)
     {
-        $notification = $this->notificationModel->find($id);
+        $notification = $this->modelNotifikasi->find($id);
 
         if (!$notification) {
             return $this->jsonResponse(['status' => false, 'message' => 'Notifikasi tidak ditemukan.'], 404);
         }
 
-        $this->notificationModel->delete($id);
+        $this->modelNotifikasi->delete($id);
 
         if ($this->isAjax()) {
             return $this->jsonResponse(['status' => true, 'message' => 'Notifikasi dihapus.']);
@@ -102,7 +102,7 @@ class NotificationController extends BaseController
             return $this->jsonResponse(['status' => false, 'message' => 'Akses ditolak.'], 403);
         }
 
-        $deleted = $this->notificationModel->cleanOld(30);
+        $deleted = $this->modelNotifikasi->cleanOld(30);
 
         return $this->jsonResponse([
             'status'  => true,

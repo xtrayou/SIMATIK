@@ -3,16 +3,16 @@
 namespace App\Controllers;
 
 use App\Controllers\BaseController;
-use App\Models\CategoryModel;
+use App\Models\KategoriModel;
 use CodeIgniter\HTTP\RedirectResponse;
 
-class CategoryController extends BaseController
+class KategoriController extends BaseController
 {
-    protected CategoryModel $categoryModel;
+    protected KategoriModel $modelKategori;
 
     public function __construct()
     {
-        $this->categoryModel = new CategoryModel();
+        $this->modelKategori = new KategoriModel();
     }
 
     /**
@@ -46,7 +46,7 @@ class CategoryController extends BaseController
      */
     private function findCategoryOrRedirect(int $id)
     {
-        $category = $this->categoryModel->find($id);
+        $category = $this->modelKategori->find($id);
 
         if ($category) {
             return $category;
@@ -74,9 +74,9 @@ class CategoryController extends BaseController
             $orderBy = 'name';
         }
 
-        $totalData  = $this->categoryModel->countCategories($keyword, $filterStatus);
+        $totalData  = $this->modelKategori->countCategories($keyword, $filterStatus);
         $offset     = ($page - 1) * $perPage;
-        $categories = $this->categoryModel->getCategoriesWithProductCount(
+        $categories = $this->modelKategori->getCategoriesWithProductCount(
             $keyword, $filterStatus, $orderBy, $orderDir, $perPage, $offset
         );
 
@@ -115,7 +115,7 @@ class CategoryController extends BaseController
         
         if ($error) return $error;
 
-        if ($this->categoryModel->insert($this->getFormData())) {
+        if ($this->modelKategori->insert($this->getFormData())) {
             return redirect()->to('/categories')->with('success', 'Kategori berhasil ditambahkan');
         }
 
@@ -147,7 +147,7 @@ class CategoryController extends BaseController
         
         if ($error) return $error;
 
-        if ($this->categoryModel->update($id, $this->getFormData())) {
+        if ($this->modelKategori->update($id, $this->getFormData())) {
             return redirect()->to('/categories')->with('success', 'Kategori berhasil diperbarui');
         }
 
@@ -156,17 +156,17 @@ class CategoryController extends BaseController
 
     public function delete($id): RedirectResponse
     {
-        $category = $this->categoryModel->find($id);
+        $category = $this->modelKategori->find($id);
         if (!$category) {
             return redirect()->to('/categories')->with('error', 'Kategori tidak ditemukan');
         }
 
-        if ($this->categoryModel->canDelete((int) $id) === false) {
+        if ($this->modelKategori->canDelete((int) $id) === false) {
             return redirect()->to('/categories')
                 ->with('error', 'Kategori tidak bisa dihapus karena masih digunakan oleh produk');
         }
 
-        if ($this->categoryModel->delete($id)) {
+        if ($this->modelKategori->delete($id)) {
             return redirect()->to('/categories')->with('success', 'Kategori berhasil dihapus');
         }
 

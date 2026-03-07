@@ -2,25 +2,25 @@
 
 namespace App\Controllers;
 
-use App\Models\ProductModel;
-use App\Models\CategoryModel;
-use App\Models\StockMovementModel;
+use App\Models\ProdukModel;
+use App\Models\KategoriModel;
+use App\Models\MutasiStokModel;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use Dompdf\Dompdf;
 use Dompdf\Options;
 
-class ReportController extends BaseController
+class LaporanController extends BaseController
 {
-    protected ProductModel $productModel;
-    protected CategoryModel $categoryModel;
-    protected StockMovementModel $stockMovementModel;
+    protected ProdukModel $modelProduk;
+    protected KategoriModel $modelKategori;
+    protected MutasiStokModel $modelMutasiStok;
 
     public function __construct()
     {
-        $this->productModel       = new ProductModel();
-        $this->categoryModel      = new CategoryModel();
-        $this->stockMovementModel = new StockMovementModel();
+        $this->modelProduk       = new ProdukModel();
+        $this->modelKategori      = new KategoriModel();
+        $this->modelMutasiStok = new MutasiStokModel();
     }
 
     /**
@@ -35,7 +35,7 @@ class ReportController extends BaseController
         $sortBy         = $this->request->getGet('sort_by') ?: 'name';
         $sortOrder      = $this->request->getGet('sort_order') ?: 'ASC';
 
-        $builder = $this->productModel->select("
+        $builder = $this->modelProduk->select("
                 products.*, 
                 categories.name as category_name,
                 (products.current_stock * products.price) as stock_value,
@@ -101,7 +101,7 @@ class ReportController extends BaseController
             $categoryBreakdown[$catName]['total_value'] += $product['stock_value'];
         }
 
-        $categories = $this->categoryModel->getActiveCategories();
+        $categories = $this->modelKategori->getActiveCategories();
 
         $data = [
             'products'           => $products,
@@ -132,7 +132,7 @@ class ReportController extends BaseController
         $productFilter  = $this->request->getGet('product');
         $movementType   = $this->request->getGet('type');
 
-        $builder = $this->stockMovementModel->select('
+        $builder = $this->modelMutasiStok->select('
                 stock_movements.*, 
                 products.name as product_name,
                 products.sku as product_sku,
@@ -166,8 +166,8 @@ class ReportController extends BaseController
             'summary'      => $analytics, // Alias for view compatibility
             'top_products' => $this->getTopMovementProducts($movements),
             'daily_trend'  => $this->getDailyMovementTrend($movements, $startDate, $endDate),
-            'categories'   => $this->categoryModel->getActiveCategories(),
-            'products'     => $this->productModel->getProductsWithCategory(),
+            'categories'   => $this->modelKategori->getActiveCategories(),
+            'products'     => $this->modelProduk->getProductsWithCategory(),
             'filters'      => [
                 'start_date' => $startDate,
                 'end_date'   => $endDate,
@@ -190,7 +190,7 @@ class ReportController extends BaseController
         $categoryFilter  = $this->request->getGet('category');
         $valuationMethod = $this->request->getGet('method') ?: 'current';
 
-        $builder = $this->productModel->select('
+        $builder = $this->modelProduk->select('
                 products.*, 
                 categories.name as category_name,
                 (products.current_stock * products.price) as current_value,
@@ -236,7 +236,7 @@ class ReportController extends BaseController
 
         $data = [
             'products'   => $products,
-            'categories' => $this->categoryModel->getActiveCategories(),
+            'categories' => $this->modelKategori->getActiveCategories(),
             'summary'    => [
                 'total_current_value'    => $totalCurrentValue,
                 'total_cost_value'       => $totalCostValue,
@@ -407,12 +407,12 @@ class ReportController extends BaseController
 
     private function calculateInventoryTurnover($period)
     {
-        $movements = $this->stockMovementModel->where('type', 'OUT')
+        $movements = $this->modelMutasiStok->where('type', 'OUT')
             ->where('created_at >=', date('Y-m-d', strtotime("-{$period} days")))
             ->findAll();
         
         $totalSold    = array_sum(array_column($movements, 'quantity'));
-        $avgInventory = $this->productModel->selectSum('current_stock')->first()['current_stock'] ?? 0;
+        $avgInventory = $this->modelProduk->selectSum('current_stock')->first()['current_stock'] ?? 0;
         
         return [
             'turnover_rate' => $avgInventory > 0 ? round(($totalSold / $avgInventory) * (365 / $period), 2) : 0,
@@ -424,7 +424,7 @@ class ReportController extends BaseController
 
     private function calculateABCAnalysis()
     {
-        $products = $this->productModel->select('products.*, (products.current_stock * products.price) as stock_value')
+        $products = $this->modelProduk->select('products.*, (products.current_stock * products.price) as stock_value')
             ->where('is_active', true)->where('current_stock >', 0)
             ->orderBy('stock_value', 'DESC')->findAll();
 
@@ -455,7 +455,7 @@ class ReportController extends BaseController
 
     private function calculateDemandForecast($period)
     {
-        $movements = $this->stockMovementModel->select('product_id, SUM(quantity) as total_out, COUNT(*) as movement_count')
+        $movements = $this->modelMutasiStok->select('product_id, SUM(quantity) as total_out, COUNT(*) as movement_count')
             ->where('type', 'OUT')->where('created_at >=', date('Y-m-d', strtotime("-{$period} days")))
             ->groupBy('product_id')->findAll();
 
@@ -475,7 +475,7 @@ class ReportController extends BaseController
 
     private function getReorderSuggestions()
     {
-        $products = $this->productModel->select('products.*, categories.name as category_name')
+        $products = $this->modelProduk->select('products.*, categories.name as category_name')
             ->join('categories', 'categories.id = products.category_id')
             ->where('products.is_active', true)
             ->where('products.current_stock <= (products.min_stock * 1.5)', null, false)
@@ -539,7 +539,7 @@ class ReportController extends BaseController
         $movementType   = $this->request->getGet('type');
 
         // Get movements data
-        $builder = $this->stockMovementModel->select('
+        $builder = $this->modelMutasiStok->select('
                 stock_movements.*, 
                 products.name as product_name,
                 products.sku as product_sku,
@@ -627,7 +627,7 @@ class ReportController extends BaseController
         $movementType   = $this->request->getGet('type');
 
         // Get movements data
-        $builder = $this->stockMovementModel->select('
+        $builder = $this->modelMutasiStok->select('
                 stock_movements.*, 
                 products.name as product_name,
                 products.sku as product_sku,

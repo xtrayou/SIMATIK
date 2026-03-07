@@ -2,16 +2,16 @@
 
 namespace App\Controllers;
 
-use App\Models\UserModel;
-use App\Models\PermissionModel;
+use App\Models\PenggunaModel;
+use App\Models\HakAksesModel;
 
 class AuthController extends BaseController
 {
-    protected UserModel $userModel;
+    protected PenggunaModel $modelPengguna;
 
     public function __construct()
     {
-        $this->userModel = new UserModel();
+        $this->modelPengguna = new PenggunaModel();
     }
 
     /**
@@ -36,7 +36,7 @@ class AuthController extends BaseController
             return redirect()->back()->withInput()->with('loginError', 'Username dan password wajib diisi.');
         }
 
-        $user = $this->userModel->findByUsername((string)$username);
+        $user = $this->modelPengguna->findByUsername((string)$username);
 
         // Verify user and password
         if ($user && password_verify((string) $password, $user['password'])) {
@@ -57,8 +57,8 @@ class AuthController extends BaseController
 
             // Load permissions for user's role
             try {
-                $permissionModel = new PermissionModel();
-                $sessionData['permissions'] = $permissionModel->getPermissionNamesByRole($user['role'] ?? 'staff');
+                $modelHakAkses = new HakAksesModel();
+                $sessionData['permissions'] = $modelHakAkses->getPermissionNamesByRole($user['role'] ?? 'staff');
             } catch (\Exception $e) {
                 $sessionData['permissions'] = [];
             }

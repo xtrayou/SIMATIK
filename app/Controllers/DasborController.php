@@ -3,21 +3,21 @@
 namespace App\Controllers;
 
 use App\Controllers\BaseController;
-use App\Models\CategoryModel;
-use App\Models\ProductModel;
-use App\Models\StockMovementModel;
+use App\Models\KategoriModel;
+use App\Models\ProdukModel;
+use App\Models\MutasiStokModel;
 
-class DashboardController extends BaseController
+class DasborController extends BaseController
 {
-    protected ProductModel $productModel;
-    protected CategoryModel $categoryModel;
-    protected StockMovementModel $stockMovementModel;
+    protected ProdukModel $modelProduk;
+    protected KategoriModel $modelKategori;
+    protected MutasiStokModel $modelMutasiStok;
 
     public function __construct()
     {
-        $this->productModel        = new ProductModel();
-        $this->categoryModel       = new CategoryModel();
-        $this->stockMovementModel  = new StockMovementModel();
+        $this->modelProduk        = new ProdukModel();
+        $this->modelKategori       = new KategoriModel();
+        $this->modelMutasiStok  = new MutasiStokModel();
     }
 
     public function index()
@@ -27,14 +27,14 @@ class DashboardController extends BaseController
         $stats = [
             'total_products'     => $this->countActiveProducts(),
             'total_categories'   => $this->countActiveCategories(),
-            'inventory_value'    => $this->productModel->getTotalInventoryValue(),
-            'low_stock_count'    => count($this->productModel->getLowStockProducts()),
+            'inventory_value'    => $this->modelProduk->getTotalInventoryValue(),
+            'low_stock_count'    => count($this->modelProduk->getLowStockProducts()),
             'out_of_stock_count' => $this->countOutOfStockProducts(),
         ];
 
         $data = array_merge($stats, [
-            'recent_movements'    => $this->stockMovementModel->getMovementsWithProduct(10),
-            'low_stock_products'  => $this->productModel->getLowStockProducts(8),
+            'recent_movements'    => $this->modelMutasiStok->getMovementsWithProduct(10),
+            'low_stock_products'  => $this->modelProduk->getLowStockProducts(8),
             'top_products'        => $this->getTopProductsByValue(5),
             'chart_data'          => [
                 'monthly_movements'      => $this->getMonthlyMovementChartData(),
@@ -52,7 +52,7 @@ class DashboardController extends BaseController
      */
     private function countActiveProducts(): int
     {
-        return $this->productModel->where('is_active', true)->countAllResults();
+        return $this->modelProduk->where('is_active', true)->countAllResults();
     }
 
     /**
@@ -60,7 +60,7 @@ class DashboardController extends BaseController
      */
     private function countActiveCategories(): int
     {
-        return $this->categoryModel->where('is_active', true)->countAllResults();
+        return $this->modelKategori->where('is_active', true)->countAllResults();
     }
 
     /**
@@ -68,7 +68,7 @@ class DashboardController extends BaseController
      */
     private function countOutOfStockProducts(): int
     {
-        return $this->productModel
+        return $this->modelProduk
             ->where('current_stock', 0)
             ->where('is_active', true)
             ->countAllResults();
@@ -82,16 +82,16 @@ class DashboardController extends BaseController
         $today = date('Y-m-d');
         $thisWeek = date('Y-m-d', strtotime('-7 days'));
 
-        $totalIn = $this->stockMovementModel->where('type', 'IN')
+        $totalIn = $this->modelMutasiStok->where('type', 'IN')
             ->where('created_at >=', $thisWeek)
             ->selectSum('quantity', 'total')->first()['total'] ?? 0;
 
-        $totalOut = $this->stockMovementModel->where('type', 'OUT')
+        $totalOut = $this->modelMutasiStok->where('type', 'OUT')
             ->where('created_at >=', $thisWeek)
             ->selectSum('quantity', 'total')->first()['total'] ?? 0;
 
         return [
-            'today_movements' => $this->stockMovementModel->where("DATE(created_at)", $today, false)->countAllResults(),
+            'today_movements' => $this->modelMutasiStok->where("DATE(created_at)", $today, false)->countAllResults(),
             'this_week_in'    => (int) $totalIn,
             'this_week_out'   => (int) $totalOut,
         ];
@@ -102,7 +102,7 @@ class DashboardController extends BaseController
      */
     private function getTopProductsByValue(int $limit = 5): array
     {
-        return $this->productModel->select('
+        return $this->modelProduk->select('
                 products.*,
                 categories.name as category_name,
                 (products.current_stock * products.price) as total_value
@@ -120,7 +120,7 @@ class DashboardController extends BaseController
      */
     private function getMonthlyMovementChartData(): array
     {
-        $movements = $this->stockMovementModel->getMonthlyMovements();
+        $movements = $this->modelMutasiStok->getMonthlyMovements();
         $monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'];
 
         $labels = [];
@@ -153,7 +153,7 @@ class DashboardController extends BaseController
      */
     private function getCategoryDistributionChartData(): array
     {
-        $categories = $this->categoryModel->select('
+        $categories = $this->modelKategori->select('
                 categories.name,
                 COUNT(products.id) as product_count,
                 SUM(products.current_stock * products.price) as total_value
@@ -176,15 +176,15 @@ class DashboardController extends BaseController
      */
     private function getStockStatusChartData(): array
     {
-        $outOfStock = $this->productModel->where('current_stock', 0)->where('is_active', true)->countAllResults();
+        $outOfStock = $this->modelProduk->where('current_stock', 0)->where('is_active', true)->countAllResults();
 
-        $lowStock = $this->productModel
+        $lowStock = $this->modelProduk
             ->where('current_stock <= products.min_stock', null, false)
             ->where('current_stock >', 0)
             ->where('is_active', true)
             ->countAllResults();
 
-        $normalStock = $this->productModel
+        $normalStock = $this->modelProduk
             ->where('current_stock > products.min_stock', null, false)
             ->where('is_active', true)
             ->countAllResults();

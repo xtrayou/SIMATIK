@@ -4,7 +4,7 @@ namespace App\Models;
 
 use CodeIgniter\Model;
 
-class ProductModel extends Model
+class ProdukModel extends Model
 {
     protected $table = 'products';
     protected $primaryKey = 'id';
@@ -143,8 +143,8 @@ class ProductModel extends Model
      */
     public function generateSKU(int $categoryId, string $productName): ?string
     {
-        $categoryModel = new CategoryModel();
-        $category = $categoryModel->find($categoryId);
+        $modelKategori = new KategoriModel();
+        $category = $modelKategori->find($categoryId);
         if (!$category) {
             return null;
         }

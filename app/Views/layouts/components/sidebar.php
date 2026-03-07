@@ -53,8 +53,8 @@
                         <span>Kategori Produk</span>
                         <span class="badge bg-primary ms-auto" id="category-count">
                             <?php
-                            $categoryModel = new \App\Models\CategoryModel();
-                            echo $categoryModel->where('is_active', true)->countAllResults();
+                            $modelKategori = new \App\Models\KategoriModel();
+                            echo $modelKategori->where('is_active', true)->countAllResults();
                             ?>
                         </span>
                     </a>
@@ -67,8 +67,8 @@
                         <span>Produk</span>
                         <span class="badge bg-success ms-auto" id="product-count">
                             <?php
-                            $productModel = new \App\Models\ProductModel();
-                            echo $productModel->where('is_active', true)->countAllResults();
+                            $modelProduk = new \App\Models\ProdukModel();
+                            echo $modelProduk->where('is_active', true)->countAllResults();
                             ?>
                         </span>
                     </a>

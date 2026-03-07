@@ -4,7 +4,7 @@ namespace App\Models;
 
 use CodeIgniter\Model;
 
-class UserModel extends Model
+class PenggunaModel extends Model
 {
     protected $table            = 'users';
     protected $primaryKey       = 'id';
@@ -35,8 +35,8 @@ class UserModel extends Model
         $user = $this->find($userId);
         if (!$user) return [];
 
-        $permissionModel = new PermissionModel();
-        return $permissionModel->getPermissionNamesByRole($user['role']);
+        $modelHakAkses = new HakAksesModel();
+        return $modelHakAkses->getPermissionNamesByRole($user['role']);
     }
 
     /**
@@ -50,7 +50,7 @@ class UserModel extends Model
         // Admin selalu punya semua permission
         if ($user['role'] === 'admin') return true;
 
-        $permissionModel = new PermissionModel();
-        return $permissionModel->roleHasPermission($user['role'], $permissionName);
+        $modelHakAkses = new HakAksesModel();
+        return $modelHakAkses->roleHasPermission($user['role'], $permissionName);
     }
 }

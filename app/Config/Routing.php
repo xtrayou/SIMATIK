@@ -48,7 +48,7 @@ class Routing extends BaseRouting
      *
      * Default: 'Home'
      */
-    public string $defaultController = 'HomeController';
+    public string $defaultController = 'BerandaController';
 
     /**
      * For Defined Routes and Auto Routing.

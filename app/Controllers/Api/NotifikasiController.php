@@ -3,15 +3,15 @@
 namespace App\Controllers\Api;
 
 use App\Controllers\BaseController;
-use App\Models\NotificationModel;
+use App\Models\NotifikasiModel;
 
-class NotificationController extends BaseController
+class NotifikasiController extends BaseController
 {
-    protected NotificationModel $notificationModel;
+    protected NotifikasiModel $modelNotifikasi;
 
     public function __construct()
     {
-        $this->notificationModel = new NotificationModel();
+        $this->modelNotifikasi = new NotifikasiModel();
     }
 
     /**
@@ -22,8 +22,8 @@ class NotificationController extends BaseController
         $role  = session()->get('role') ?? 'staff';
         $limit = (int) ($this->request->getGet('limit') ?? 5);
 
-        $notifications = $this->notificationModel->getUnreadForRole($role, $limit);
-        $unreadCount   = $this->notificationModel->countUnreadForRole($role);
+        $notifications = $this->modelNotifikasi->getUnreadForRole($role, $limit);
+        $unreadCount   = $this->modelNotifikasi->countUnreadForRole($role);
 
         return $this->jsonResponse([
             'status'       => true,
@@ -38,7 +38,7 @@ class NotificationController extends BaseController
     public function count()
     {
         $role = session()->get('role') ?? 'staff';
-        $count = $this->notificationModel->countUnreadForRole($role);
+        $count = $this->modelNotifikasi->countUnreadForRole($role);
 
         return $this->jsonResponse([
             'status' => true,

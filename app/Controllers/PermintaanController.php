@@ -2,28 +2,28 @@
 
 namespace App\Controllers;
 
-use App\Models\RequestModel;
-use App\Models\RequestItemModel;
-use App\Models\ProductModel;
-use App\Models\StockMovementModel;
-use App\Models\NotificationModel;
+use App\Models\PermintaanModel;
+use App\Models\ItemPermintaanModel;
+use App\Models\ProdukModel;
+use App\Models\MutasiStokModel;
+use App\Models\NotifikasiModel;
 use Exception;
 
-class RequestController extends BaseController
+class PermintaanController extends BaseController
 {
-    protected RequestModel $requestModel;
-    protected RequestItemModel $requestItemModel;
-    protected ProductModel $productModel;
-    protected StockMovementModel $stockMovementModel;
-    protected NotificationModel $notificationModel;
+    protected PermintaanModel $modelPermintaan;
+    protected ItemPermintaanModel $modelItemPermintaan;
+    protected ProdukModel $modelProduk;
+    protected MutasiStokModel $modelMutasiStok;
+    protected NotifikasiModel $modelNotifikasi;
 
     public function __construct()
     {
-        $this->requestModel       = new RequestModel();
-        $this->requestItemModel   = new RequestItemModel();
-        $this->productModel       = new ProductModel();
-        $this->stockMovementModel = new StockMovementModel();
-        $this->notificationModel  = new NotificationModel();
+        $this->modelPermintaan       = new PermintaanModel();
+        $this->modelItemPermintaan   = new ItemPermintaanModel();
+        $this->modelProduk       = new ProdukModel();
+        $this->modelMutasiStok = new MutasiStokModel();
+        $this->modelNotifikasi  = new NotifikasiModel();
     }
 
     /**
@@ -34,7 +34,7 @@ class RequestController extends BaseController
         $this->setPageData('Daftar Permintaan', 'Manajemen permintaan dan distribusi ATK');
 
         $status = $this->request->getGet('status');
-        $builder = $this->requestModel->orderBy('created_at', 'DESC');
+        $builder = $this->modelPermintaan->orderBy('created_at', 'DESC');
 
         if ($status) {
             $builder->where('status', $status);
@@ -57,7 +57,7 @@ class RequestController extends BaseController
     {
         $this->setPageData('Buat Permintaan', 'Formulir permintaan ATK baru');
 
-        $products = $this->productModel->where('is_active', true)->orderBy('name', 'ASC')->findAll();
+        $products = $this->modelProduk->where('is_active', true)->orderBy('name', 'ASC')->findAll();
 
         $data = [
             'daftarProduk' => $products
@@ -88,7 +88,7 @@ class RequestController extends BaseController
         $db->transStart();
 
         try {
-            $requestId = $this->requestModel->insert([
+            $requestId = $this->modelPermintaan->insert([
                 'borrower_name'       => $this->request->getPost('borrower_name'),
                 'borrower_identifier' => $this->request->getPost('borrower_identifier'),
                 'borrower_unit'       => $this->request->getPost('borrower_unit'),
@@ -104,7 +104,7 @@ class RequestController extends BaseController
             foreach ($productIds as $index => $pid) {
                 if (empty($pid) || empty($quantities[$index])) continue;
 
-                $this->requestItemModel->insert([
+                $this->modelItemPermintaan->insert([
                     'request_id' => $requestId,
                     'product_id' => $pid,
                     'quantity'   => $quantities[$index],
@@ -121,9 +121,9 @@ class RequestController extends BaseController
 
             // Kirim notifikasi permintaan baru
             try {
-                $requestData = $this->requestModel->find($requestId);
-                if ($requestData) {
-                    $this->notificationModel->createNewRequestNotification($requestData);
+                $dataPermintaan = $this->modelPermintaan->find($requestId);
+                if ($dataPermintaan) {
+                    $this->modelNotifikasi->createNewRequestNotification($dataPermintaan);
                 }
             } catch (\Throwable $e) {
                 log_message('error', 'Gagal kirim notifikasi permintaan baru: ' . $e->getMessage());
@@ -141,15 +141,15 @@ class RequestController extends BaseController
      */
     public function show($id)
     {
-        $requestData = $this->requestModel->getRequestWithItems((int)$id);
+        $dataPermintaan = $this->modelPermintaan->getRequestWithItems((int)$id);
 
-        if (!$requestData) {
+        if (!$dataPermintaan) {
             return redirect()->to('/requests')->with('error', 'Data tidak ditemukan.');
         }
 
         $this->setPageData('Detail Permintaan', 'Review detail permintaan ATK');
 
-        return $this->render('requests/show', ['pinjaman' => $requestData]);
+        return $this->render('requests/show', ['pinjaman' => $dataPermintaan]);
     }
 
     /**
@@ -157,13 +157,13 @@ class RequestController extends BaseController
      */
     public function approve($id)
     {
-        $requestData = $this->requestModel->find($id);
-        if (!$requestData) return $this->jsonResponse(['status' => false, 'message' => 'Data tidak ditemukan'], 404);
+        $dataPermintaan = $this->modelPermintaan->find($id);
+        if (!$dataPermintaan) return $this->jsonResponse(['status' => false, 'message' => 'Data tidak ditemukan'], 404);
 
-        if ($this->requestModel->update($id, ['status' => 'approved'])) {
+        if ($this->modelPermintaan->update($id, ['status' => 'approved'])) {
             // Kirim notifikasi disetujui
             try {
-                $this->notificationModel->createRequestApprovedNotification($requestData);
+                $this->modelNotifikasi->createRequestApprovedNotification($dataPermintaan);
             } catch (\Throwable $e) {
                 log_message('error', 'Gagal kirim notifikasi approve: ' . $e->getMessage());
             }
@@ -178,17 +178,17 @@ class RequestController extends BaseController
      */
     public function distribute($id)
     {
-        $requestData = $this->requestModel->find($id);
-        if (!$requestData) return $this->jsonResponse(['status' => false, 'message' => 'Data tidak ditemukan'], 404);
+        $dataPermintaan = $this->modelPermintaan->find($id);
+        if (!$dataPermintaan) return $this->jsonResponse(['status' => false, 'message' => 'Data tidak ditemukan'], 404);
 
-        $items = $this->requestItemModel->where('request_id', $id)->findAll();
+        $daftarItem = $this->modelItemPermintaan->where('request_id', $id)->findAll();
 
         $db = \Config\Database::connect();
         $db->transStart();
 
         try {
-            foreach ($items as $item) {
-                $this->stockMovementModel->createMovement([
+            foreach ($daftarItem as $item) {
+                $this->modelMutasiStok->createMovement([
                     'product_id'   => $item['product_id'],
                     'type'         => 'OUT',
                     'quantity'     => $item['quantity'],
@@ -198,20 +198,20 @@ class RequestController extends BaseController
                 ]);
             }
 
-            $this->requestModel->update($id, ['status' => 'distributed']);
+            $this->modelPermintaan->update($id, ['status' => 'distributed']);
             $db->transComplete();
 
             if ($db->transStatus() === false) throw new Exception('Gagal memproses mutasi stok.');
 
             // Cek stok rendah/habis setelah distribusi
             try {
-                foreach ($items as $item) {
-                    $product = $this->productModel->find($item['product_id']);
-                    if (!$product) continue;
-                    if ((int)$product['current_stock'] <= 0) {
-                        $this->notificationModel->createOutOfStockNotification($product);
-                    } elseif ((int)$product['current_stock'] <= (int)($product['min_stock'] ?? 0)) {
-                        $this->notificationModel->createLowStockNotification($product);
+                foreach ($daftarItem as $item) {
+                    $produk = $this->modelProduk->find($item['product_id']);
+                    if (!$produk) continue;
+                    if ((int)$produk['current_stock'] <= 0) {
+                        $this->modelNotifikasi->createOutOfStockNotification($produk);
+                    } elseif ((int)$produk['current_stock'] <= (int)($produk['min_stock'] ?? 0)) {
+                        $this->modelNotifikasi->createLowStockNotification($produk);
                     }
                 }
             } catch (\Throwable $e) {
@@ -230,17 +230,17 @@ class RequestController extends BaseController
      */
     public function cancel($id)
     {
-        $requestData = $this->requestModel->find($id);
-        if (!$requestData) return $this->jsonResponse(['status' => false, 'message' => 'Data tidak ditemukan'], 404);
+        $dataPermintaan = $this->modelPermintaan->find($id);
+        if (!$dataPermintaan) return $this->jsonResponse(['status' => false, 'message' => 'Data tidak ditemukan'], 404);
 
-        if ($requestData['status'] == 'distributed') {
+        if ($dataPermintaan['status'] == 'distributed') {
             return $this->jsonResponse(['status' => false, 'message' => 'Tidak bisa membatalkan permintaan yang sudah didistribusikan.'], 400);
         }
 
-        if ($this->requestModel->update($id, ['status' => 'cancelled'])) {
+        if ($this->modelPermintaan->update($id, ['status' => 'cancelled'])) {
             // Kirim notifikasi dibatalkan
             try {
-                $this->notificationModel->createRequestCancelledNotification($requestData);
+                $this->modelNotifikasi->createRequestCancelledNotification($dataPermintaan);
             } catch (\Throwable $e) {
                 log_message('error', 'Gagal kirim notifikasi cancel: ' . $e->getMessage());
             }

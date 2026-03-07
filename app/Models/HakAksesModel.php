@@ -4,7 +4,7 @@ namespace App\Models;
 
 use CodeIgniter\Model;
 
-class PermissionModel extends Model
+class HakAksesModel extends Model
 {
     protected $table            = 'permissions';
     protected $primaryKey       = 'id';

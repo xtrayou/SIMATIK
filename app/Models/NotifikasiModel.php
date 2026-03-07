@@ -4,7 +4,7 @@ namespace App\Models;
 
 use CodeIgniter\Model;
 
-class NotificationModel extends Model
+class NotifikasiModel extends Model
 {
     protected $table            = 'notifications';
     protected $primaryKey       = 'id';

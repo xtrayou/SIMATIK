@@ -4,7 +4,7 @@ namespace App\Models;
 
 use CodeIgniter\Model;
 
-class RequestItemModel extends Model
+class ItemPermintaanModel extends Model
 {
     protected $table = 'request_items';
     protected $primaryKey = 'id';

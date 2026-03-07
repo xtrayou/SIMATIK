@@ -5,7 +5,7 @@ namespace App\Models;
 use CodeIgniter\Model;
 use Exception;
 
-class StockMovementModel extends Model
+class MutasiStokModel extends Model
 {
     protected $table = 'stock_movements';
     protected $primaryKey = 'id';
@@ -80,8 +80,8 @@ class StockMovementModel extends Model
      */
     public function createMovement(array $data): int
     {
-        $productModel = new ProductModel();
-        $product = $productModel->find($data['product_id']);
+        $modelProduk = new ProdukModel();
+        $product = $modelProduk->find($data['product_id']);
 
         if (!$product) {
             throw new Exception('Produk tidak ditemukan');
@@ -112,7 +112,7 @@ class StockMovementModel extends Model
         $movementId = $this->insert($data);
 
         // Update product current stock
-        $productModel->update($data['product_id'], ['current_stock' => $newStock]);
+        $modelProduk->update($data['product_id'], ['current_stock' => $newStock]);
 
         return (int) $movementId;
     }
