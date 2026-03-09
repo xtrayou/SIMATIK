@@ -33,6 +33,7 @@
         <!-- Sidebar Menu -->
         <div class="sidebar-menu">
             <ul class="menu">
+                <?php $userRole = session()->get('role'); ?>
 
                 <!-- Dashboard -->
                 <li class="sidebar-title">Dashboard</li>
@@ -46,7 +47,8 @@
                 <!-- Master Data Section -->
                 <li class="sidebar-title">Master Data</li>
 
-                <!-- Categories -->
+                <!-- Categories (Super Admin Only) -->
+                <?php if ($userRole === 'superadmin'): ?>
                 <li class="sidebar-item <?= (strpos(uri_string(), 'categories') !== false) ? 'active' : '' ?>">
                     <a href="<?= base_url('/categories') ?>" class='sidebar-link'>
                         <i class="bi bi-collection-fill"></i>
@@ -59,6 +61,7 @@
                         </span>
                     </a>
                 </li>
+                <?php endif; ?>
 
                 <!-- Products -->
                 <li class="sidebar-item <?= (strpos(uri_string(), 'products') !== false) ? 'active' : '' ?>">
@@ -93,15 +96,23 @@
                     </a>
                 </li>
 
-                <!-- Permintaan ATK -->
-                <li class="sidebar-title">Permintaan ATK</li>
+                <!-- Stock History -->
+                <li class="sidebar-item <?= (uri_string() == 'stock/history') ? 'active' : '' ?>">
+                    <a href="<?= base_url('/stock/history') ?>" class='sidebar-link'>
+                        <i class="bi bi-clock-history"></i>
+                        <span>Riwayat Stok</span>
+                    </a>
+                </li>
 
+                <!-- Permintaan ATK (Super Admin Only) -->
+                <?php if ($userRole === 'superadmin'): ?>
                 <li class="sidebar-item <?= (strpos(uri_string(), 'requests') !== false) ? 'active' : '' ?>">
                     <a href="<?= base_url('/requests') ?>" class='sidebar-link'>
                         <i class="bi bi-journal-arrow-down"></i>
                         <span>Permintaan ATK</span>
                     </a>
                 </li>
+                <?php endif; ?>
 
                 <!-- Reports Section -->
                 <li class="sidebar-title">Laporan</li>
@@ -124,31 +135,35 @@
                                 <span>Laporan Pergerakan</span>
                             </a>
                         </li>
+                        <?php if ($userRole === 'superadmin'): ?>
                         <li class="submenu-item <?= (uri_string() == 'reports/valuation') ? 'active' : '' ?>">
                             <a href="<?= base_url('/reports/valuation') ?>" class="submenu-link">
                                 <i class="bi bi-currency-dollar"></i>
                                 <span>Valuasi Inventory</span>
                             </a>
                         </li>
+                        <?php endif; ?>
                     </ul>
                 </li>
 
-                <!-- Settings Section -->
+                <!-- Settings & User Management (Super Admin Only) -->
+                <?php if ($userRole === 'superadmin'): ?>
                 <li class="sidebar-title">Pengaturan</li>
 
-                <li class="sidebar-item">
+                <li class="sidebar-item <?= (uri_string() == 'settings') ? 'active' : '' ?>">
                     <a href="<?= base_url('/settings') ?>" class='sidebar-link'>
                         <i class="bi bi-gear-fill"></i>
                         <span>Pengaturan Sistem</span>
                     </a>
                 </li>
 
-                <li class="sidebar-item">
+                <li class="sidebar-item <?= (uri_string() == 'users') ? 'active' : '' ?>">
                     <a href="<?= base_url('/users') ?>" class='sidebar-link'>
                         <i class="bi bi-people-fill"></i>
                         <span>Manajemen User</span>
                     </a>
                 </li>
+                <?php endif; ?>
 
             </ul>
         </div>

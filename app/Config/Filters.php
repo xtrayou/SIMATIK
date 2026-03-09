@@ -124,9 +124,10 @@ class Filters extends BaseFilters
             'users*',
             'settings*',
         ]],
-        'role:admin' => ['before' => [
+        'role:superadmin' => ['before' => [
             'users*',
             'settings*',
+            'categories*',
         ]],
     ];
 }

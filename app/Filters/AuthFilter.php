@@ -18,6 +18,20 @@ class AuthFilter implements FilterInterface
             return redirect()->to('/')->with('loginError', 'Silakan login terlebih dahulu untuk mengakses halaman tersebut.');
         }
 
+        // --- Cek Inaktivitas (15 Menit = 900 detik) ---
+        $lastActivity = session()->get('last_activity');
+        $currentTime  = time();
+        $timeout      = 900; 
+
+        if ($lastActivity && ($currentTime - $lastActivity > $timeout)) {
+            session()->destroy();
+            return redirect()->to('/')->with('loginError', 'Sesi Anda telah berakhir karena tidak ada aktivitas selama 15 menit.');
+        }
+        
+        // Update waktu aktivitas terakhir
+        session()->set('last_activity', $currentTime);
+        // ----------------------------------------------
+
         // Cek permission jika ada argument $arguments dari filter
         if (!empty($arguments)) {
             $userPermissions = session()->get('permissions') ?? [];

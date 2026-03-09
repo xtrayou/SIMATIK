@@ -30,6 +30,12 @@ class MutasiStokModel extends Model
     public function getMovementsWithProduct(int $limit = 10, array $filters = []): array
     {
         $builder = $this->select('stock_movements.*, products.name as product_name, products.sku as product_sku, products.unit')
+            ->select('CASE 
+                WHEN stock_movements.type = "IN" THEN stock_movements.previous_stock + stock_movements.quantity
+                WHEN stock_movements.type = "OUT" THEN stock_movements.previous_stock - stock_movements.quantity
+                WHEN stock_movements.type = "ADJUSTMENT" THEN stock_movements.quantity
+                ELSE stock_movements.previous_stock
+            END as current_stock', false)
             ->join('products', 'products.id = stock_movements.product_id');
 
         if (!empty($filters['product_id'])) {

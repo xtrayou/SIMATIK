@@ -14,6 +14,7 @@ $routes->get('login', 'BerandaController::index');   // fallback: tampilkan land
 $routes->post('login', 'AuthController::login');
 $routes->post('auth/login', 'AuthController::login'); // aksi form modal di landing page
 $routes->get('logout', 'AuthController::logout');
+$routes->get('auth/logout', 'AuthController::logout');
 
 // ── Dashboard ────────────────────────────────────────────────────────
 $routes->get('dashboard', 'DasborController::index', ['filter' => 'auth']);

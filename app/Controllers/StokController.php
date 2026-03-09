@@ -424,19 +424,99 @@ class StokController extends BaseController
     }
 
     /**
-     * AJAX: Get Stock Info
+     * Export Stock History
      */
-    public function getProductStock($id)
+    public function exportHistory($format = 'excel')
     {
-        $produk = $this->modelProduk->find($id);
+        $filters = [
+            'product_id' => $this->request->getGet('product'),
+            'type'       => $this->request->getGet('type'),
+            'start_date' => $this->request->getGet('start_date'),
+            'end_date'   => $this->request->getGet('end_date')
+        ];
 
-        if (!$produk) {
-            return $this->jsonResponse(['status' => false, 'message' => 'Produk tidak ditemukan'], 404);
+        // Ambil semua data tanpa limit (0)
+        $movements = $this->modelMutasiStok->getMovementsWithProduct(0, $filters);
+
+        if ($format === 'excel') {
+            return $this->exportHistoryExcel($movements);
+        } else {
+            return $this->exportHistoryPDF($movements);
+        }
+    }
+
+    private function exportHistoryExcel(array $movements)
+    {
+        $spreadsheet = new \PhpOffice\PhpSpreadsheet\Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
+
+        // Header
+        $sheet->setCellValue('A1', 'RIWAYAT MUTASI STOK INVENTORY');
+        $sheet->mergeCells('A1:G1');
+        $sheet->getStyle('A1')->getFont()->setBold(true)->setSize(14);
+        $sheet->getStyle('A1')->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+
+        $sheet->setCellValue('A2', 'Dicetak pada: ' . date('d/m/Y H:i'));
+        $sheet->mergeCells('A2:G2');
+        $sheet->getStyle('A2')->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+
+        // Column headers
+        $headers = ['No', 'Tanggal & Waktu', 'Produk', 'SKU', 'Tipe', 'Jumlah', 'Stok Sisa', 'Referensi/Ket'];
+        $col = 'A';
+        foreach ($headers as $header) {
+            $sheet->setCellValue($col . '4', $header);
+            $sheet->getStyle($col . '4')->getFont()->setBold(true);
+            $sheet->getStyle($col . '4')->getFill()
+                ->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
+                ->getStartColor()->setRGB('E9ECEF');
+            $col++;
         }
 
-        return $this->jsonResponse([
-            'status' => true,
-            'produk' => $produk
-        ]);
+        // Data
+        $row = 5;
+        foreach ($movements as $index => $mut) {
+            $sheet->setCellValue('A' . $row, $index + 1);
+            $sheet->setCellValue('B' . $row, date('d/m/Y H:i', strtotime($mut['created_at'])));
+            $sheet->setCellValue('C' . $row, $mut['product_name']);
+            $sheet->setCellValue('D' . $row, $mut['product_sku']);
+            $sheet->setCellValue('E' . $row, $mut['type']);
+            $sheet->setCellValue('F' . $row, ($mut['type'] == 'IN' ? '+' : ($mut['type'] == 'OUT' ? '-' : '±')) . $mut['quantity']);
+            $sheet->setCellValue('G' . $row, $mut['current_stock']);
+            $sheet->setCellValue('H' . $row, ($mut['reference_no'] ? "Ref: " . $mut['reference_no'] . " | " : "") . ($mut['notes'] ?: '-'));
+            $row++;
+        }
+
+        // Auto size columns
+        foreach (range('A', 'H') as $col) {
+            $sheet->getColumnDimension($col)->setAutoSize(true);
+        }
+
+        $filename = 'Riwayat_Stok_' . date('YmdHis') . '.xlsx';
+        
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment;filename="' . $filename . '"');
+        header('Cache-Control: max-age=0');
+        
+        $writer = new \PhpOffice\PhpSpreadsheet\Writer\Xlsx($spreadsheet);
+        $writer->save('php://output');
+        exit;
+    }
+
+    private function exportHistoryPDF(array $movements)
+    {
+        $html = view('stock/history_pdf', ['movements' => $movements]);
+
+        $options = new \Dompdf\Options();
+        $options->set('isHtml5ParserEnabled', true);
+        $options->set('isRemoteEnabled', true);
+        
+        $dompdf = new \Dompdf\Dompdf($options);
+        $dompdf->loadHtml($html);
+        $dompdf->setPaper('A4', 'portrait');
+        $dompdf->render();
+        
+        $filename = 'Riwayat_Stok_' . date('YmdHis') . '.pdf';
+        $dompdf->stream($filename, ['Attachment' => true]);
+        exit;
     }
 }

@@ -1,6 +1,7 @@
 <?= $this->extend('layouts/app') ?>
 
 <?= $this->section('content') ?>
+<?php $userRole = session()->get('role'); ?>
 
 <!-- Kartu Statistik Utama -->
 <div class="row mb-4">
@@ -42,6 +43,7 @@
         </div>
     </div>
 
+    <?php if ($userRole === 'superadmin'): ?>
     <div class="col-6 col-lg-3 col-md-6">
         <div class="card inventory-card">
             <div class="card-body px-4 py-4-5">
@@ -60,6 +62,7 @@
             </div>
         </div>
     </div>
+    <?php endif; ?>
 
     <div class="col-6 col-lg-3 col-md-6">
         <div class="card inventory-card <?= $low_stock_count > 0 ? 'low-stock alert-stock' : '' ?>">
@@ -357,6 +360,7 @@
     </div>
 </div>
 
+<?php if ($userRole === 'superadmin'): ?>
 <!-- Top Produk Berdasarkan Nilai -->
 <div class="row">
     <div class="col-12">
@@ -414,6 +418,7 @@
         </div>
     </div>
 </div>
+<?php endif; ?>
 
 <?= $this->endSection() ?>
 

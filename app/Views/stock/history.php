@@ -60,10 +60,20 @@
             <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
                 <h5 class="mb-0 fw-bold">Daftar Mutasi Stok</h5>
                 <div class="d-flex gap-2">
-                    <a href="<?= base_url('/stock/in') ?>" class="btn btn-sm btn-outline-success">
+                    <?php if (session()->get('role') === 'superadmin'): ?>
+                        <div class="btn-group me-2">
+                            <a href="<?= base_url('/stock/history/export/excel') . '?' . http_build_query($_GET) ?>" class="btn btn-sm btn-outline-success">
+                                <i class="bi bi-file-earmark-excel"></i> Excel
+                            </a>
+                            <a href="<?= base_url('/stock/history/export/pdf') . '?' . http_build_query($_GET) ?>" class="btn btn-sm btn-outline-danger">
+                                <i class="bi bi-file-earmark-pdf"></i> PDF
+                            </a>
+                        </div>
+                    <?php endif; ?>
+                    <a href="<?= base_url('/stock/in') ?>" class="btn btn-sm btn-success">
                         <i class="bi bi-plus-lg me-1"></i> Barang Masuk
                     </a>
-                    <a href="<?= base_url('/stock/out') ?>" class="btn btn-sm btn-outline-warning">
+                    <a href="<?= base_url('/stock/out') ?>" class="btn btn-sm btn-warning">
                         <i class="bi bi-dash-lg me-1"></i> Barang Keluar
                     </a>
                 </div>

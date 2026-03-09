@@ -99,6 +99,7 @@
                                 <button class="btn btn-outline-secondary" type="button" data-bs-toggle="collapse" data-bs-target="#filterCollapse">
                                     <i class="fas fa-filter me-2"></i>Filter
                                 </button>
+                                <?php if (session()->get('role') === 'superadmin'): ?>
                                 <div class="btn-group">
                                     <button class="btn btn-success dropdown-toggle" type="button" data-bs-toggle="dropdown">
                                         <i class="fas fa-download me-2"></i>Export
@@ -112,6 +113,7 @@
                                         </a></li>
                                     </ul>
                                 </div>
+                                <?php endif; ?>
                             </div>
                         </div>
 

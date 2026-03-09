@@ -51,8 +51,9 @@ class AuthController extends BaseController
                 'userId'     => $user['id'],
                 'username'   => $user['username'],
                 'name'       => $user['name'],
-                'role'       => $user['role'] ?? 'user',
-                'isLoggedIn' => true,
+                'role'          => $user['role'] ?? 'user',
+                'isLoggedIn'    => true,
+                'last_activity' => time(),
             ];
 
             // Load permissions for user's role

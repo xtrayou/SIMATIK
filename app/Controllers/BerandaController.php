@@ -22,9 +22,9 @@ class BerandaController extends BaseController
     public function index()
     {
         // Jika sudah login, langsung ke dashboard
-        if (session()->get('isLoggedIn')) {
-            return redirect()->to('/dashboard');
-        }
+        // if (session()->get('isLoggedIn')) {
+        //     return redirect()->to('/dashboard');
+        // }
 
         // Ambil semua produk aktif beserta category_id, unit, dan stok
         try {
