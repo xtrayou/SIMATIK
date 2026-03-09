@@ -11,7 +11,7 @@ class UpdateUserRolesEnum extends Migration
         // Modify role column to new ENUM values
         // Old: ['admin', 'staff']
         // New: ['superadmin', 'admin', 'user']
-        
+
         $fields = [
             'role' => [
                 'type'       => 'ENUM',
@@ -19,9 +19,9 @@ class UpdateUserRolesEnum extends Migration
                 'default'    => 'user',
             ],
         ];
-        
+
         $this->forge->modifyColumn('users', $fields);
-        
+
         // Update existing 'staff' records to 'admin'
         $this->db->query("UPDATE users SET role = 'admin' WHERE role = 'staff'");
     }
@@ -36,9 +36,9 @@ class UpdateUserRolesEnum extends Migration
                 'default'    => 'staff',
             ],
         ];
-        
+
         $this->forge->modifyColumn('users', $fields);
-        
+
         // Revert changes
         $this->db->query("UPDATE users SET role = 'staff' WHERE role IN ('admin', 'user')");
         $this->db->query("DELETE FROM users WHERE role = 'superadmin'");

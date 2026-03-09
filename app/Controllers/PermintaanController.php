@@ -201,10 +201,10 @@ class PermintaanController extends BaseController
                 $errorStok[] = "Produk ID {$item['product_id']} tidak ditemukan";
                 continue;
             }
-            
+
             $stokSekarang = (int) $produk['current_stock'];
             $jumlahDiminta = (int) $item['quantity'];
-            
+
             if ($stokSekarang < $jumlahDiminta) {
                 $errorStok[] = "{$produk['name']}: stok tersedia {$stokSekarang}, diminta {$jumlahDiminta}";
             }
@@ -212,7 +212,7 @@ class PermintaanController extends BaseController
 
         if (!empty($errorStok)) {
             return $this->jsonResponse([
-                'status' => false, 
+                'status' => false,
                 'message' => 'Stok tidak mencukupi:<br>• ' . implode('<br>• ', $errorStok)
             ], 400);
         }

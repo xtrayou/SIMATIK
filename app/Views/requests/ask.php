@@ -53,7 +53,8 @@
             color: #343a40;
         }
 
-        .form-control, .form-select {
+        .form-control,
+        .form-select {
             border-radius: 8px;
             font-size: 0.9rem;
         }
@@ -94,7 +95,9 @@
         }
 
         @media (max-width: 576px) {
-            .ask-header { padding: 1.5rem 0 3rem; }
+            .ask-header {
+                padding: 1.5rem 0 3rem;
+            }
         }
     </style>
 </head>
@@ -285,10 +288,10 @@
     <script src="<?= base_url('assets/compiled/js/app.js') ?>"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
+        document.addEventListener('DOMContentLoaded', function() {
 
             // Tambah baris barang
-            document.getElementById('add-item')?.addEventListener('click', function () {
+            document.getElementById('add-item')?.addEventListener('click', function() {
                 const container = document.getElementById('item-container');
                 const firstRow = container.querySelector('.item-row');
                 const newRow = firstRow.cloneNode(true);
@@ -303,7 +306,7 @@
             });
 
             // Hapus baris
-            document.getElementById('item-container')?.addEventListener('click', function (e) {
+            document.getElementById('item-container')?.addEventListener('click', function(e) {
                 const btn = e.target.closest('.remove-item');
                 if (!btn || btn.classList.contains('disabled')) return;
                 const rows = document.querySelectorAll('.item-row');
@@ -315,7 +318,7 @@
 
             function updateRemoveButtons() {
                 const rows = document.querySelectorAll('.item-row');
-                rows.forEach(function (row) {
+                rows.forEach(function(row) {
                     const btn = row.querySelector('.remove-item');
                     if (rows.length <= 1) {
                         btn.classList.add('disabled');
@@ -326,7 +329,7 @@
             }
 
             // Update label satuan saat produk dipilih
-            document.getElementById('item-container')?.addEventListener('change', function (e) {
+            document.getElementById('item-container')?.addEventListener('change', function(e) {
                 if (e.target.classList.contains('select-product')) {
                     const selected = e.target.options[e.target.selectedIndex];
                     const unit = selected.dataset.unit || 'Pcs';
@@ -335,7 +338,7 @@
             });
 
             // Loading state saat submit
-            document.getElementById('askForm')?.addEventListener('submit', function () {
+            document.getElementById('askForm')?.addEventListener('submit', function() {
                 const btn = document.getElementById('btnSubmit');
                 btn.disabled = true;
                 btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Mengirim...';

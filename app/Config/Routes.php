@@ -160,28 +160,28 @@ $routes->get('admin/fix-request-status', function () {
 // Fix Session - Regenerate userId in session
 $routes->get('admin/fix-session', function () {
     $username = session()->get('username');
-    
+
     if (!$username) {
         return redirect()->to('/login')->with('error', 'Session tidak valid. Silakan login.');
     }
-    
+
     // Get user from database
     $db = \Config\Database::connect();
     $user = $db->table('users')->where('username', $username)->get()->getRowArray();
-    
+
     if (!$user) {
         session()->destroy();
         return redirect()->to('/login')->with('error', 'User tidak ditemukan. Silakan login ulang.');
     }
-    
+
     // Update session with userId
     session()->set('userId', $user['id']);
-    
+
     $output = "<h2>✅ Session Diperbaiki</h2>";
     $output .= "<p>Session telah diperbarui dengan userId: <strong>{$user['id']}</strong></p>";
     $output .= "<p>User: <strong>{$user['name']}</strong> ({$user['username']})</p>";
     $output .= '<hr>';
     $output .= '<p><a href="' . base_url('dashboard') . '">← Kembali ke Dashboard</a></p>';
-    
+
     return $output;
 });

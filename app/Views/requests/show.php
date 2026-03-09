@@ -125,7 +125,7 @@
             <div class="card-body p-4">
                 <?php
                 $currentStatus = $pinjaman['status'] ?? 'requested';
-                
+
                 // Check stock availability
                 $productModel = new \App\Models\ProdukModel();
                 $stockIssues = [];
@@ -144,20 +144,20 @@
                     }
                 }
                 ?>
-                
+
                 <?php if (!empty($stockIssues)): ?>
                     <div class="alert alert-danger border-0 mb-4">
                         <h6 class="fw-bold mb-2"><i class="bi bi-exclamation-triangle me-2"></i>Stok Tidak Mencukupi!</h6>
                         <ul class="mb-0 small">
                             <?php foreach ($stockIssues as $issue): ?>
-                                <li><strong><?= esc($issue['name']) ?></strong>: 
+                                <li><strong><?= esc($issue['name']) ?></strong>:
                                     Diminta <?= $issue['requested'] ?>, Tersedia <?= $issue['available'] ?>
                                 </li>
                             <?php endforeach; ?>
                         </ul>
                     </div>
                 <?php endif; ?>
-                
+
                 <?php if ($currentStatus == 'requested' || empty($currentStatus)): ?>
                     <div class="alert alert-info border-0 bg-light-info mb-4">
                         <i class="bi bi-info-circle me-2"></i> Permintaan perlu ditinjau sebelum disetujui.
@@ -173,7 +173,7 @@
                 <?php elseif ($currentStatus == 'approved'): ?>
                     <?php if (!empty($stockIssues)): ?>
                         <div class="alert alert-warning border-0 mb-4">
-                            <i class="bi bi-exclamation-triangle me-2"></i> 
+                            <i class="bi bi-exclamation-triangle me-2"></i>
                             <strong>Perhatian:</strong> Stok tidak mencukupi. Tambah stok terlebih dahulu sebelum distribusi.
                         </div>
                         <div class="d-grid gap-3">
@@ -220,14 +220,14 @@
                     </div>
                 <?php endif; ?>
             </div>
-            </div>
         </div>
     </div>
+</div>
 
-    <?= $this->endSection() ?>
+<?= $this->endSection() ?>
 
-    <?= $this->section('scripts') ?>
-    <script>
+<?= $this->section('scripts') ?>
+<script>
     function showAlert(message, type = 'success') {
         const alertHtml = `
             <div class="alert alert-${type} alert-dismissible fade show" role="alert">
@@ -235,13 +235,15 @@
                 <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
             </div>
         `;
-        
+
         // Insert alert at top of first card
         $('.card').first().prepend(alertHtml);
-        
+
         // Auto dismiss after 5 seconds
         setTimeout(() => {
-            $('.alert').fadeOut(500, function() { $(this).remove(); });
+            $('.alert').fadeOut(500, function() {
+                $(this).remove();
+            });
         }, 5000);
     }
 
@@ -281,41 +283,41 @@
                         console.error('Parse error:', e);
                     }
                     showAlert(errorMsg, 'danger');
-                    }
-                });
-            }
+                }
+            });
         }
+    }
 
-        $('#btn-approve').on('click', function() {
-            jalankanAksi('<?= base_url('requests/approve/' . $pinjaman['id']) ?>', 'Setujui permintaan ini?');
-        });
+    $('#btn-approve').on('click', function() {
+        jalankanAksi('<?= base_url('requests/approve/' . $pinjaman['id']) ?>', 'Setujui permintaan ini?');
+    });
 
-        $('#btn-distribute').on('click', function() {
-            jalankanAksi('<?= base_url('requests/distribute/' . $pinjaman['id']) ?>', 'Lanjutkan distribusi? Tindakan ini akan memotong stok barang.');
-        });
+    $('#btn-distribute').on('click', function() {
+        jalankanAksi('<?= base_url('requests/distribute/' . $pinjaman['id']) ?>', 'Lanjutkan distribusi? Tindakan ini akan memotong stok barang.');
+    });
 
-        $('#btn-cancel').on('click', function() {
-            jalankanAksi('<?= base_url('requests/cancel/' . $pinjaman['id']) ?>', 'Apakah Anda yakin ingin membatalkan permintaan ini?');
-        });
-    </script>
-    <?= $this->endSection() ?>
+    $('#btn-cancel').on('click', function() {
+        jalankanAksi('<?= base_url('requests/cancel/' . $pinjaman['id']) ?>', 'Apakah Anda yakin ingin membatalkan permintaan ini?');
+    });
+</script>
+<?= $this->endSection() ?>
 
-    <?= $this->section('styles') ?>
-    <style>
-        .bg-light-info {
-            background-color: rgba(13, 202, 240, 0.1);
-        }
+<?= $this->section('styles') ?>
+<style>
+    .bg-light-info {
+        background-color: rgba(13, 202, 240, 0.1);
+    }
 
-        .bg-light-warning {
-            background-color: rgba(255, 193, 7, 0.1);
-        }
+    .bg-light-warning {
+        background-color: rgba(255, 193, 7, 0.1);
+    }
 
-        .bg-light-success {
-            background-color: rgba(25, 135, 84, 0.1);
-        }
+    .bg-light-success {
+        background-color: rgba(25, 135, 84, 0.1);
+    }
 
-        .italic {
-            font-style: italic;
-        }
-    </style>
-    <?= $this->endSection() ?>
+    .italic {
+        font-style: italic;
+    }
+</style>
+<?= $this->endSection() ?>
