@@ -179,29 +179,71 @@ class PermintaanController extends BaseController
     public function distribute($id)
     {
         $dataPermintaan = $this->modelPermintaan->find($id);
-        if (!$dataPermintaan) return $this->jsonResponse(['status' => false, 'message' => 'Data tidak ditemukan'], 404);
+        if (!$dataPermintaan) {
+            return $this->jsonResponse(['status' => false, 'message' => 'Data tidak ditemukan'], 404);
+        }
+
+        if ($dataPermintaan['status'] !== 'approved') {
+            return $this->jsonResponse(['status' => false, 'message' => 'Permintaan belum disetujui'], 400);
+        }
 
         $daftarItem = $this->modelItemPermintaan->where('request_id', $id)->findAll();
+
+        if (empty($daftarItem)) {
+            return $this->jsonResponse(['status' => false, 'message' => 'Tidak ada item untuk didistribusikan'], 400);
+        }
+
+        // Cek stok sebelum distribusi
+        $errorStok = [];
+        foreach ($daftarItem as $item) {
+            $produk = $this->modelProduk->find($item['product_id']);
+            if (!$produk) {
+                $errorStok[] = "Produk ID {$item['product_id']} tidak ditemukan";
+                continue;
+            }
+            
+            $stokSekarang = (int) $produk['current_stock'];
+            $jumlahDiminta = (int) $item['quantity'];
+            
+            if ($stokSekarang < $jumlahDiminta) {
+                $errorStok[] = "{$produk['name']}: stok tersedia {$stokSekarang}, diminta {$jumlahDiminta}";
+            }
+        }
+
+        if (!empty($errorStok)) {
+            return $this->jsonResponse([
+                'status' => false, 
+                'message' => 'Stok tidak mencukupi:<br>• ' . implode('<br>• ', $errorStok)
+            ], 400);
+        }
 
         $db = \Config\Database::connect();
         $db->transStart();
 
         try {
+            // Get current user ID
+            $userId = session()->get('userId');
+            if (!$userId || !is_numeric($userId)) {
+                throw new Exception('Session tidak valid. Silakan login ulang.');
+            }
+
             foreach ($daftarItem as $item) {
                 $this->modelMutasiStok->createMovement([
                     'product_id'   => $item['product_id'],
                     'type'         => 'OUT',
                     'quantity'     => $item['quantity'],
-                    'notes'        => 'Distribusi ATK - No. Permintaan: #' . $id,
+                    'notes'        => 'Distribusi ATK - No. Permintaan: #' . $id . ' oleh ' . (session()->get('name') ?: 'Admin'),
                     'reference_no' => 'REQ-' . $id,
-                    'created_by'   => session()->get('name') ?: 'System'
+                    'created_by'   => (int) $userId
                 ]);
             }
 
             $this->modelPermintaan->update($id, ['status' => 'distributed']);
             $db->transComplete();
 
-            if ($db->transStatus() === false) throw new Exception('Gagal memproses mutasi stok.');
+            if ($db->transStatus() === false) {
+                throw new Exception('Gagal memproses mutasi stok. Silakan coba lagi.');
+            }
 
             // Cek stok rendah/habis setelah distribusi
             try {
@@ -221,7 +263,8 @@ class PermintaanController extends BaseController
             return $this->jsonResponse(['status' => true, 'message' => 'Barang berhasil didistribusikan dan stok telah terpotong.']);
         } catch (Exception $e) {
             $db->transRollback();
-            return $this->jsonResponse(['status' => false, 'message' => $e->getMessage()], 500);
+            log_message('error', 'Error saat distribusi: ' . $e->getMessage());
+            return $this->jsonResponse(['status' => false, 'message' => 'Gagal distribusi: ' . $e->getMessage()], 500);
         }
     }
 
@@ -248,5 +291,105 @@ class PermintaanController extends BaseController
         }
 
         return $this->jsonResponse(['status' => false, 'message' => 'Gagal membatalkan permintaan.'], 500);
+    }
+
+    /**
+     * Halaman publik - form permintaan barang (tanpa login)
+     */
+    public function askForm()
+    {
+        $produk = $this->modelProduk
+            ->where('is_active', true)
+            ->where('current_stock >', 0)
+            ->orderBy('name', 'ASC')
+            ->findAll();
+
+        $data = [
+            'title'       => 'Ajukan Permintaan ATK | SIMATIK',
+            'daftarProduk' => $produk,
+        ];
+
+        return view('requests/ask', $data);
+    }
+
+    /**
+     * Proses simpan permintaan publik
+     */
+    public function askStore()
+    {
+        $rules = [
+            'borrower_name' => 'required|min_length[3]|max_length[150]',
+            'borrower_unit' => 'required',
+            'email'         => 'required|valid_email',
+            'product_id'    => 'required',
+            'quantity'      => 'required',
+            'request_date'  => 'required|valid_date',
+        ];
+
+        if (!$this->validate($rules)) {
+            return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
+        }
+
+        $db = \Config\Database::connect();
+        $db->transStart();
+
+        try {
+            $requestId = $this->modelPermintaan->insert([
+                'borrower_name'       => $this->request->getPost('borrower_name'),
+                'borrower_identifier' => $this->request->getPost('borrower_identifier'),
+                'borrower_unit'       => $this->request->getPost('borrower_unit'),
+                'email'               => $this->request->getPost('email'),
+                'request_date'        => $this->request->getPost('request_date') ?: date('Y-m-d'),
+                'status'              => 'requested',
+                'notes'               => $this->request->getPost('notes'),
+            ]);
+
+            $productIds = (array) $this->request->getPost('product_id');
+            $quantities = (array) $this->request->getPost('quantity');
+
+            foreach ($productIds as $index => $pid) {
+                if (empty($pid) || empty($quantities[$index])) continue;
+                $this->modelItemPermintaan->insert([
+                    'request_id' => $requestId,
+                    'product_id' => $pid,
+                    'quantity'   => $quantities[$index],
+                ]);
+            }
+
+            $db->transComplete();
+
+            if ($db->transStatus() === false) {
+                throw new Exception('Gagal menyimpan data ke database.');
+            }
+
+            // Kirim notifikasi ke admin
+            try {
+                $dataPermintaan = $this->modelPermintaan->find($requestId);
+                if ($dataPermintaan) {
+                    $this->modelNotifikasi->createNewRequestNotification($dataPermintaan);
+                }
+            } catch (\Throwable $e) {
+                log_message('error', 'Gagal kirim notifikasi permintaan publik: ' . $e->getMessage());
+            }
+
+            return redirect()->to('/ask/success')->with('request_id', $requestId)->with('borrower_name', $this->request->getPost('borrower_name'));
+        } catch (Exception $e) {
+            $db->transRollback();
+            return redirect()->back()->withInput()->with('error', $e->getMessage());
+        }
+    }
+
+    /**
+     * Halaman sukses setelah permintaan publik dikirim
+     */
+    public function askSuccess()
+    {
+        $data = [
+            'title'         => 'Permintaan Terkirim | SIMATIK',
+            'request_id'    => session()->getFlashdata('request_id'),
+            'borrower_name' => session()->getFlashdata('borrower_name'),
+        ];
+
+        return view('requests/ask_success', $data);
     }
 }

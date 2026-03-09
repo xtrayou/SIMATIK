@@ -14,7 +14,7 @@ class AuthFilter implements FilterInterface
     public function before(RequestInterface $request, $arguments = null)
     {
         if (!session()->get('isLoggedIn')) {
-            // Jika belum login, redirect ke home dengan pesan error
+            // Jika belum login, redirect ke landing page (berisi modal login)
             return redirect()->to('/')->with('loginError', 'Silakan login terlebih dahulu untuk mengakses halaman tersebut.');
         }
 

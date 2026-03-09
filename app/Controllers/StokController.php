@@ -85,7 +85,7 @@ class StokController extends BaseController
                     'quantity'     => $m['quantity'],
                     'reference_no' => $reference,
                     'notes'        => $m['notes'] ?: $globalNotes,
-                    'created_by'   => session()->get('username') ?: 'System'
+                    'created_by'   => session()->get('userId') ?: null
                 ]);
                 $successCount++;
             }
@@ -182,7 +182,7 @@ class StokController extends BaseController
                     'quantity'     => $m['quantity'],
                     'reference_no' => $reference,
                     'notes'        => $m['notes'] ?: $globalNotes,
-                    'created_by'   => session()->get('username') ?: 'System'
+                    'created_by'   => session()->get('userId') ?: null
                 ]);
                 $successCount++;
             }
@@ -367,7 +367,7 @@ class StokController extends BaseController
                     'quantity'     => $p['new_stock'],
                     'reference_no' => 'ADJ-' . time(),
                     'notes'        => $p['notes'] ?: $globalNotes,
-                    'created_by'   => session()->get('name') ?: 'System'
+                    'created_by'   => session()->get('userId') ?: null
                 ]);
                 $successCount++;
             }
@@ -436,7 +436,7 @@ class StokController extends BaseController
 
         return $this->jsonResponse([
             'status' => true,
-            'produk' => $product
+            'produk' => $produk
         ]);
     }
 }

@@ -3,8 +3,8 @@
 namespace App\Controllers;
 
 use App\Models\ProductModel;
-use App\Models\CategoryModel;
-use App\Models\StockMovementModel;
+use App\Models\KategoriModel;
+use App\Models\MutasiStokModel;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use Dompdf\Dompdf;
@@ -13,14 +13,14 @@ use Dompdf\Options;
 class ReportController extends BaseController
 {
     protected ProductModel $productModel;
-    protected CategoryModel $categoryModel;
-    protected StockMovementModel $stockMovementModel;
+    protected KategoriModel $categoryModel;
+    protected MutasiStokModel $stockMovementModel;
 
     public function __construct()
     {
         $this->productModel       = new ProductModel();
-        $this->categoryModel      = new CategoryModel();
-        $this->stockMovementModel = new StockMovementModel();
+        $this->categoryModel      = new KategoriModel();
+        $this->stockMovementModel = new MutasiStokModel();
     }
 
     /**

@@ -19,8 +19,13 @@ class BerandaController extends BaseController
     /**
      * Landing Page — tampilkan daftar produk & kategori dari DB
      */
-    public function index(): string
+    public function index()
     {
+        // Jika sudah login, langsung ke dashboard
+        if (session()->get('isLoggedIn')) {
+            return redirect()->to('/dashboard');
+        }
+
         // Ambil semua produk aktif beserta category_id, unit, dan stok
         try {
             $daftarProduk = $this->modelProduk

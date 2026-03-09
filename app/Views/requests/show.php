@@ -9,11 +9,15 @@
             <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
                 <h5 class="mb-0 fw-bold">Detail Permintaan #<?= $pinjaman['id'] ?></h5>
                 <?php
-                $badgeClass = 'bg-secondary';
+                // Default untuk status kosong/null
+                $currentStatus = $pinjaman['status'] ?? 'requested';
+                $badgeClass = 'bg-info';
                 $statusLabel = 'Diajukan';
 
-                switch ($pinjaman['status']) {
+                switch ($currentStatus) {
                     case 'requested':
+                    case '': // handle empty string
+                    case null: // handle null
                         $badgeClass = 'bg-info';
                         $statusLabel = 'Diajukan';
                         break;
@@ -77,17 +81,31 @@
                         <thead class="bg-light">
                             <tr>
                                 <th class="ps-3">Nama Produk</th>
-                                <th width="150" class="text-center">SKU</th>
-                                <th width="100" class="text-center">Jumlah</th>
-                                <th width="100" class="text-center">Satuan</th>
+                                <th width="120" class="text-center">SKU</th>
+                                <th width="100" class="text-center">Diminta</th>
+                                <th width="100" class="text-center">Stok</th>
+                                <th width="80" class="text-center">Satuan</th>
                             </tr>
                         </thead>
                         <tbody>
                             <?php foreach (($pinjaman['items'] ?? []) as $item): ?>
+                                <?php
+                                // Get current stock for the product
+                                $productModel = new \App\Models\ProdukModel();
+                                $product = $productModel->find($item['product_id']);
+                                $currentStock = $product ? (int)$product['current_stock'] : 0;
+                                $requestedQty = (int)$item['quantity'];
+                                $isStockSufficient = $currentStock >= $requestedQty;
+                                ?>
                                 <tr>
                                     <td class="ps-3 fw-bold text-primary"><?= esc($item['product_name']) ?></td>
-                                    <td class="text-center"><code><?= esc($item['sku']) ?></code></td>
-                                    <td class="text-center fw-bold fs-5"><?= number_format($item['quantity']) ?></td>
+                                    <td class="text-center"><code><?= esc($item['product_sku'] ?? '-') ?></code></td>
+                                    <td class="text-center fw-bold fs-5"><?= number_format($requestedQty) ?></td>
+                                    <td class="text-center">
+                                        <span class="badge <?= $isStockSufficient ? 'bg-success' : 'bg-danger' ?>">
+                                            <?= number_format($currentStock) ?>
+                                        </span>
+                                    </td>
                                     <td class="text-center text-muted"><?= esc($item['unit'] ?? 'Pcs') ?></td>
                                 </tr>
                             <?php endforeach; ?>
@@ -105,7 +123,42 @@
                 <h5 class="mb-0 fw-bold">Kontrol Permintaan</h5>
             </div>
             <div class="card-body p-4">
-                <?php if ($pinjaman['status'] == 'requested'): ?>
+                <?php
+                $currentStatus = $pinjaman['status'] ?? 'requested';
+                
+                // Check stock availability
+                $productModel = new \App\Models\ProdukModel();
+                $stockIssues = [];
+                foreach (($pinjaman['items'] ?? []) as $item) {
+                    $product = $productModel->find($item['product_id']);
+                    if ($product) {
+                        $currentStock = (int)$product['current_stock'];
+                        $requestedQty = (int)$item['quantity'];
+                        if ($currentStock < $requestedQty) {
+                            $stockIssues[] = [
+                                'name' => $product['name'],
+                                'requested' => $requestedQty,
+                                'available' => $currentStock
+                            ];
+                        }
+                    }
+                }
+                ?>
+                
+                <?php if (!empty($stockIssues)): ?>
+                    <div class="alert alert-danger border-0 mb-4">
+                        <h6 class="fw-bold mb-2"><i class="bi bi-exclamation-triangle me-2"></i>Stok Tidak Mencukupi!</h6>
+                        <ul class="mb-0 small">
+                            <?php foreach ($stockIssues as $issue): ?>
+                                <li><strong><?= esc($issue['name']) ?></strong>: 
+                                    Diminta <?= $issue['requested'] ?>, Tersedia <?= $issue['available'] ?>
+                                </li>
+                            <?php endforeach; ?>
+                        </ul>
+                    </div>
+                <?php endif; ?>
+                
+                <?php if ($currentStatus == 'requested' || empty($currentStatus)): ?>
                     <div class="alert alert-info border-0 bg-light-info mb-4">
                         <i class="bi bi-info-circle me-2"></i> Permintaan perlu ditinjau sebelum disetujui.
                     </div>
@@ -117,19 +170,34 @@
                             <i class="bi bi-x-lg me-2"></i> BATALKAN
                         </button>
                     </div>
-                <?php elseif ($pinjaman['status'] == 'approved'): ?>
-                    <div class="alert alert-warning border-0 bg-light-warning mb-4">
-                        <i class="bi bi-exclamation-triangle me-2"></i> Barang siap didistribusikan. Stok akan terpotong otomatis.
-                    </div>
-                    <div class="d-grid gap-3">
-                        <button class="btn btn-success py-2 fw-bold" id="btn-distribute">
-                            <i class="bi bi-box-arrow-right me-2"></i> DISTRIBUSIKAN SEKARANG
-                        </button>
-                        <button class="btn btn-outline-danger py-2" id="btn-cancel">
-                            <i class="bi bi-x-lg me-2"></i> BATALKAN
-                        </button>
-                    </div>
-                <?php elseif ($pinjaman['status'] == 'distributed'): ?>
+                <?php elseif ($currentStatus == 'approved'): ?>
+                    <?php if (!empty($stockIssues)): ?>
+                        <div class="alert alert-warning border-0 mb-4">
+                            <i class="bi bi-exclamation-triangle me-2"></i> 
+                            <strong>Perhatian:</strong> Stok tidak mencukupi. Tambah stok terlebih dahulu sebelum distribusi.
+                        </div>
+                        <div class="d-grid gap-3">
+                            <a href="<?= base_url('stock/in') ?>" class="btn btn-success py-2 fw-bold">
+                                <i class="bi bi-plus-circle me-2"></i> TAMBAH STOK
+                            </a>
+                            <button class="btn btn-outline-danger py-2" id="btn-cancel">
+                                <i class="bi bi-x-lg me-2"></i> BATALKAN
+                            </button>
+                        </div>
+                    <?php else: ?>
+                        <div class="alert alert-success border-0 mb-4">
+                            <i class="bi bi-check-circle me-2"></i> Stok mencukupi. Barang siap didistribusikan.
+                        </div>
+                        <div class="d-grid gap-3">
+                            <button class="btn btn-success py-2 fw-bold" id="btn-distribute">
+                                <i class="bi bi-box-arrow-right me-2"></i> DISTRIBUSIKAN SEKARANG
+                            </button>
+                            <button class="btn btn-outline-danger py-2" id="btn-cancel">
+                                <i class="bi bi-x-lg me-2"></i> BATALKAN
+                            </button>
+                        </div>
+                    <?php endif; ?>
+                <?php elseif ($currentStatus == 'distributed'): ?>
                     <div class="text-center py-4">
                         <div class="avatar avatar-xl bg-light-success text-success mx-auto mb-3 rounded-circle d-flex align-items-center justify-content-center" style="width: 80px; height: 80px;">
                             <i class="bi bi-check-all display-4"></i>
@@ -141,21 +209,42 @@
                             <i class="bi bi-printer me-2"></i> Cetak Bukti
                         </button>
                     </div>
-                <?php else: ?>
+                <?php elseif ($currentStatus == 'cancelled'): ?>
                     <div class="text-center py-4 text-muted">
                         <i class="bi bi-slash-circle display-4"></i>
                         <p class="mt-3">Permintaan ini telah dibatalkan.</p>
                     </div>
+                <?php else: ?>
+                    <div class="alert alert-warning border-0 mb-4">
+                        <i class="bi bi-exclamation-triangle me-2"></i> Status tidak dikenali: <code><?= esc($pinjaman['status']) ?></code>
+                    </div>
                 <?php endif; ?>
+            </div>
             </div>
         </div>
     </div>
-</div>
 
-<?= $this->endSection() ?>
+    <?= $this->endSection() ?>
 
-<?= $this->section('scripts') ?>
-<script>
+    <?= $this->section('scripts') ?>
+    <script>
+    function showAlert(message, type = 'success') {
+        const alertHtml = `
+            <div class="alert alert-${type} alert-dismissible fade show" role="alert">
+                ${message}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        `;
+        
+        // Insert alert at top of first card
+        $('.card').first().prepend(alertHtml);
+        
+        // Auto dismiss after 5 seconds
+        setTimeout(() => {
+            $('.alert').fadeOut(500, function() { $(this).remove(); });
+        }, 5000);
+    }
+
     function jalankanAksi(url, pesanCek) {
         if (confirm(pesanCek)) {
             const btn = event.target;
@@ -173,53 +262,60 @@
                 dataType: 'json',
                 success: function(res) {
                     if (res.status) {
-                        alert(res.message);
-                        location.reload();
+                        showAlert(res.message, 'success');
+                        setTimeout(() => location.reload(), 1500);
                     } else {
-                        alert(res.message);
+                        showAlert(res.message, 'danger');
                         btn.disabled = false;
                         btn.innerHTML = originalHtml;
                     }
                 },
-                error: function() {
-                    alert('Terjadi kesalahan server.');
-                    btn.disabled = false;
-                    btn.innerHTML = originalHtml;
-                }
-            });
+                error: function(xhr) {
+                    let errorMsg = 'Terjadi kesalahan server.';
+                    try {
+                        const response = JSON.parse(xhr.responseText);
+                        if (response.message) {
+                            errorMsg = response.message;
+                        }
+                    } catch (e) {
+                        console.error('Parse error:', e);
+                    }
+                    showAlert(errorMsg, 'danger');
+                    }
+                });
+            }
         }
-    }
 
-    $('#btn-approve').on('click', function() {
-        jalankanAksi('<?= base_url('requests/approve/' . $pinjaman['id']) ?>', 'Setujui permintaan ini?');
-    });
+        $('#btn-approve').on('click', function() {
+            jalankanAksi('<?= base_url('requests/approve/' . $pinjaman['id']) ?>', 'Setujui permintaan ini?');
+        });
 
-    $('#btn-distribute').on('click', function() {
-        jalankanAksi('<?= base_url('requests/distribute/' . $pinjaman['id']) ?>', 'Lanjutkan distribusi? Tindakan ini akan memotong stok barang.');
-    });
+        $('#btn-distribute').on('click', function() {
+            jalankanAksi('<?= base_url('requests/distribute/' . $pinjaman['id']) ?>', 'Lanjutkan distribusi? Tindakan ini akan memotong stok barang.');
+        });
 
-    $('#btn-cancel').on('click', function() {
-        jalankanAksi('<?= base_url('requests/cancel/' . $pinjaman['id']) ?>', 'Apakah Anda yakin ingin membatalkan permintaan ini?');
-    });
-</script>
-<?= $this->endSection() ?>
+        $('#btn-cancel').on('click', function() {
+            jalankanAksi('<?= base_url('requests/cancel/' . $pinjaman['id']) ?>', 'Apakah Anda yakin ingin membatalkan permintaan ini?');
+        });
+    </script>
+    <?= $this->endSection() ?>
 
-<?= $this->section('styles') ?>
-<style>
-    .bg-light-info {
-        background-color: rgba(13, 202, 240, 0.1);
-    }
+    <?= $this->section('styles') ?>
+    <style>
+        .bg-light-info {
+            background-color: rgba(13, 202, 240, 0.1);
+        }
 
-    .bg-light-warning {
-        background-color: rgba(255, 193, 7, 0.1);
-    }
+        .bg-light-warning {
+            background-color: rgba(255, 193, 7, 0.1);
+        }
 
-    .bg-light-success {
-        background-color: rgba(25, 135, 84, 0.1);
-    }
+        .bg-light-success {
+            background-color: rgba(25, 135, 84, 0.1);
+        }
 
-    .italic {
-        font-style: italic;
-    }
-</style>
-<?= $this->endSection() ?>
+        .italic {
+            font-style: italic;
+        }
+    </style>
+    <?= $this->endSection() ?>

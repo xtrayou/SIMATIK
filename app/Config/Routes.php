@@ -6,12 +6,13 @@ use CodeIgniter\Router\RouteCollection;
  * @var RouteCollection $routes
  */
 
-// ── Landing Page (redirect to dashboard) ────────────────────────────
-$routes->get('/', 'DasborController::index', ['filter' => 'auth']);
+// ── Landing Page (publik - berisi modal login) ──────────────────────
+$routes->get('/', 'BerandaController::index');
 
 // ── Auth ─────────────────────────────────────────────────────────────
-$routes->get('login', 'AuthController::index');
+$routes->get('login', 'BerandaController::index');   // fallback: tampilkan landing page
 $routes->post('login', 'AuthController::login');
+$routes->post('auth/login', 'AuthController::login'); // aksi form modal di landing page
 $routes->get('logout', 'AuthController::logout');
 
 // ── Dashboard ────────────────────────────────────────────────────────
@@ -127,4 +128,60 @@ $routes->group('notifications', function ($routes) {
 $routes->group('api/notifications', function ($routes) {
     $routes->get('/', 'Api\NotifikasiController::latest');
     $routes->get('count', 'Api\NotifikasiController::count');
+});
+
+// Halaman Publik - Form Permintaan Barang
+$routes->get('ask', 'PermintaanController::askForm');
+$routes->post('ask/store', 'PermintaanController::askStore');
+$routes->get('ask/success', 'PermintaanController::askSuccess');
+
+// ── Maintenance Routes (Admin only) ──────────────────────────────
+$routes->get('admin/fix-request-status', function () {
+    $db = \Config\Database::connect();
+    $sql = "UPDATE requests SET status = 'requested' WHERE status IS NULL OR status = '' OR status = 'pending'";
+    $db->query($sql);
+    $affected = $db->affectedRows();
+
+    $stats = $db->query("SELECT status, COUNT(*) as total FROM requests GROUP BY status")->getResultArray();
+
+    $output = "<h2>✅ Status Diperbaiki</h2>";
+    $output .= "<p><strong>{$affected}</strong> data telah diperbaiki.</p>";
+    $output .= "<h3>Statistik:</h3><ul>";
+    foreach ($stats as $row) {
+        $status = $row['status'] ?: '(kosong)';
+        $output .= "<li><strong>{$status}</strong>: {$row['total']}</li>";
+    }
+    $output .= "</ul>";
+    $output .= '<p><a href="' . base_url('requests') . '">← Kembali ke Daftar Permintaan</a></p>';
+
+    return $output;
+});
+
+// Fix Session - Regenerate userId in session
+$routes->get('admin/fix-session', function () {
+    $username = session()->get('username');
+    
+    if (!$username) {
+        return redirect()->to('/login')->with('error', 'Session tidak valid. Silakan login.');
+    }
+    
+    // Get user from database
+    $db = \Config\Database::connect();
+    $user = $db->table('users')->where('username', $username)->get()->getRowArray();
+    
+    if (!$user) {
+        session()->destroy();
+        return redirect()->to('/login')->with('error', 'User tidak ditemukan. Silakan login ulang.');
+    }
+    
+    // Update session with userId
+    session()->set('userId', $user['id']);
+    
+    $output = "<h2>✅ Session Diperbaiki</h2>";
+    $output .= "<p>Session telah diperbarui dengan userId: <strong>{$user['id']}</strong></p>";
+    $output .= "<p>User: <strong>{$user['name']}</strong> ({$user['username']})</p>";
+    $output .= '<hr>';
+    $output .= '<p><a href="' . base_url('dashboard') . '">← Kembali ke Dashboard</a></p>';
+    
+    return $output;
 });

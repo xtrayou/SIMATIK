@@ -52,8 +52,9 @@
                     <div class="col-md-3">
                         <select class="form-select" onchange="window.location.href='<?= base_url('/users') ?>?role='+this.value<?= !empty($keyword) ? "+'&q=" . esc($keyword) . "'" : '' ?>">
                             <option value="">Semua Role</option>
+                            <option value="superadmin" <?= ($filterRole === 'superadmin') ? 'selected' : '' ?>>Superadmin</option>
                             <option value="admin" <?= ($filterRole === 'admin') ? 'selected' : '' ?>>Admin</option>
-                            <option value="petugas" <?= ($filterRole === 'petugas') ? 'selected' : '' ?>>Petugas</option>
+                            <option value="user" <?= ($filterRole === 'user') ? 'selected' : '' ?>>User/Pemohon</option>
                         </select>
                     </div>
                 </div>
@@ -87,10 +88,12 @@
                                         <td><code><?= esc($user['username']) ?></code></td>
                                         <td><?= esc($user['name']) ?></td>
                                         <td>
-                                            <?php if ($user['role'] === 'admin'): ?>
+                                            <?php if ($user['role'] === 'superadmin'): ?>
+                                                <span class="badge bg-dark"><i class="bi bi-star-fill me-1"></i>Superadmin</span>
+                                            <?php elseif ($user['role'] === 'admin'): ?>
                                                 <span class="badge bg-danger"><i class="bi bi-shield-fill me-1"></i>Admin</span>
                                             <?php else: ?>
-                                                <span class="badge bg-info"><i class="bi bi-person-fill me-1"></i>Petugas</span>
+                                                <span class="badge bg-info"><i class="bi bi-person-fill me-1"></i>User/Pemohon</span>
                                             <?php endif; ?>
                                         </td>
                                         <td>

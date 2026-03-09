@@ -10,6 +10,15 @@ class UserSeeder extends Seeder
     {
         $data = [
             [
+                'username'   => 'superadmin',
+                'password'   => password_hash('superadmin123', PASSWORD_DEFAULT),
+                'name'       => 'Super Administrator',
+                'role'       => 'superadmin',
+                'is_active'  => 1,
+                'created_at' => date('Y-m-d H:i:s'),
+                'updated_at' => date('Y-m-d H:i:s'),
+            ],
+            [
                 'username'   => 'admin',
                 'password'   => password_hash('admin123', PASSWORD_DEFAULT),
                 'name'       => 'Administrator',
@@ -19,10 +28,10 @@ class UserSeeder extends Seeder
                 'updated_at' => date('Y-m-d H:i:s'),
             ],
             [
-                'username'   => 'petugas',
-                'password'   => password_hash('petugas123', PASSWORD_DEFAULT),
-                'name'       => 'Petugas Gudang',
-                'role'       => 'staff',
+                'username'   => 'user',
+                'password'   => password_hash('user123', PASSWORD_DEFAULT),
+                'name'       => 'Pemohon',
+                'role'       => 'user',
                 'is_active'  => 1,
                 'created_at' => date('Y-m-d H:i:s'),
                 'updated_at' => date('Y-m-d H:i:s'),

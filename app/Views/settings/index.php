@@ -322,8 +322,9 @@
                         <div class="col-md-6 mb-3">
                             <label for="default_role" class="form-label">Default Role User Baru <span class="text-danger">*</span></label>
                             <select class="form-select" id="default_role" name="default_role">
-                                <option value="petugas" <?= $settings['default_role'] === 'petugas' ? 'selected' : '' ?>>Petugas</option>
+                                <option value="user" <?= $settings['default_role'] === 'user' ? 'selected' : '' ?>>User/Pemohon</option>
                                 <option value="admin" <?= $settings['default_role'] === 'admin' ? 'selected' : '' ?>>Admin</option>
+                                <option value="superadmin" <?= $settings['default_role'] === 'superadmin' ? 'selected' : '' ?>>Superadmin</option>
                             </select>
                             <div class="form-text">Role yang otomatis diberikan saat membuat user baru</div>
                         </div>

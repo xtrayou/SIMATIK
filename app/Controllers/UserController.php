@@ -3,16 +3,16 @@
 namespace App\Controllers;
 
 use App\Controllers\BaseController;
-use App\Models\UserModel;
+use App\Models\PenggunaModel;
 use CodeIgniter\HTTP\RedirectResponse;
 
 class UserController extends BaseController
 {
-    protected UserModel $userModel;
+    protected PenggunaModel $modelPengguna;
 
     public function __construct()
     {
-        $this->userModel = new UserModel();
+        $this->modelPengguna = new PenggunaModel();
     }
 
     /**
@@ -25,7 +25,7 @@ class UserController extends BaseController
         $keyword = trim((string) ($this->request->getGet('q') ?? ''));
         $filterRole = $this->request->getGet('role');
 
-        $builder = $this->userModel->orderBy('name', 'ASC');
+        $builder = $this->modelPengguna->orderBy('name', 'ASC');
 
         if ($keyword !== '') {
             $builder->groupStart()
@@ -34,7 +34,7 @@ class UserController extends BaseController
                 ->groupEnd();
         }
 
-        if ($filterRole && in_array($filterRole, ['admin', 'petugas'])) {
+        if ($filterRole && in_array($filterRole, ['superadmin', 'admin', 'user'])) {
             $builder->where('role', $filterRole);
         }
 
@@ -55,7 +55,7 @@ class UserController extends BaseController
         $this->setPageData('Tambah User', 'Buat pengguna baru');
 
         return $this->render('users/create', [
-            'user'       => ['username' => '', 'name' => '', 'role' => 'petugas', 'is_active' => 1],
+            'user'       => ['username' => '', 'name' => '', 'role' => 'user', 'is_active' => 1],
             'validation' => service('validation'),
         ]);
     }
@@ -69,7 +69,7 @@ class UserController extends BaseController
             'username' => 'required|min_length[3]|max_length[50]|is_unique[users.username]|alpha_numeric',
             'name'     => 'required|min_length[3]|max_length[100]',
             'password' => 'required|min_length[6]|max_length[255]',
-            'role'     => 'required|in_list[admin,petugas]',
+            'role'     => 'required|in_list[superadmin,admin,user]',
         ])) {
             return redirect()->back()
                 ->withInput()
@@ -84,7 +84,7 @@ class UserController extends BaseController
             'is_active' => $this->request->getPost('is_active') ? 1 : 0,
         ];
 
-        if ($this->userModel->insert($data)) {
+        if ($this->modelPengguna->insert($data)) {
             return redirect()->to('/users')->with('success', 'User berhasil ditambahkan');
         }
 
@@ -96,7 +96,7 @@ class UserController extends BaseController
      */
     public function edit($id)
     {
-        $user = $this->userModel->find($id);
+        $user = $this->modelPengguna->find($id);
         if (!$user) {
             return redirect()->to('/users')->with('error', 'User tidak ditemukan');
         }
@@ -114,7 +114,7 @@ class UserController extends BaseController
      */
     public function update($id)
     {
-        $user = $this->userModel->find($id);
+        $user = $this->modelPengguna->find($id);
         if (!$user) {
             return redirect()->to('/users')->with('error', 'User tidak ditemukan');
         }
@@ -122,7 +122,7 @@ class UserController extends BaseController
         $rules = [
             'username' => "required|min_length[3]|max_length[50]|is_unique[users.username,id,{$id}]|alpha_numeric",
             'name'     => 'required|min_length[3]|max_length[100]',
-            'role'     => 'required|in_list[admin,petugas]',
+            'role'     => 'required|in_list[superadmin,admin,user]',
         ];
 
         // Password optional on update
@@ -148,7 +148,7 @@ class UserController extends BaseController
             $data['password'] = password_hash($password, PASSWORD_DEFAULT);
         }
 
-        if ($this->userModel->update($id, $data)) {
+        if ($this->modelPengguna->update($id, $data)) {
             return redirect()->to('/users')->with('success', 'User berhasil diperbarui');
         }
 
@@ -160,7 +160,7 @@ class UserController extends BaseController
      */
     public function delete($id): RedirectResponse
     {
-        $user = $this->userModel->find($id);
+        $user = $this->modelPengguna->find($id);
         if (!$user) {
             return redirect()->to('/users')->with('error', 'User tidak ditemukan');
         }
@@ -170,7 +170,7 @@ class UserController extends BaseController
             return redirect()->to('/users')->with('error', 'Tidak dapat menghapus akun sendiri');
         }
 
-        if ($this->userModel->delete($id)) {
+        if ($this->modelPengguna->delete($id)) {
             return redirect()->to('/users')->with('success', 'User berhasil dihapus');
         }
 

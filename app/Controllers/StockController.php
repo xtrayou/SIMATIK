@@ -3,25 +3,25 @@
 namespace App\Controllers;
 
 use App\Models\ProductModel;
-use App\Models\CategoryModel;
-use App\Models\StockMovementModel;
-use App\Models\NotificationModel;
+use App\Models\KategoriModel;
+use App\Models\MutasiStokModel;
+use App\Models\NotifikasiModel;
 use App\Controllers\BaseController;
 use Exception;
 
 class StockController extends BaseController
 {
     protected ProductModel $productModel;
-    protected CategoryModel $categoryModel;
-    protected StockMovementModel $stockMovementModel;
-    protected NotificationModel $notificationModel;
+    protected KategoriModel $categoryModel;
+    protected MutasiStokModel $stockMovementModel;
+    protected NotifikasiModel $notificationModel;
 
     public function __construct()
     {
         $this->productModel        = new ProductModel();
-        $this->categoryModel       = new CategoryModel();
-        $this->stockMovementModel  = new StockMovementModel();
-        $this->notificationModel   = new NotificationModel();
+        $this->categoryModel       = new KategoriModel();
+        $this->stockMovementModel  = new MutasiStokModel();
+        $this->notificationModel   = new NotifikasiModel();
     }
 
     /**
@@ -85,7 +85,7 @@ class StockController extends BaseController
                     'quantity'     => $m['quantity'],
                     'reference_no' => $reference,
                     'notes'        => $m['notes'] ?: $globalNotes,
-                    'created_by'   => session()->get('username') ?: 'System'
+                    'created_by'   => session()->get('userId') ?: null
                 ]);
                 $successCount++;
             }
@@ -182,7 +182,7 @@ class StockController extends BaseController
                     'quantity'     => $m['quantity'],
                     'reference_no' => $reference,
                     'notes'        => $m['notes'] ?: $globalNotes,
-                    'created_by'   => session()->get('username') ?: 'System'
+                    'created_by'   => session()->get('userId') ?: null
                 ]);
                 $successCount++;
             }
@@ -367,7 +367,7 @@ class StockController extends BaseController
                     'quantity'     => $p['new_stock'],
                     'reference_no' => 'ADJ-' . time(),
                     'notes'        => $p['notes'] ?: $globalNotes,
-                    'created_by'   => session()->get('name') ?: 'System'
+                    'created_by'   => session()->get('userId') ?: null
                 ]);
                 $successCount++;
             }

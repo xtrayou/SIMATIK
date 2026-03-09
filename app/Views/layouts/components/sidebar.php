@@ -150,16 +150,6 @@
                     </a>
                 </li>
 
-                <!-- Help & Support -->
-                <li class="sidebar-title">Bantuan</li>
-
-                <li class="sidebar-item">
-                    <a href="<?= base_url('/help') ?>" class='sidebar-link'>
-                        <i class="bi bi-question-circle-fill"></i>
-                        <span>Bantuan</span>
-                    </a>
-                </li>
-
             </ul>
         </div>
     </div>

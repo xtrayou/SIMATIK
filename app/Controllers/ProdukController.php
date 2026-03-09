@@ -125,7 +125,7 @@ class ProdukController extends BaseController
                 'quantity'     => (int) $this->request->getPost('current_stock') ?: 0,
                 'notes'        => 'Stok awal produk baru',
                 'reference_no' => 'INIT-' . time(),
-                'created_by'   => session()->get('name') ?: 'System'
+                'created_by'   => session()->get('userId') ?: null
             ]);
 
             $db->transComplete();

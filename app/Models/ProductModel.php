@@ -143,7 +143,7 @@ class ProductModel extends Model
      */
     public function generateSKU(int $categoryId, string $productName): ?string
     {
-        $categoryModel = new CategoryModel();
+        $categoryModel = new KategoriModel();
         $category = $categoryModel->find($categoryId);
         if (!$category) {
             return null;

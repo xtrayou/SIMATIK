@@ -2,18 +2,18 @@
 
 namespace App\Controllers;
 
-use App\Models\CategoryModel;
+use App\Models\KategoriModel;
 use App\Models\ProductModel;
 
 class HomeController extends BaseController
 {
     protected ProductModel  $modelProduk;
-    protected CategoryModel $modelKategori;
+    protected KategoriModel $modelKategori;
 
     public function __construct()
     {
         $this->modelProduk   = new ProductModel();
-        $this->modelKategori = new CategoryModel();
+        $this->modelKategori = new KategoriModel();
     }
 
     /**
