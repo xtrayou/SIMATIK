@@ -19,7 +19,6 @@
                         </p>
                     </div>
                     <div class="col-md-4 text-md-end">
-                        <?php if (session()->get('role') === 'superadmin'): ?>
                         <div class="btn-group">
                             <button class="btn btn-success" onclick="exportReport('excel')">
                                 <i class="bi bi-file-earmark-excel"></i> Excel
@@ -31,7 +30,6 @@
                                 <i class="bi bi-printer"></i> Print
                             </button>
                         </div>
-                        <?php endif; ?>
                     </div>
                 </div>
             </div>

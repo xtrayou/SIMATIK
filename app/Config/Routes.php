@@ -21,7 +21,7 @@ $routes->get('dashboard', 'DasborController::index', ['filter' => 'auth']);
 $routes->get('api/dashboard/stats', 'Api\DasborController::getStats');
 
 //category
-$routes->group('categories', function ($routes) {
+$routes->group('categories', ['filter' => 'auth'], function ($routes) {
     $routes->get('/', 'KategoriController::index');
     $routes->get('create', 'KategoriController::create');
     $routes->post('store', 'KategoriController::store');
@@ -31,7 +31,7 @@ $routes->group('categories', function ($routes) {
 });
 
 //product
-$routes->group('products', function ($routes) {
+$routes->group('products', ['filter' => 'auth'], function ($routes) {
     $routes->get('/', 'ProdukController::index');
     $routes->get('create', 'ProdukController::create');
     $routes->get('show/(:num)', 'ProdukController::show/$1');
@@ -48,9 +48,9 @@ $routes->group('products', function ($routes) {
 });
 
 //Stock Management
-$routes->get('stock', 'StokController::movements');
+$routes->get('stock', 'StokController::movements', ['filter' => 'auth']);
 
-$routes->group('stock', function ($routes) {
+$routes->group('stock', ['filter' => 'auth'], function ($routes) {
     $routes->get('movements', 'StokController::movements');
     $routes->get('in', 'StokController::stockIn');
     $routes->post('in/store', 'StokController::storeStockIn');
@@ -65,7 +65,7 @@ $routes->group('stock', function ($routes) {
 });
 
 //Reports
-$routes->group('reports', function ($routes) {
+$routes->group('reports', ['filter' => 'auth'], function ($routes) {
     $routes->get('stock', 'LaporanController::stock');
     $routes->get('movements', 'LaporanController::movements');
     $routes->get('export/stock', 'LaporanController::exportStock');
@@ -92,7 +92,7 @@ $routes->group('api/products', function ($routes) {
 });
 
 // Permintaan ATK
-$routes->group('requests', function ($routes) {
+$routes->group('requests', ['filter' => 'auth'], function ($routes) {
     $routes->get('/', 'PermintaanController::index');
     $routes->get('create', 'PermintaanController::create');
     $routes->post('store', 'PermintaanController::store');
@@ -102,8 +102,8 @@ $routes->group('requests', function ($routes) {
     $routes->post('cancel/(:num)', 'PermintaanController::cancel/$1');
 });
 
-// Users Management
-$routes->group('users', function ($routes) {
+// Users Management (Superadmin Only)
+$routes->group('users', ['filter' => 'role:superadmin'], function ($routes) {
     $routes->get('/', 'PenggunaController::index');
     $routes->get('create', 'PenggunaController::create');
     $routes->post('store', 'PenggunaController::store');
@@ -112,9 +112,9 @@ $routes->group('users', function ($routes) {
     $routes->delete('delete/(:num)', 'PenggunaController::delete/$1');
 });
 
-// Settings
-$routes->get('settings', 'PengaturanController::index');
-$routes->post('settings/update', 'PengaturanController::update');
+// Settings (Superadmin Only)
+$routes->get('settings', 'PengaturanController::index', ['filter' => 'role:superadmin']);
+$routes->post('settings/update', 'PengaturanController::update', ['filter' => 'role:superadmin']);
 
 // Notifications
 $routes->group('notifications', function ($routes) {

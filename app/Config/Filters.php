@@ -109,25 +109,31 @@ class Filters extends BaseFilters
      * @var array<string, array<string, list<string>>>
      */
     public array $filters = [
+        // Semua halaman berikut memerlukan login
         'auth' => ['before' => [
             'dashboard*',
             'categories*',
             'products*',
             'stock*',
             'requests',
-            'requests/show/*',
-            'requests/approve/*',
-            'requests/distribute/*',
-            'requests/cancel/*',
+            'requests/*',
             'reports*',
             'notifications*',
             'users*',
-            'settings*',
         ]],
+        // UC: Kelola Kategori, Kelola Barang, Manajemen Stok,
+        //     Lihat Riwayat Stok, Menyetujui Permintaan ATK → Admin only
+        'role:admin' => ['before' => [
+            'categories*',
+            'products*',
+            'stock*',
+            'requests/approve/*',
+            'requests/distribute/*',
+            'requests/cancel/*',
+        ]],
+        // UC: Kelola Hak Akses → Superadmin only
         'role:superadmin' => ['before' => [
             'users*',
-            'settings*',
-            'categories*',
         ]],
     ];
 }

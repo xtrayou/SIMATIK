@@ -35,7 +35,9 @@
             <ul class="menu">
                 <?php $userRole = session()->get('role'); ?>
 
-                <!-- Dashboard -->
+                <!-- ═══════════════════════════════════════════════ -->
+                <!-- UC: Melihat Dashboard & Statistik (Semua Role) -->
+                <!-- ═══════════════════════════════════════════════ -->
                 <li class="sidebar-title">Dashboard</li>
                 <li class="sidebar-item <?= (strpos(uri_string(), 'dashboard') !== false || uri_string() == '' || uri_string() == '/') ? 'active' : '' ?>">
                     <a href="<?= base_url('dashboard') ?>" class='sidebar-link'>
@@ -44,125 +46,162 @@
                     </a>
                 </li>
 
-                <!-- Master Data Section -->
-                <li class="sidebar-title">Master Data</li>
+                <!-- ════════════════════════════════════════════════════ -->
+                <!-- MENU KHUSUS ADMIN (Pengelola Operasional ATK)       -->
+                <!-- UC: Kelola Kategori, Kelola Barang, Manajemen Stok, -->
+                <!--      Lihat Riwayat Stok, Menyetujui Permintaan ATK,-->
+                <!--      Kelola Laporan                                 -->
+                <!-- ════════════════════════════════════════════════════ -->
+                <?php if ($userRole === 'admin'): ?>
 
-                <!-- Categories (Super Admin Only) -->
-                <?php if ($userRole === 'superadmin'): ?>
-                <li class="sidebar-item <?= (strpos(uri_string(), 'categories') !== false) ? 'active' : '' ?>">
-                    <a href="<?= base_url('/categories') ?>" class='sidebar-link'>
-                        <i class="bi bi-collection-fill"></i>
-                        <span>Kategori Produk</span>
-                        <span class="badge bg-primary ms-auto" id="category-count">
-                            <?php
-                            $modelKategori = new \App\Models\KategoriModel();
-                            echo $modelKategori->where('is_active', true)->countAllResults();
-                            ?>
-                        </span>
-                    </a>
-                </li>
+                    <!-- UC: Kelola Kategori & Kelola Barang -->
+                    <li class="sidebar-title">Master Data</li>
+
+                    <li class="sidebar-item <?= (strpos(uri_string(), 'categories') !== false) ? 'active' : '' ?>">
+                        <a href="<?= base_url('/categories') ?>" class='sidebar-link'>
+                            <i class="bi bi-collection-fill"></i>
+                            <span>Kelola Kategori</span>
+                            <span class="badge bg-primary ms-auto" id="category-count">
+                                <?php
+                                $modelKategori = new \App\Models\KategoriModel();
+                                echo $modelKategori->where('is_active', true)->countAllResults();
+                                ?>
+                            </span>
+                        </a>
+                    </li>
+
+                    <li class="sidebar-item <?= (strpos(uri_string(), 'products') !== false) ? 'active' : '' ?>">
+                        <a href="<?= base_url('/products') ?>" class='sidebar-link'>
+                            <i class="bi bi-box-seam-fill"></i>
+                            <span>Kelola Barang</span>
+                            <span class="badge bg-success ms-auto" id="product-count">
+                                <?php
+                                $modelProduk = new \App\Models\ProdukModel();
+                                echo $modelProduk->where('is_active', true)->countAllResults();
+                                ?>
+                            </span>
+                        </a>
+                    </li>
+
+                    <!-- UC: Manajemen Stok & Lihat Riwayat Stok -->
+                    <li class="sidebar-title">Manajemen Stok</li>
+
+                    <li class="sidebar-item <?= (strpos(uri_string(), 'stock') !== false && uri_string() != 'stock/history') ? 'active' : '' ?>">
+                        <a href="<?= base_url('/stock') ?>" class='sidebar-link'>
+                            <i class="bi bi-arrow-left-right"></i>
+                            <span>Manajemen Stok</span>
+                        </a>
+                    </li>
+
+                    <li class="sidebar-item <?= (uri_string() == 'stock/history') ? 'active' : '' ?>">
+                        <a href="<?= base_url('/stock/history') ?>" class='sidebar-link'>
+                            <i class="bi bi-clock-history"></i>
+                            <span>Lihat Riwayat Stok</span>
+                        </a>
+                    </li>
+
+                    <!-- UC: Menyetujui Permintaan ATK -->
+                    <li class="sidebar-title">Permintaan</li>
+
+                    <li class="sidebar-item <?= (strpos(uri_string(), 'requests') !== false) ? 'active' : '' ?>">
+                        <a href="<?= base_url('/requests') ?>" class='sidebar-link'>
+                            <i class="bi bi-check2-square"></i>
+                            <span>Menyetujui Permintaan ATK</span>
+                        </a>
+                    </li>
+
+                    <!-- UC: Kelola Laporan -->
+                    <li class="sidebar-title">Laporan</li>
+
+                    <li class="sidebar-item has-sub <?= (strpos(uri_string(), 'reports') !== false) ? 'active' : '' ?>">
+                        <a href="#" class='sidebar-link'>
+                            <i class="bi bi-graph-up-arrow"></i>
+                            <span>Kelola Laporan</span>
+                        </a>
+                        <ul class="submenu <?= (strpos(uri_string(), 'reports') !== false) ? 'submenu-open' : '' ?>">
+                            <li class="submenu-item <?= (uri_string() == 'reports/stock') ? 'active' : '' ?>">
+                                <a href="<?= base_url('/reports/stock') ?>" class="submenu-link">
+                                    <i class="bi bi-box"></i>
+                                    <span>Lihat Laporan Stok</span>
+                                </a>
+                            </li>
+                            <li class="submenu-item <?= (uri_string() == 'reports/movements') ? 'active' : '' ?>">
+                                <a href="<?= base_url('/reports/movements') ?>" class="submenu-link">
+                                    <i class="bi bi-arrow-repeat"></i>
+                                    <span>Lihat Laporan Pergerakan Barang</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+
                 <?php endif; ?>
 
-                <!-- Products -->
-                <li class="sidebar-item <?= (strpos(uri_string(), 'products') !== false) ? 'active' : '' ?>">
-                    <a href="<?= base_url('/products') ?>" class='sidebar-link'>
-                        <i class="bi bi-box-seam-fill"></i>
-                        <span>Produk</span>
-                        <span class="badge bg-success ms-auto" id="product-count">
-                            <?php
-                            $modelProduk = new \App\Models\ProdukModel();
-                            echo $modelProduk->where('is_active', true)->countAllResults();
-                            ?>
-                        </span>
-                    </a>
-                </li>
-
-                <!-- Stock Management Section -->
-                <li class="sidebar-title">Manajemen Stok</li>
-
-                <!-- Stock Movements (Unified - No Submenu) -->
-                <li class="sidebar-item <?= (strpos(uri_string(), 'stock') !== false && uri_string() != 'stock/adjustment') ? 'active' : '' ?>">
-                    <a href="<?= base_url('/stock') ?>" class='sidebar-link'>
-                        <i class="bi bi-arrow-left-right"></i>
-                        <span>Pergerakan Stok</span>
-                    </a>
-                </li>
-
-                <!-- Stock Adjustment -->
-                <li class="sidebar-item <?= (uri_string() == 'stock/adjustment') ? 'active' : '' ?>">
-                    <a href="<?= base_url('/stock/adjustment') ?>" class='sidebar-link'>
-                        <i class="bi bi-tools"></i>
-                        <span>Penyesuaian Stok</span>
-                    </a>
-                </li>
-
-                <!-- Stock History -->
-                <li class="sidebar-item <?= (uri_string() == 'stock/history') ? 'active' : '' ?>">
-                    <a href="<?= base_url('/stock/history') ?>" class='sidebar-link'>
-                        <i class="bi bi-clock-history"></i>
-                        <span>Riwayat Stok</span>
-                    </a>
-                </li>
-
-                <!-- Permintaan ATK (Super Admin Only) -->
+                <!-- ════════════════════════════════════════════════════ -->
+                <!-- MENU KHUSUS SUPERADMIN (Pengawas / Kepala)          -->
+                <!-- UC: Kelola Hak Akses, Kelola Laporan              -->
+                <!-- ════════════════════════════════════════════════════ -->
                 <?php if ($userRole === 'superadmin'): ?>
-                <li class="sidebar-item <?= (strpos(uri_string(), 'requests') !== false) ? 'active' : '' ?>">
-                    <a href="<?= base_url('/requests') ?>" class='sidebar-link'>
-                        <i class="bi bi-journal-arrow-down"></i>
-                        <span>Permintaan ATK</span>
-                    </a>
-                </li>
+
+                    <!-- UC: Kelola Hak Akses -->
+                    <li class="sidebar-title">Pengaturan</li>
+
+                    <li class="sidebar-item <?= (uri_string() == 'users') ? 'active' : '' ?>">
+                        <a href="<?= base_url('/users') ?>" class='sidebar-link'>
+                            <i class="bi bi-shield-lock-fill"></i>
+                            <span>Kelola Hak Akses</span>
+                        </a>
+                    </li>
+
+                    <!-- UC: Kelola Laporan -->
+                    <li class="sidebar-title">Laporan</li>
+
+                    <li class="sidebar-item has-sub <?= (strpos(uri_string(), 'reports') !== false) ? 'active' : '' ?>">
+                        <a href="#" class='sidebar-link'>
+                            <i class="bi bi-graph-up-arrow"></i>
+                            <span>Kelola Laporan</span>
+                        </a>
+                        <ul class="submenu <?= (strpos(uri_string(), 'reports') !== false) ? 'submenu-open' : '' ?>">
+                            <li class="submenu-item <?= (uri_string() == 'reports/stock') ? 'active' : '' ?>">
+                                <a href="<?= base_url('/reports/stock') ?>" class="submenu-link">
+                                    <i class="bi bi-box"></i>
+                                    <span>Lihat Laporan Stok</span>
+                                </a>
+                            </li>
+                            <li class="submenu-item <?= (uri_string() == 'reports/movements') ? 'active' : '' ?>">
+                                <a href="<?= base_url('/reports/movements') ?>" class="submenu-link">
+                                    <i class="bi bi-arrow-repeat"></i>
+                                    <span>Lihat Laporan Pergerakan Barang</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+
                 <?php endif; ?>
 
-                <!-- Reports Section -->
-                <li class="sidebar-title">Laporan</li>
+                <!-- ════════════════════════════════════════════════════ -->
+                <!-- MENU KHUSUS USER (Pegawai / Pemohon ATK)            -->
+                <!-- UC: Ajukan Permintaan ATK, Lihat Status Permintaan  -->
+                <!-- ════════════════════════════════════════════════════ -->
+                <?php if ($userRole === 'user'): ?>
 
-                <li class="sidebar-item has-sub <?= (strpos(uri_string(), 'reports') !== false) ? 'active' : '' ?>">
-                    <a href="#" class='sidebar-link'>
-                        <i class="bi bi-graph-up-arrow"></i>
-                        <span>Laporan</span>
-                    </a>
-                    <ul class="submenu <?= (strpos(uri_string(), 'reports') !== false) ? 'submenu-open' : '' ?>">
-                        <li class="submenu-item <?= (uri_string() == 'reports/stock') ? 'active' : '' ?>">
-                            <a href="<?= base_url('/reports/stock') ?>" class="submenu-link">
-                                <i class="bi bi-box"></i>
-                                <span>Laporan Stok</span>
-                            </a>
-                        </li>
-                        <li class="submenu-item <?= (uri_string() == 'reports/movements') ? 'active' : '' ?>">
-                            <a href="<?= base_url('/reports/movements') ?>" class="submenu-link">
-                                <i class="bi bi-arrow-repeat"></i>
-                                <span>Laporan Pergerakan</span>
-                            </a>
-                        </li>
-                        <?php if ($userRole === 'superadmin'): ?>
-                        <li class="submenu-item <?= (uri_string() == 'reports/valuation') ? 'active' : '' ?>">
-                            <a href="<?= base_url('/reports/valuation') ?>" class="submenu-link">
-                                <i class="bi bi-currency-dollar"></i>
-                                <span>Valuasi Inventory</span>
-                            </a>
-                        </li>
-                        <?php endif; ?>
-                    </ul>
-                </li>
+                    <li class="sidebar-title">Permintaan ATK</li>
 
-                <!-- Settings & User Management (Super Admin Only) -->
-                <?php if ($userRole === 'superadmin'): ?>
-                <li class="sidebar-title">Pengaturan</li>
+                    <!-- UC: Ajukan Permintaan ATK -->
+                    <li class="sidebar-item <?= (uri_string() == 'requests/create') ? 'active' : '' ?>">
+                        <a href="<?= base_url('/requests/create') ?>" class='sidebar-link'>
+                            <i class="bi bi-journal-arrow-up"></i>
+                            <span>Ajukan Permintaan ATK</span>
+                        </a>
+                    </li>
 
-                <li class="sidebar-item <?= (uri_string() == 'settings') ? 'active' : '' ?>">
-                    <a href="<?= base_url('/settings') ?>" class='sidebar-link'>
-                        <i class="bi bi-gear-fill"></i>
-                        <span>Pengaturan Sistem</span>
-                    </a>
-                </li>
+                    <!-- UC: Lihat Status Permintaan -->
+                    <li class="sidebar-item <?= (strpos(uri_string(), 'requests') !== false && uri_string() != 'requests/create') ? 'active' : '' ?>">
+                        <a href="<?= base_url('/requests') ?>" class='sidebar-link'>
+                            <i class="bi bi-eye"></i>
+                            <span>Lihat Status Permintaan</span>
+                        </a>
+                    </li>
 
-                <li class="sidebar-item <?= (uri_string() == 'users') ? 'active' : '' ?>">
-                    <a href="<?= base_url('/users') ?>" class='sidebar-link'>
-                        <i class="bi bi-people-fill"></i>
-                        <span>Manajemen User</span>
-                    </a>
-                </li>
                 <?php endif; ?>
 
             </ul>
