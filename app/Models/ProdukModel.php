@@ -18,6 +18,8 @@ class ProdukModel extends Model
         'cost_price',
         'min_stock',
         'current_stock',
+        'stock_baik',
+        'stock_rusak',
         'unit',
         'is_active',
     ];
@@ -42,6 +44,8 @@ class ProdukModel extends Model
                     products.cost_price, 
                     products.min_stock, 
                     products.current_stock, 
+                    products.stock_baik,
+                    products.stock_rusak,
                     products.unit, 
                     products.is_active,
                     categories.name as category_name,
@@ -101,7 +105,7 @@ class ProdukModel extends Model
      */
     public function getProductWithCategory(int $id): ?array
     {
-        return $this->select('products.id, products.name, products.sku, products.category_id, products.description, products.price, products.cost_price, products.min_stock, products.current_stock, products.unit, products.is_active, categories.name as category_name')
+        return $this->select('products.id, products.name, products.sku, products.category_id, products.description, products.price, products.cost_price, products.min_stock, products.current_stock, products.stock_baik, products.stock_rusak, products.unit, products.is_active, categories.name as category_name')
             ->join('categories', 'categories.id = products.category_id')
             ->where('products.id', $id)
             ->first();

@@ -1445,26 +1445,26 @@
             <div class="row" data-aos="fade-up">
                 <div class="col-md-3 col-6">
                     <div class="stat-item">
-                        <span class="stat-number" data-count="500">0</span>
+                        <span class="stat-number" data-count="75">0</span>
                         <span class="stat-label">Jenis Barang</span>
                     </div>
                 </div>
                 <div class="col-md-3 col-6">
                     <div class="stat-item">
-                        <span class="stat-number" data-count="1000">0</span>
-                        <span class="stat-label">Transaksi/Bulan</span>
+                        <span class="stat-number" data-count="10">0</span>
+                        <span class="stat-label">Laporan Bulanan</span>
                     </div>
                 </div>
                 <div class="col-md-3 col-6">
                     <div class="stat-item">
-                        <span class="stat-number" data-count="50">0</span>
+                        <span class="stat-number" data-count="3">0</span>
                         <span class="stat-label">Kategori</span>
                     </div>
                 </div>
                 <div class="col-md-3 col-6">
                     <div class="stat-item">
-                        <span class="stat-number" data-count="24">0</span>
-                        <span class="stat-label">Jam Aktif</span>
+                        <span class="stat-number" data-count="8">0</span>
+                        <span class="stat-label">Jam Operasional</span>
                     </div>
                 </div>
             </div>

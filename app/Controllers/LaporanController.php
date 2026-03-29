@@ -301,9 +301,9 @@ class LaporanController extends BaseController
     /**
      * Export Movement Reports
      */
-    public function exportMovements()
+    public function exportMovements($format = null)
     {
-        $format = $this->request->getGet('format') ?: 'excel';
+        $format = $format ?: ($this->request->getGet('format') ?: 'excel');
         
         if ($format === 'excel') {
             return $this->exportMovementsExcel();
@@ -523,11 +523,364 @@ class LaporanController extends BaseController
 
     private function calculateDaysUntilStockout($productId) { return rand(5, 30); }
 
-    private function exportStockExcel() { return $this->response->download('stock_report.xlsx', null); }
-    private function exportStockPDF()   { return $this->response->download('stock_report.pdf', null); }
+    /**
+     * Export Stock Report to Excel - Matching official Stock Opname template
+     */
+    private function exportStockExcel()
+    {
+        $products = $this->getStockReportData();
+
+        $spreadsheet = new \PhpOffice\PhpSpreadsheet\Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
+        $sheet->setTitle('Stock Opname');
+
+        // Use aliases for cleaner code
+        $alignment = \PhpOffice\PhpSpreadsheet\Style\Alignment::class;
+        $border = \PhpOffice\PhpSpreadsheet\Style\Border::class;
+        $fill = \PhpOffice\PhpSpreadsheet\Style\Fill::class;
+        $numberFormat = \PhpOffice\PhpSpreadsheet\Style\NumberFormat::class;
+
+        // ── Column widths ──
+        $sheet->getColumnDimension('A')->setWidth(6);   // No
+        $sheet->getColumnDimension('B')->setWidth(40);  // Jenis Barang
+        $sheet->getColumnDimension('C')->setWidth(12);  // Jumlah
+        $sheet->getColumnDimension('D')->setWidth(18);  // Harga Satuan
+        $sheet->getColumnDimension('E')->setWidth(18);  // Total Harga
+        $sheet->getColumnDimension('F')->setWidth(10);  // Baik
+        $sheet->getColumnDimension('G')->setWidth(12);  // Rusak/Usang
+
+        // ── Header Section (Row 2-8) ──
+        $sheet->setCellValue('A2', 'LAMPIRAN BERITA ACARA STOK OPNAME FISIK PERSEDIAAN');
+        $sheet->mergeCells('A2:E2');
+        $sheet->setCellValue('F2', 'Lampiran 1');
+        $sheet->mergeCells('F2:G2');
+        $sheet->getStyle('A2')->getFont()->setBold(true)->setSize(11);
+
+        $sheet->setCellValue('A3', 'Nomor ');
+        $sheet->setCellValue('B3', ': ........../UN64.7/LK/' . date('Y'));
+
+        $sheet->setCellValue('A4', 'Tanggal ');
+        $sheet->setCellValue('B4', ': ' . $this->formatTanggalIndonesia(date('Y-m-d')));
+
+        $sheet->setCellValue('A5', 'Unit');
+        $sheet->setCellValue('B5', ': Fakultas Ilmu Komputer');
+
+        $sheet->setCellValue('A6', 'LAPORAN STOCK OPNAME ');
+        $sheet->mergeCells('A6:G6');
+        $sheet->getStyle('A6')->getFont()->setBold(true)->setSize(12);
+        $sheet->getStyle('A6')->getAlignment()->setHorizontal($alignment::HORIZONTAL_CENTER);
+
+        $sheet->setCellValue('A7', 'UNTUK PERIODE YANG BERAKHIR TANGGAL  ' . strtoupper($this->formatTanggalIndonesia(date('Y-m-d'))));
+        $sheet->mergeCells('A7:G7');
+        $sheet->getStyle('A7')->getAlignment()->setHorizontal($alignment::HORIZONTAL_CENTER);
+
+        $sheet->setCellValue('A8', 'TAHUN ANGGARAN');
+        $sheet->mergeCells('A8:G8');
+        $sheet->getStyle('A8')->getAlignment()->setHorizontal($alignment::HORIZONTAL_CENTER);
+
+        // ── Table Headers (Row 10-11) ──
+        // Row 10 - Main headers
+        $sheet->setCellValue('A10', 'No');
+        $sheet->mergeCells('A10:A11');
+        $sheet->setCellValue('B10', 'Jenis Barang');
+        $sheet->mergeCells('B10:B11');
+        $sheet->setCellValue('C10', 'Hasil Stock Opname');
+        $sheet->mergeCells('C10:E10');
+        $sheet->setCellValue('F10', 'Kondisi Barang ');
+        $sheet->mergeCells('F10:G10');
+
+        // Row 11 - Sub-headers
+        $sheet->setCellValue('C11', 'Jumlah');
+        $sheet->setCellValue('D11', ' Harga Satuan');
+        $sheet->setCellValue('E11', 'Total Harga');
+        $sheet->setCellValue('F11', 'Baik');
+        $sheet->setCellValue('G11', 'Rusak /Usang');
+
+        // Style headers
+        $headerStyle = [
+            'font' => ['bold' => true, 'size' => 10],
+            'alignment' => [
+                'horizontal' => $alignment::HORIZONTAL_CENTER,
+                'vertical' => $alignment::VERTICAL_CENTER,
+                'wrapText' => true,
+            ],
+            'borders' => [
+                'allBorders' => ['borderStyle' => $border::BORDER_THIN],
+            ],
+        ];
+        $sheet->getStyle('A10:G11')->applyFromArray($headerStyle);
+
+        // ── Data Rows ──
+        $row = 12;
+        $totalHargaSatuan = 0;
+        $totalHarga = 0;
+
+        foreach ($products as $index => $product) {
+            $hargaSatuan = (float)($product['price'] ?? 0);
+            $jumlah = (int)($product['current_stock'] ?? 0);
+            $nilaiTotal = $jumlah * $hargaSatuan;
+            $kondisi = $jumlah > 0 ? 'V' : '';
+
+            $sheet->setCellValue('A' . $row, $index + 1);
+            $sheet->setCellValue('B' . $row, $product['name']);
+            $sheet->setCellValue('C' . $row, $jumlah);
+            $sheet->setCellValue('D' . $row, $hargaSatuan);
+            $sheet->setCellValue('E' . $row, $nilaiTotal);
+            $sheet->setCellValue('F' . $row, $kondisi);
+            $sheet->setCellValue('G' . $row, '');
+
+            // Alignment
+            $sheet->getStyle('A' . $row)->getAlignment()->setHorizontal($alignment::HORIZONTAL_CENTER);
+            $sheet->getStyle('C' . $row)->getAlignment()->setHorizontal($alignment::HORIZONTAL_CENTER);
+            $sheet->getStyle('F' . $row)->getAlignment()->setHorizontal($alignment::HORIZONTAL_CENTER);
+            $sheet->getStyle('G' . $row)->getAlignment()->setHorizontal($alignment::HORIZONTAL_CENTER);
+
+            // Number format
+            $sheet->getStyle('D' . $row)->getNumberFormat()->setFormatCode('#,##0');
+            $sheet->getStyle('E' . $row)->getNumberFormat()->setFormatCode('#,##0');
+
+            $totalHargaSatuan += $hargaSatuan;
+            $totalHarga += $nilaiTotal;
+            $row++;
+        }
+
+        // ── Total Row ──
+        $sheet->setCellValue('D' . $row, $totalHargaSatuan);
+        $sheet->setCellValue('E' . $row, $totalHarga);
+        $sheet->getStyle('D' . $row)->getNumberFormat()->setFormatCode('#,##0');
+        $sheet->getStyle('E' . $row)->getNumberFormat()->setFormatCode('#,##0');
+        $sheet->getStyle('D' . $row . ':E' . $row)->getFont()->setBold(true);
+
+        // Borders for data area
+        $dataRange = 'A10:G' . $row;
+        $sheet->getStyle($dataRange)->getBorders()->getAllBorders()->setBorderStyle($border::BORDER_THIN);
+
+        // ── Signature Section ──
+        $sigRow = $row + 3;
+        $sheet->setCellValue('B' . $sigRow, 'Mengetahui,');
+        $sigRow++;
+        $sheet->setCellValue('B' . $sigRow, 'A.n Dekan');
+        $sheet->setCellValue('E' . $sigRow, 'Operator Persediaan');
+        $sigRow++;
+        $sheet->setCellValue('B' . $sigRow, 'Wakil Dekan Bidang Umum dan Keuangan');
+
+        $sigRow += 4;
+        $sheet->setCellValue('B' . $sigRow, 'Betha Nurina Sari, M.Kom.');
+        $sheet->setCellValue('E' . $sigRow, 'M Rizki Fauzi S, S.Pd.');
+        $sigRow++;
+        $sheet->setCellValue('B' . $sigRow, 'NIP. 198910232018032001');
+
+        // ── Generate file ──
+        $bulan = strtoupper($this->getNamaBulan(date('n')));
+        $filename = $bulan . ' - STOCK OPNAME PERSEDIAAN FASILKOM ' . date('Y') . '.xlsx';
+        $writer = new \PhpOffice\PhpSpreadsheet\Writer\Xlsx($spreadsheet);
+
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment;filename="' . $filename . '"');
+        header('Cache-Control: max-age=0');
+
+        $writer->save('php://output');
+        exit;
+    }
+
+    /**
+     * Export Stock Report to PDF - Matching official Stock Opname template
+     */
+    private function exportStockPDF()
+    {
+        $products = $this->getStockReportData();
+
+        $tanggal = $this->formatTanggalIndonesia(date('Y-m-d'));
+        $periodeUpper = strtoupper($tanggal);
+
+        $html = '
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <meta charset="UTF-8">
+            <style>
+                body { font-family: Arial, sans-serif; font-size: 9pt; margin: 20px; }
+                .header { margin-bottom: 10px; }
+                .header-row { margin-bottom: 2px; }
+                .header-row span.label { display: inline-block; width: 80px; }
+                .title { text-align: center; font-weight: bold; font-size: 11pt; margin: 10px 0 5px; }
+                .subtitle { text-align: center; font-size: 9pt; margin-bottom: 15px; }
+                table { width: 100%; border-collapse: collapse; }
+                th { background-color: #f2f2f2; border: 1px solid #000; padding: 6px 4px; text-align: center; font-size: 8pt; font-weight: bold; }
+                td { border: 1px solid #000; padding: 4px; font-size: 8pt; }
+                td.center { text-align: center; }
+                td.right { text-align: right; }
+                tr.total td { font-weight: bold; border-top: 2px solid #000; }
+                .signature { margin-top: 30px; }
+                .signature table { border: none; }
+                .signature td { border: none; padding: 3px; font-size: 9pt; }
+            </style>
+        </head>
+        <body>
+            <div class="header">
+                <div class="header-row"><strong>LAMPIRAN BERITA ACARA STOK OPNAME FISIK PERSEDIAAN</strong></div>
+                <div class="header-row"><span class="label">Nomor</span>: ........../UN64.7/LK/' . date('Y') . '</div>
+                <div class="header-row"><span class="label">Tanggal</span>: ' . $tanggal . '</div>
+                <div class="header-row"><span class="label">Unit</span>: Fakultas Ilmu Komputer</div>
+            </div>
+
+            <div class="title">LAPORAN STOCK OPNAME</div>
+            <div class="subtitle">UNTUK PERIODE YANG BERAKHIR TANGGAL ' . $periodeUpper . '</div>
+            <div class="subtitle">TAHUN ANGGARAN</div>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th rowspan="2" width="5%">No</th>
+                        <th rowspan="2" width="35%">Jenis Barang</th>
+                        <th colspan="3">Hasil Stock Opname</th>
+                        <th colspan="2">Kondisi Barang</th>
+                    </tr>
+                    <tr>
+                        <th width="8%">Jumlah</th>
+                        <th width="15%">Harga Satuan</th>
+                        <th width="15%">Total Harga</th>
+                        <th width="8%">Baik</th>
+                        <th width="10%">Rusak /Usang</th>
+                    </tr>
+                </thead>
+                <tbody>';
+
+        $totalHargaSatuan = 0;
+        $totalHarga = 0;
+
+        foreach ($products as $index => $product) {
+            $hargaSatuan = (float)($product['price'] ?? 0);
+            $jumlah = (int)($product['current_stock'] ?? 0);
+            $nilaiTotal = $jumlah * $hargaSatuan;
+            $kondisi = $jumlah > 0 ? 'V' : '';
+
+            $html .= '<tr>
+                <td class="center">' . ($index + 1) . '</td>
+                <td>' . esc($product['name']) . '</td>
+                <td class="center">' . number_format($jumlah) . '</td>
+                <td class="right">' . number_format($hargaSatuan) . '</td>
+                <td class="right">' . number_format($nilaiTotal) . '</td>
+                <td class="center">' . $kondisi . '</td>
+                <td class="center"></td>
+            </tr>';
+
+            $totalHargaSatuan += $hargaSatuan;
+            $totalHarga += $nilaiTotal;
+        }
+
+        $html .= '<tr class="total">
+                <td colspan="3"></td>
+                <td class="right">' . number_format($totalHargaSatuan) . '</td>
+                <td class="right">' . number_format($totalHarga) . '</td>
+                <td colspan="2"></td>
+            </tr>';
+
+        $html .= '</tbody></table>
+
+            <div class="signature">
+                <table width="100%">
+                    <tr><td width="50%">Mengetahui,</td><td></td></tr>
+                    <tr><td>A.n Dekan</td><td>Operator Persediaan</td></tr>
+                    <tr><td>Wakil Dekan Bidang Umum dan Keuangan</td><td></td></tr>
+                    <tr><td><br><br><br><br></td><td></td></tr>
+                    <tr><td><u>Betha Nurina Sari, M.Kom.</u></td><td><u>M Rizki Fauzi S, S.Pd.</u></td></tr>
+                    <tr><td>NIP. 198910232018032001</td><td></td></tr>
+                </table>
+            </div>
+        </body></html>';
+
+        $options = new \Dompdf\Options();
+        $options->set('isHtml5ParserEnabled', true);
+        $options->set('isRemoteEnabled', true);
+
+        $dompdf = new \Dompdf\Dompdf($options);
+        $dompdf->loadHtml($html);
+        $dompdf->setPaper('A4', 'portrait');
+        $dompdf->render();
+
+        $bulan = strtoupper($this->getNamaBulan(date('n')));
+        $filename = $bulan . '_STOCK_OPNAME_' . date('Y') . '.pdf';
+        $dompdf->stream($filename, ['Attachment' => true]);
+        exit;
+    }
+
+    /**
+     * Get stock report data for export
+     */
+    private function getStockReportData()
+    {
+        $categoryFilter = $this->request->getGet('category');
+        $stockStatus    = $this->request->getGet('stock_status');
+
+        $builder = $this->modelProduk->select("
+                products.*,
+                categories.name as category_name
+            ")
+            ->join('categories', 'categories.id = products.category_id')
+            ->where('products.is_active', true);
+
+        if ($categoryFilter) {
+            $builder->where('products.category_id', $categoryFilter);
+        }
+
+        if ($stockStatus) {
+            switch ($stockStatus) {
+                case 'out_of_stock':
+                    $builder->where('products.current_stock', 0);
+                    break;
+                case 'low_stock':
+                    $builder->where('products.current_stock <= products.min_stock', null, false)
+                            ->where('products.current_stock >', 0);
+                    break;
+                case 'normal':
+                    $builder->where('products.current_stock > products.min_stock', null, false);
+                    break;
+            }
+        }
+
+        return $builder->orderBy('products.name', 'ASC')->findAll();
+    }
+
+    /**
+     * Format tanggal dalam bahasa Indonesia
+     */
+    private function formatTanggalIndonesia($date)
+    {
+        $bulanList = [
+            1 => 'Januari', 2 => 'Februari', 3 => 'Maret',
+            4 => 'April', 5 => 'Mei', 6 => 'Juni',
+            7 => 'Juli', 8 => 'Agustus', 9 => 'September',
+            10 => 'Oktober', 11 => 'November', 12 => 'Desember',
+        ];
+
+        $timestamp = strtotime($date);
+        $hari = date('d', $timestamp);
+        $bulan = $bulanList[(int)date('n', $timestamp)];
+        $tahun = date('Y', $timestamp);
+
+        return "{$hari} {$bulan} {$tahun}";
+    }
+
+    /**
+     * Get nama bulan Indonesia
+     */
+    private function getNamaBulan($num)
+    {
+        $bulan = [
+            1 => 'Januari', 2 => 'Februari', 3 => 'Maret',
+            4 => 'April', 5 => 'Mei', 6 => 'Juni',
+            7 => 'Juli', 8 => 'Agustus', 9 => 'September',
+            10 => 'Oktober', 11 => 'November', 12 => 'Desember',
+        ];
+        return $bulan[(int)$num] ?? '';
+    }
 
     /**
      * Export Movements to Excel
+     */
+    /**
+     * Export Movements to Excel - Professional University Template
      */
     private function exportMovementsExcel()
     {
@@ -556,54 +909,105 @@ class LaporanController extends BaseController
 
         $movements = $builder->orderBy('stock_movements.created_at', 'DESC')->findAll();
 
-        // Create Excel
         $spreadsheet = new \PhpOffice\PhpSpreadsheet\Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
+        $sheet->setTitle('Mutasi Stok');
 
-        // Header
-        $sheet->setCellValue('A1', 'LAPORAN PERGERAKAN STOK');
-        $sheet->mergeCells('A1:G1');
-        $sheet->getStyle('A1')->getFont()->setBold(true)->setSize(16);
-        $sheet->getStyle('A1')->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+        // Aliases
+        $alignment = \PhpOffice\PhpSpreadsheet\Style\Alignment::class;
+        $border = \PhpOffice\PhpSpreadsheet\Style\Border::class;
 
-        $sheet->setCellValue('A2', 'Periode: ' . date('d M Y', strtotime($startDate)) . ' - ' . date('d M Y', strtotime($endDate)));
-        $sheet->mergeCells('A2:G2');
-        $sheet->getStyle('A2')->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+        // Column Widths
+        $sheet->getColumnDimension('A')->setWidth(6);
+        $sheet->getColumnDimension('B')->setWidth(20);
+        $sheet->getColumnDimension('C')->setWidth(35);
+        $sheet->getColumnDimension('D')->setWidth(15);
+        $sheet->getColumnDimension('E')->setWidth(20);
+        $sheet->getColumnDimension('F')->setWidth(12);
+        $sheet->getColumnDimension('G')->setWidth(12);
+        $sheet->getColumnDimension('H')->setWidth(25);
 
-        // Column headers
-        $headers = ['No', 'Tanggal', 'Produk', 'SKU', 'Kategori', 'Tipe', 'Jumlah', 'Keterangan'];
+        // Header Section
+        $sheet->setCellValue('A2', 'LAPORAN MUTASI / PERGERAKAN STOK PERSEDIAAN');
+        $sheet->mergeCells('A2:F2');
+        $sheet->setCellValue('G2', 'Lampiran 2');
+        $sheet->mergeCells('G2:H2');
+        $sheet->getStyle('A2')->getFont()->setBold(true)->setSize(11);
+
+        $sheet->setCellValue('A3', 'Nomor ');
+        $sheet->setCellValue('B3', ': ........../UN64.7/LK/' . date('Y'));
+        $sheet->setCellValue('A4', 'Unit');
+        $sheet->setCellValue('B4', ': Fakultas Ilmu Komputer');
+
+        $sheet->setCellValue('A6', 'LAPORAN MUTASI BARANG PERSEDIAAN');
+        $sheet->mergeCells('A6:H6');
+        $sheet->getStyle('A6')->getFont()->setBold(true)->setSize(12);
+        $sheet->getStyle('A6')->getAlignment()->setHorizontal($alignment::HORIZONTAL_CENTER);
+
+        $sheet->setCellValue('A7', 'PERIODE: ' . strtoupper($this->formatTanggalIndonesia($startDate)) . ' S/D ' . strtoupper($this->formatTanggalIndonesia($endDate)));
+        $sheet->mergeCells('A7:H7');
+        $sheet->getStyle('A7')->getAlignment()->setHorizontal($alignment::HORIZONTAL_CENTER);
+
+        // Table Headers
+        $headers = ['No', 'Tanggal', 'Nama Barang', 'SKU', 'Kategori', 'Tipe', 'Jumlah', 'Keterangan'];
         $col = 'A';
         foreach ($headers as $header) {
-            $sheet->setCellValue($col . '4', $header);
-            $sheet->getStyle($col . '4')->getFont()->setBold(true);
-            $sheet->getStyle($col . '4')->getFill()
-                ->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
-                ->getStartColor()->setRGB('4472C4');
-            $sheet->getStyle($col . '4')->getFont()->getColor()->setRGB('FFFFFF');
+            $sheet->setCellValue($col . '10', $header);
             $col++;
         }
 
-        // Data
-        $row = 5;
-        foreach ($movements as $index => $movement) {
+        $headerStyle = [
+            'font' => ['bold' => true, 'size' => 10],
+            'alignment' => [
+                'horizontal' => $alignment::HORIZONTAL_CENTER,
+                'vertical' => $alignment::VERTICAL_CENTER,
+            ],
+            'borders' => ['allBorders' => ['borderStyle' => $border::BORDER_THIN]],
+            'fill' => [
+                'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+                'startColor' => ['rgb' => 'F2F2F2'],
+            ],
+        ];
+        $sheet->getStyle('A10:H10')->applyFromArray($headerStyle);
+
+        // Data Rows
+        $row = 11;
+        foreach ($movements as $index => $m) {
             $sheet->setCellValue('A' . $row, $index + 1);
-            $sheet->setCellValue('B' . $row, date('d/m/Y H:i', strtotime($movement['created_at'])));
-            $sheet->setCellValue('C' . $row, $movement['product_name']);
-            $sheet->setCellValue('D' . $row, $movement['product_sku']);
-            $sheet->setCellValue('E' . $row, $movement['category_name']);
-            $sheet->setCellValue('F' . $row, $movement['type']);
-            $sheet->setCellValue('G' . $row, $movement['quantity']);
-            $sheet->setCellValue('H' . $row, $movement['notes'] ?? '-');
+            $sheet->setCellValue('B' . $row, date('d/m/Y H:i', strtotime($m['created_at'])));
+            $sheet->setCellValue('C' . $row, $m['product_name']);
+            $sheet->setCellValue('D' . $row, $m['product_sku']);
+            $sheet->setCellValue('E' . $row, $m['category_name']);
+            $sheet->setCellValue('F' . $row, $m['type']);
+            $sheet->setCellValue('G' . $row, $m['quantity']);
+            $sheet->setCellValue('H' . $row, $m['notes'] ?? '-');
+
+            $sheet->getStyle('A' . $row)->getAlignment()->setHorizontal($alignment::HORIZONTAL_CENTER);
+            $sheet->getStyle('B' . $row)->getAlignment()->setHorizontal($alignment::HORIZONTAL_CENTER);
+            $sheet->getStyle('F' . $row)->getAlignment()->setHorizontal($alignment::HORIZONTAL_CENTER);
+            $sheet->getStyle('G' . $row)->getAlignment()->setHorizontal($alignment::HORIZONTAL_CENTER);
             $row++;
         }
 
-        // Auto size columns
-        foreach (range('A', 'H') as $col) {
-            $sheet->getColumnDimension($col)->setAutoSize(true);
-        }
+        // Borders
+        $sheet->getStyle('A10:H' . ($row - 1))->getBorders()->getAllBorders()->setBorderStyle($border::BORDER_THIN);
 
-        // Generate file
-        $filename = 'Laporan_Pergerakan_' . date('YmdHis') . '.xlsx';
+        // Signature Section
+        $sigRow = $row + 3;
+        $sheet->setCellValue('B' . $sigRow, 'Mengetahui,');
+        $sigRow++;
+        $sheet->setCellValue('B' . $sigRow, 'A.n Dekan');
+        $sheet->setCellValue('F' . $sigRow, 'Operator Persediaan');
+        $sigRow++;
+        $sheet->setCellValue('B' . $sigRow, 'Wakil Dekan Bidang Umum dan Keuangan');
+
+        $sigRow += 4;
+        $sheet->setCellValue('B' . $sigRow, 'Betha Nurina Sari, M.Kom.');
+        $sheet->setCellValue('F' . $sigRow, 'M Rizki Fauzi S, S.Pd.');
+        $sigRow++;
+        $sheet->setCellValue('B' . $sigRow, 'NIP. 198910232018032001');
+
+        $filename = 'MUTASI_STOK_' . date('Ymd') . '.xlsx';
         $writer = new \PhpOffice\PhpSpreadsheet\Writer\Xlsx($spreadsheet);
         
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
@@ -616,6 +1020,9 @@ class LaporanController extends BaseController
 
     /**
      * Export Movements to PDF
+     */
+    /**
+     * Export Movements to PDF - Professional University Template
      */
     private function exportMovementsPDF()
     {
@@ -645,6 +1052,8 @@ class LaporanController extends BaseController
         $movements = $builder->orderBy('stock_movements.created_at', 'DESC')->findAll();
         $analytics = $this->calculateMovementAnalytics($movements, $startDate, $endDate);
 
+        $tanggal = $this->formatTanggalIndonesia(date('Y-m-d'));
+        
         // Generate HTML
         $html = '
         <!DOCTYPE html>
@@ -652,79 +1061,85 @@ class LaporanController extends BaseController
         <head>
             <meta charset="UTF-8">
             <style>
-                body { font-family: Arial, sans-serif; font-size: 10pt; }
-                h2 { text-align: center; color: #333; margin-bottom: 5px; }
-                .period { text-align: center; color: #666; margin-bottom: 20px; }
-                .summary { margin-bottom: 20px; }
-                .summary table { width: 100%; border-collapse: collapse; }
-                .summary td { padding: 8px; background: #f8f9fa; }
-                .summary strong { color: #435ebe; }
-                table { width: 100%; border-collapse: collapse; margin-top: 10px; }
-                th { background-color: #435ebe; color: white; padding: 8px; text-align: left; font-size: 9pt; }
-                td { padding: 6px; border-bottom: 1px solid #ddd; font-size: 9pt; }
-                tr:nth-child(even) { background-color: #f8f9fa; }
-                .badge-in { background: #28a745; color: white; padding: 2px 6px; border-radius: 3px; }
-                .badge-out { background: #ffc107; color: #000; padding: 2px 6px; border-radius: 3px; }
-                .badge-adj { background: #17a2b8; color: white; padding: 2px 6px; border-radius: 3px; }
+                body { font-family: Arial, sans-serif; font-size: 8pt; margin: 20px; }
+                .header { margin-bottom: 10px; }
+                .header-row { margin-bottom: 2px; }
+                .header-row span.label { display: inline-block; width: 80px; }
+                .title { text-align: center; font-weight: bold; font-size: 11pt; margin: 15px 0 5px; }
+                .subtitle { text-align: center; font-size: 9pt; margin-bottom: 15px; }
+                table { width: 100%; border-collapse: collapse; }
+                th { background-color: #f2f2f2; border: 1px solid #000; padding: 6px 4px; text-align: center; font-weight: bold; }
+                td { border: 1px solid #000; padding: 4px; }
+                td.center { text-align: center; }
+                .signature { margin-top: 30px; line-height: 1.4; }
+                .signature table { border: none; }
+                .signature td { border: none; padding: 0; font-size: 9pt; }
+                .badge { padding: 2px 5px; border-radius: 3px; font-weight: bold; }
             </style>
         </head>
         <body>
-            <h2>LAPORAN PERGERAKAN STOK</h2>
-            <div class="period">Periode: ' . date('d M Y', strtotime($startDate)) . ' - ' . date('d M Y', strtotime($endDate)) . '</div>
-            
-            <div class="summary">
-                <table>
-                    <tr>
-                        <td><strong>Total Pergerakan:</strong> ' . number_format($analytics['total_movements']) . '</td>
-                        <td><strong>Barang Masuk:</strong> ' . number_format($analytics['total_in_quantity']) . '</td>
-                        <td><strong>Barang Keluar:</strong> ' . number_format($analytics['total_out_quantity']) . '</td>
-                        <td><strong>Net Movement:</strong> ' . number_format($analytics['net_movement']) . '</td>
-                    </tr>
-                </table>
+            <div class="header">
+                <div class="header-row"><strong>LAPORAN MUTASI / PERGERAKAN STOK PERSEDIAAN</strong></div>
+                <div class="header-row"><span class="label">Nomor</span>: ........../UN64.7/LK/' . date('Y') . '</div>
+                <div class="header-row"><span class="label">Tanggal</span>: ' . $tanggal . '</div>
+                <div class="header-row"><span class="label">Unit</span>: Fakultas Ilmu Komputer</div>
             </div>
+
+            <div class="title">LAPORAN MUTASI BARANG PERSEDIAAN</div>
+            <div class="subtitle">PERIODE ' . strtoupper($this->formatTanggalIndonesia($startDate)) . ' S/D ' . strtoupper($this->formatTanggalIndonesia($endDate)) . '</div>
 
             <table>
                 <thead>
                     <tr>
                         <th width="5%">No</th>
-                        <th width="12%">Tanggal</th>
-                        <th width="20%">Produk</th>
+                        <th width="15%">Tanggal</th>
+                        <th width="25%">Nama Barang</th>
                         <th width="10%">SKU</th>
                         <th width="15%">Kategori</th>
                         <th width="8%">Tipe</th>
-                        <th width="10%">Jumlah</th>
-                        <th width="20%">Keterangan</th>
+                        <th width="8%">Jumlah</th>
+                        <th width="14%">Keterangan</th>
                     </tr>
                 </thead>
                 <tbody>';
 
-        foreach ($movements as $index => $movement) {
-            $badgeClass = $movement['type'] === 'IN' ? 'badge-in' : ($movement['type'] === 'OUT' ? 'badge-out' : 'badge-adj');
+        foreach ($movements as $index => $m) {
             $html .= '<tr>
-                <td>' . ($index + 1) . '</td>
-                <td>' . date('d/m/Y H:i', strtotime($movement['created_at'])) . '</td>
-                <td>' . esc($movement['product_name']) . '</td>
-                <td>' . esc($movement['product_sku']) . '</td>
-                <td>' . esc($movement['category_name']) . '</td>
-                <td><span class="' . $badgeClass . '">' . $movement['type'] . '</span></td>
-                <td>' . number_format($movement['quantity']) . '</td>
-                <td>' . esc($movement['notes'] ?? '-') . '</td>
+                <td class="center">' . ($index + 1) . '</td>
+                <td class="center">' . date('d/m/Y H:i', strtotime($m['created_at'])) . '</td>
+                <td>' . esc($m['product_name']) . '</td>
+                <td class="center">' . esc($m['product_sku']) . '</td>
+                <td>' . esc($m['category_name']) . '</td>
+                <td class="center">' . $m['type'] . '</td>
+                <td class="center">' . number_format($m['quantity']) . '</td>
+                <td>' . esc($m['notes'] ?? '-') . '</td>
             </tr>';
         }
 
-        $html .= '</tbody></table></body></html>';
+        $html .= '</tbody></table>
 
-        // Generate PDF
+            <div class="signature">
+                <table width="100%">
+                    <tr><td width="60%">Mengetahui,</td><td></td></tr>
+                    <tr><td>A.n Dekan</td><td>Operator Persediaan</td></tr>
+                    <tr><td>Wakil Dekan Bidang Umum dan Keuangan</td><td></td></tr>
+                    <tr><td><br><br><br><br></td><td></td></tr>
+                    <tr><td><u>Betha Nurina Sari, M.Kom.</u></td><td><u>M Rizki Fauzi S, S.Pd.</u></td></tr>
+                    <tr><td>NIP. 198910232018032001</td><td></td></tr>
+                </table>
+            </div>
+        </body></html>';
+
         $options = new \Dompdf\Options();
         $options->set('isHtml5ParserEnabled', true);
         $options->set('isRemoteEnabled', true);
         
         $dompdf = new \Dompdf\Dompdf($options);
         $dompdf->loadHtml($html);
-        $dompdf->setPaper('A4', 'landscape');
+        $dompdf->setPaper('A4', 'portrait');
         $dompdf->render();
         
-        $filename = 'Laporan_Pergerakan_' . date('YmdHis') . '.pdf';
+        $filename = 'MUTASI_STOK_' . date('YmdHis') . '.pdf';
         $dompdf->stream($filename, ['Attachment' => true]);
         exit;
     }

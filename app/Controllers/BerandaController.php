@@ -53,10 +53,30 @@ class BerandaController extends BaseController
             'Lainnya',
         ];
 
+        // Ambil data statistik untuk dashboard publik
+        $totalProduk  = $this->modelProduk->where('is_active', true)->countAllResults();
+        $totalKategori = $this->modelKategori->where('is_active', true)->countAllResults();
+        
+        // Hitung file laporan bulanan di public/laporan bulanan
+        $laporanDir = FCPATH . 'laporan bulanan';
+        $totalLaporan = 0;
+        if (is_dir($laporanDir)) {
+            $files = scandir($laporanDir);
+            $totalLaporan = count(array_filter($files, function($f) {
+                return str_ends_with(strtolower($f), '.xlsx');
+            }));
+        }
+
         return view('home/index', [
             'daftarProduk'   => $daftarProduk,
             'daftarKategori' => $daftarKategori,
             'unitKerja'      => $unitKerja,
+            'stats'          => [
+                'total_produk'  => $totalProduk,
+                'total_kategori' => $totalKategori,
+                'total_laporan'  => $totalLaporan,
+                'jam_operasi'   => 8 // Tetap hardcoded atau dari config
+            ]
         ]);
     }
 }

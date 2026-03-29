@@ -125,3 +125,57 @@ if (!function_exists('time_ago')) {
         return waktu_lalu((string) $datetime);
     }
 }
+
+/* =========================
+ * 5) Format Tanggal
+ * ========================= */
+if (!function_exists('formatDate')) {
+    /**
+     * Format tanggal dari database ke format Indonesia
+     * Contoh: 2024-03-19 -> 19 Maret 2024
+     */
+    function formatDate(string|null $date): string
+    {
+        if (!$date) return '-';
+
+        try {
+            $timestamp = strtotime($date);
+            if ($timestamp === false) return '-';
+
+            $bulan = [
+                'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni',
+                'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'
+            ];
+
+            $hari = date('d', $timestamp);
+            $bulanIdx = (int) date('m', $timestamp) - 1;
+            $tahun = date('Y', $timestamp);
+
+            return $hari . ' ' . $bulan[$bulanIdx] . ' ' . $tahun;
+        } catch (\Exception $e) {
+            return '-';
+        }
+    }
+}
+
+/* =========================
+ * 6) Generate Kode Resi Berdasarkan Tanggal & Waktu
+ * ========================= */
+if (!function_exists('generateReceiptCode')) {
+    /**
+     * Generate kode resi berdasarkan waktu saat ini
+     * Format: RES-DD-MM-YY-HH-MM-SS
+     * Contoh: RES-19-03-26-14-30-45
+     */
+    function generateReceiptCode(): string
+    {
+        $dd = date('d');  // 01-31
+        $mm = date('m');  // 01-12
+        $yy = date('y');  // 26 (tahun 2 digit)
+        $hh = date('H');  // 00-23
+        $mi = date('i');  // 00-59
+        $ss = date('s');  // 00-59
+
+        return "RES-{$dd}-{$mm}-{$yy}-{$hh}-{$mi}-{$ss}";
+    }
+}

@@ -160,7 +160,9 @@ class PermintaanController extends BaseController
         $dataPermintaan = $this->modelPermintaan->find($id);
         if (!$dataPermintaan) return $this->jsonResponse(['status' => false, 'message' => 'Data tidak ditemukan'], 404);
 
-        if ($this->modelPermintaan->update($id, ['status' => 'approved'])) {
+        $reason = $this->request->getPost('reason') ?: 'Disetujui oleh Admin';
+
+        if ($this->modelPermintaan->update($id, ['status' => 'approved', 'status_reason' => $reason])) {
             // Kirim notifikasi disetujui
             try {
                 $this->modelNotifikasi->createRequestApprovedNotification($dataPermintaan);
@@ -238,7 +240,10 @@ class PermintaanController extends BaseController
                 ]);
             }
 
-            $this->modelPermintaan->update($id, ['status' => 'distributed']);
+            $this->modelPermintaan->update($id, [
+                'status' => 'distributed',
+                'status_reason' => $this->request->getPost('reason') ?: 'Barang didistribusikan'
+            ]);
             $db->transComplete();
 
             if ($db->transStatus() === false) {
@@ -280,7 +285,9 @@ class PermintaanController extends BaseController
             return $this->jsonResponse(['status' => false, 'message' => 'Tidak bisa membatalkan permintaan yang sudah didistribusikan.'], 400);
         }
 
-        if ($this->modelPermintaan->update($id, ['status' => 'cancelled'])) {
+        $reason = $this->request->getPost('reason') ?: 'Dibatalkan oleh Admin';
+
+        if ($this->modelPermintaan->update($id, ['status' => 'cancelled', 'status_reason' => $reason])) {
             // Kirim notifikasi dibatalkan
             try {
                 $this->modelNotifikasi->createRequestCancelledNotification($dataPermintaan);
@@ -391,5 +398,81 @@ class PermintaanController extends BaseController
         ];
 
         return view('requests/ask_success', $data);
+    }
+
+    /**
+     * Halaman publik - form tracking permintaan (tanpa login)
+     */
+    public function trackForm()
+    {
+        $data = [
+            'title' => 'Lacak Permintaan ATK | SIMATIK',
+        ];
+
+        return view('requests/track', $data);
+    }
+
+    /**
+     * Proses pencarian status permintaan publik
+     */
+    public function trackStatus()
+    {
+        $referenceNo = trim($this->request->getPost('reference_no') ?? '');
+        $email = trim($this->request->getPost('email') ?? '');
+
+        // Validasi input
+        if (empty($referenceNo) || empty($email)) {
+            return redirect()->back()->withInput()->with('error', 'Nomor referensi dan email harus diisi.');
+        }
+
+        // Parse nomor referensi - format: REQ-0001
+        if (!preg_match('/^REQ-(\d+)$/i', $referenceNo, $matches)) {
+            return redirect()->back()->withInput()->with('error', 'Format nomor referensi tidak valid. Gunakan format: REQ-0001');
+        }
+
+        $requestId = (int) $matches[1];
+
+        // Cari permintaan berdasarkan ID dan email
+        $dataPermintaan = $this->modelPermintaan->find($requestId);
+
+        if (!$dataPermintaan) {
+            return redirect()->back()->withInput()->with('error', 'Permintaan tidak ditemukan.');
+        }
+
+        // Validasi email
+        if (strtolower($dataPermintaan['email']) !== strtolower($email)) {
+            return redirect()->back()->withInput()->with('error', 'Email tidak sesuai dengan data permintaan.');
+        }
+
+        // Ambil detail item permintaan
+        $itemPermintaan = $this->modelItemPermintaan->where('request_id', $requestId)->findAll();
+
+        // Enriched item dengan detail produk
+        $itemEnriched = [];
+        foreach ($itemPermintaan as $item) {
+            $produk = $this->modelProduk->find($item['product_id']);
+            $itemEnriched[] = [
+                'item' => $item,
+                'produk' => $produk
+            ];
+        }
+
+        // Tentukan badge status
+        $statusBadges = [
+            'requested'   => ['text' => 'Menunggu Persetujuan', 'color' => 'warning', 'icon' => 'hourglass-split'],
+            'approved'    => ['text' => 'Disetujui', 'color' => 'info', 'icon' => 'check-circle'],
+            'distributed' => ['text' => 'Sudah Dikirim', 'color' => 'success', 'icon' => 'check2-all'],
+            'cancelled'   => ['text' => 'Dibatalkan', 'color' => 'danger', 'icon' => 'x-circle'],
+        ];
+
+        $data = [
+            'title'              => 'Lacak Permintaan ATK | SIMATIK',
+            'referenceNo'        => $referenceNo,
+            'permintaan'         => $dataPermintaan,
+            'itemPermintaan'     => $itemEnriched,
+            'statusBadges'       => $statusBadges,
+        ];
+
+        return view('requests/track_result', $data);
     }
 }

@@ -131,26 +131,17 @@
                         </div>
 
                         <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label for="current_stock" class="form-label fw-bold">Stok Awal</label>
-                                <input type="number" 
-                                       class="form-control <?= (session('errors.current_stock')) ? 'is-invalid' : '' ?>" 
-                                       id="current_stock" 
-                                       name="current_stock" 
-                                       value="<?= old('current_stock', $produk['current_stock']) ?>"
-                                       placeholder="0">
-                                <small class="text-muted">Jumlah stok yang ada saat ini</small>
+                            <div class="col-md-4 mb-3">
+                                <label for="stock_baik" class="form-label fw-bold">Stok Baik</label>
+                                <input type="number" class="form-control" id="stock_baik" name="stock_baik" value="<?= old('stock_baik', $produk['stock_baik'] ?? 0) ?>" placeholder="0">
                             </div>
-                            
-                            <div class="col-md-6 mb-3">
+                            <div class="col-md-4 mb-3">
+                                <label for="stock_rusak" class="form-label fw-bold">Stok Rusak</label>
+                                <input type="number" class="form-control" id="stock_rusak" name="stock_rusak" value="<?= old('stock_rusak', $produk['stock_rusak'] ?? 0) ?>" placeholder="0">
+                            </div>
+                            <div class="col-md-4 mb-3">
                                 <label for="min_stock" class="form-label fw-bold">Stok Minimum <span class="text-danger">*</span></label>
-                                <input type="number" 
-                                       class="form-control <?= (session('errors.min_stock')) ? 'is-invalid' : '' ?>" 
-                                       id="min_stock" 
-                                       name="min_stock" 
-                                       value="<?= old('min_stock', $produk['min_stock']) ?>"
-                                       placeholder="5" required>
-                                <small class="text-muted">Batas stok untuk peringatan (alert)</small>
+                                <input type="number" class="form-control" id="min_stock" name="min_stock" value="<?= old('min_stock', $produk['min_stock']) ?>" required>
                             </div>
                         </div>
                     </div>
@@ -211,14 +202,16 @@
 <?= $this->section('scripts') ?>
 <script>
 $(document).ready(function() {
-    $('#name, #current_stock, #unit, #category_id').on('input change', function() {
+    $('#name, #stock_baik, #stock_rusak, #unit, #category_id').on('input change', function() {
         const name = $('#name').val() || 'Nama Produk';
-        const stock = $('#current_stock').val() || '0';
+        const baik = parseInt($('#stock_baik').val()) || 0;
+        const rusak = parseInt($('#stock_rusak').val()) || 0;
+        const totalStock = baik + rusak;
         const unit = $('#unit').val();
         const category = $('#category_id option:selected').text() || 'Kategori';
         
         $('#preview-name').text(name);
-        $('#preview-stock').text(stock);
+        $('#preview-stock').text(totalStock);
         $('#preview-unit').text(unit);
         $('#preview-category').text(category);
     });

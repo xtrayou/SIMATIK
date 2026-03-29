@@ -70,6 +70,8 @@ $routes->group('reports', ['filter' => 'auth'], function ($routes) {
     $routes->get('movements', 'LaporanController::movements');
     $routes->get('export/stock', 'LaporanController::exportStock');
     $routes->get('export/movements', 'LaporanController::exportMovements');
+    $routes->get('stock/export/(:alpha)', 'LaporanController::exportStock/$1');
+    $routes->get('movements/export/(:alpha)', 'LaporanController::exportMovements/$1');
     $routes->get('valuation', 'LaporanController::valuation');
     $routes->get('analytics', 'LaporanController::analytics');
 });
@@ -135,6 +137,10 @@ $routes->group('api/notifications', function ($routes) {
 $routes->get('ask', 'PermintaanController::askForm');
 $routes->post('ask/store', 'PermintaanController::askStore');
 $routes->get('ask/success', 'PermintaanController::askSuccess');
+
+// Halaman Publik - Lacak Status Permintaan
+$routes->get('track', 'PermintaanController::trackForm');
+$routes->post('track-status', 'PermintaanController::trackStatus');
 
 // ── Maintenance Routes (Admin only) ──────────────────────────────
 $routes->get('admin/fix-request-status', function () {

@@ -158,15 +158,29 @@
                     </div>
                 <?php endif; ?>
 
-                <?php if ($currentStatus == 'requested' || empty($currentStatus)): ?>
-                    <div class="alert alert-info border-0 bg-light-info mb-4">
-                        <i class="bi bi-info-circle me-2"></i> Permintaan perlu ditinjau sebelum disetujui.
+                <?php if ($pinjaman['status_reason']): ?>
+                    <div class="alert alert-secondary border-0 mb-4">
+                        <small class="fw-bold d-block mb-1 text-uppercase">Alasan Admin:</small>
+                        <p class="mb-0 small italic"><?= esc($pinjaman['status_reason']) ?></p>
                     </div>
-                    <div class="d-grid gap-3">
-                        <button class="btn btn-primary py-2 fw-bold" id="btn-approve">
-                            <i class="bi bi-check-lg me-2"></i> SETUJUI PERMINTAAN
+                <?php endif; ?>
+
+                <?php if ($currentStatus == 'requested' || $currentStatus == 'approved' || empty($currentStatus)): ?>
+                    <div class="mb-4">
+                        <label for="admin_reason" class="form-label small fw-bold">Alasan / Catatan Admin (Opsional):</label>
+                        <textarea class="form-control" id="admin_reason" rows="3" placeholder="Contoh: Barang sedang diambil, Ditolak karena stok terbatas, dll"></textarea>
+                    </div>
+                <?php endif; ?>
+
+                <?php if ($currentStatus == 'requested' || empty($currentStatus)): ?>
+                    <div class="alert alert-info border-0 bg-light-info mb-4 small">
+                        <i class="bi bi-info-circle me-2"></i> Tinjau ketersediaan stok sebelum menyetujui.
+                    </div>
+                    <div class="d-grid gap-2">
+                        <button class="btn btn-primary fw-bold" id="btn-approve">
+                            <i class="bi bi-check-lg me-2"></i> SETUJUI
                         </button>
-                        <button class="btn btn-outline-danger py-2" id="btn-cancel">
+                        <button class="btn btn-outline-danger" id="btn-cancel">
                             <i class="bi bi-x-lg me-2"></i> BATALKAN
                         </button>
                     </div>
@@ -188,11 +202,11 @@
                         <div class="alert alert-success border-0 mb-4">
                             <i class="bi bi-check-circle me-2"></i> Stok mencukupi. Barang siap didistribusikan.
                         </div>
-                        <div class="d-grid gap-3">
-                            <button class="btn btn-success py-2 fw-bold" id="btn-distribute">
-                                <i class="bi bi-box-arrow-right me-2"></i> DISTRIBUSIKAN SEKARANG
+                        <div class="d-grid gap-2">
+                            <button class="btn btn-success fw-bold" id="btn-distribute">
+                                <i class="bi bi-box-arrow-right me-2"></i> DISTRIBUSIKAN
                             </button>
-                            <button class="btn btn-outline-danger py-2" id="btn-cancel">
+                            <button class="btn btn-outline-danger" id="btn-cancel">
                                 <i class="bi bi-x-lg me-2"></i> BATALKAN
                             </button>
                         </div>
@@ -255,11 +269,14 @@
             btn.disabled = true;
             btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Memproses...';
 
+            const reason = $('#admin_reason').val();
+
             $.ajax({
                 url: url,
                 type: 'POST',
                 data: {
-                    <?= csrf_token() ?>: '<?= csrf_hash() ?>'
+                    <?= csrf_token() ?>: '<?= csrf_hash() ?>',
+                    reason: reason
                 },
                 dataType: 'json',
                 success: function(res) {

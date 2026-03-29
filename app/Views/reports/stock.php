@@ -232,76 +232,62 @@
             <div class="card-body">
                 <?php if (!empty($products)): ?>
                     <div class="table-responsive">
-                        <table class="table table-hover datatable" id="stockReportTable">
+                        <table class="table table-bordered table-hover" id="stockReportTable">
                             <thead>
-                                <tr>
-                                    <th width="5%">#</th>
-                                    <th width="25%">Produk</th>
-                                    <th width="15%">Kategori</th>
-                                    <th width="10%">SKU</th>
-                                    <th width="10%">Stok Saat Ini</th>
-                                    <th width="10%">Min. Stok</th>
-                                    <th width="10%">Status</th>
-                                    <th width="15%">Nilai Stok</th>
+                                <tr class="table-primary text-center">
+                                    <th rowspan="2" width="5%" class="align-middle">No</th>
+                                    <th rowspan="2" width="30%" class="align-middle">Jenis Barang</th>
+                                    <th colspan="3">Hasil Stock Opname</th>
+                                    <th colspan="2">Kondisi Barang</th>
+                                </tr>
+                                <tr class="table-primary text-center">
+                                    <th width="10%">Jumlah</th>
+                                    <th width="15%">Harga Satuan</th>
+                                    <th width="15%">Total Harga</th>
+                                    <th width="8%">Baik</th>
+                                    <th width="10%">Rusak /Usang</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <?php foreach ($products as $index => $product): ?>
-                                <tr class="<?= $product['stock_status'] == 'out_of_stock' ? 'table-danger' : 
-                                             ($product['stock_status'] == 'low_stock' ? 'table-warning' : '') ?>">
-                                    <td><?= $index + 1 ?></td>
+                                <?php 
+                                $totalHargaSatuan = 0;
+                                $totalHarga = 0;
+                                foreach ($products as $index => $product): 
+                                    $hargaSatuan = (float)($product['price'] ?? 0);
+                                    $jumlah = (int)($product['current_stock'] ?? 0);
+                                    $nilaiTotal = $jumlah * $hargaSatuan;
+                                    $kondisiBaik = $jumlah > 0 ? 'V' : '';
+                                    $totalHargaSatuan += $hargaSatuan;
+                                    $totalHarga += $nilaiTotal;
+                                ?>
+                                <tr class="<?= $product['current_stock'] == 0 ? 'table-danger' : 
+                                             ($product['current_stock'] <= $product['min_stock'] ? 'table-warning' : '') ?>">
+                                    <td class="text-center"><?= $index + 1 ?></td>
                                     <td>
-                                        <div class="d-flex align-items-center">
-                                            <div class="avatar avatar-sm me-2">
-                                                <div class="avatar-content bg-<?= $product['stock_status'] == 'out_of_stock' ? 'danger' : 
-                                                                                 ($product['stock_status'] == 'low_stock' ? 'warning' : 'success') ?> text-white">
-                                                    <i class="bi bi-box"></i>
-                                                </div>
-                                            </div>
-                                            <div>
-                                                <h6 class="mb-0"><?= esc($product['name']) ?></h6>
-                                                <small class="text-muted"><?= $product['unit'] ?></small>
-                                            </div>
-                                        </div>
+                                        <strong><?= esc($product['name']) ?></strong>
+                                        <small class="d-block text-muted">
+                                            <span class="badge bg-info"><?= esc($product['category_name']) ?></span>
+                                        </small>
                                     </td>
-                                    <td>
-                                        <span class="badge bg-info"><?= esc($product['category_name']) ?></span>
-                                    </td>
-                                    <td>
-                                        <code><?= $product['sku'] ?></code>
-                                    </td>
-                                    <td>
-                                        <strong class="<?= $product['stock_status'] == 'out_of_stock' ? 'text-danger' : 
-                                                         ($product['stock_status'] == 'low_stock' ? 'text-warning' : 'text-success') ?>">
-                                            <?= number_format($product['current_stock']) ?>
+                                    <td class="text-center">
+                                        <strong class="<?= $product['current_stock'] == 0 ? 'text-danger' : 
+                                                         ($product['current_stock'] <= $product['min_stock'] ? 'text-warning' : 'text-success') ?>">
+                                            <?= number_format($jumlah) ?>
                                         </strong>
                                     </td>
-                                    <td>
-                                        <span class="text-muted"><?= number_format($product['min_stock']) ?></span>
-                                    </td>
-                                    <td>
-                                        <?= format_stock_badge($product['current_stock'], $product['min_stock']) ?>
-                                    </td>
-                                    <td>
-                                        <div>
-                                            <strong><?= format_currency($product['stock_value']) ?></strong>
-                                            <?php if ($product['price'] > 0): ?>
-                                                <small class="d-block text-muted">
-                                                    @ <?= format_currency($product['price']) ?>
-                                                </small>
-                                            <?php endif ?>
-                                        </div>
-                                    </td>
+                                    <td class="text-end"><?= number_format($hargaSatuan) ?></td>
+                                    <td class="text-end"><strong><?= number_format($nilaiTotal) ?></strong></td>
+                                    <td class="text-center"><?= $kondisiBaik ?></td>
+                                    <td class="text-center"></td>
                                 </tr>
                                 <?php endforeach ?>
                             </tbody>
                             <tfoot>
-                                <tr class="table-active">
-                                    <th colspan="4">TOTAL</th>
-                                    <th><?= number_format($summary['total_quantity']) ?></th>
-                                    <th>-</th>
-                                    <th>-</th>
-                                    <th><?= format_currency($summary['total_value']) ?></th>
+                                <tr class="table-active fw-bold">
+                                    <th colspan="3" class="text-end">TOTAL</th>
+                                    <th class="text-end"><?= number_format($totalHargaSatuan) ?></th>
+                                    <th class="text-end"><?= number_format($totalHarga) ?></th>
+                                    <th colspan="2"></th>
                                 </tr>
                             </tfoot>
                         </table>
@@ -337,29 +323,10 @@ $(document).ready(function() {
         language: {
             url: '//cdn.datatables.net/plug-ins/1.13.7/i18n/id.json'
         },
-        dom: 'Bfrtip',
-        buttons: [
-            'copy', 'csv', 'excel', 'pdf', 'print'
-        ],
-        footerCallback: function ( row, data, start, end, display ) {
-            var api = this.api();
- 
-            // Remove the formatting to get integer data for summation
-            var intVal = function ( i ) {
-                return typeof i === 'string' ?
-                    i.replace(/[\$,]/g, '')*1 :
-                    typeof i === 'number' ?
-                        i : 0;
-            };
- 
-            // Total over current page
-            var pageTotal = api
-                .column( 4, { page: 'current'} )
-                .data()
-                .reduce( function (a, b) {
-                    return intVal(a) + intVal(b);
-                }, 0 );
-        }
+        ordering: true,
+        searching: true,
+        paging: true,
+        info: true
     });
 
     // Category breakdown chart

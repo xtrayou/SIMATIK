@@ -17,6 +17,7 @@ class PermintaanModel extends Model
         'request_date',
         'due_date',
         'status',
+        'status_reason',
         'notes',
     ];
 

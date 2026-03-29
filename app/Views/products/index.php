@@ -90,52 +90,62 @@
                 <?php if (!empty($daftarProduk)): ?>
                     <div class="table-responsive">
                         <table class="table table-hover align-middle" id="productsTable">
-                            <thead class="bg-light">
+                            <thead class="bg-light text-uppercase small fw-bold">
                                 <tr>
-                                    <th width="50">#</th>
-                                    <th>Informasi Produk</th>
-                                    <th>Kategori</th>
-                                    <th>SKU</th>
-                                    <th>Stok</th>
-                                    <th>Harga</th>
-                                    <th width="150" class="text-center">Aksi</th>
+                                    <th rowspan="2" width="50" class="align-middle border text-center">#</th>
+                                    <th rowspan="2" class="align-middle border">Informasi Produk</th>
+                                    <th rowspan="2" class="align-middle border text-center">Kategori</th>
+                                    <th colspan="3" class="text-center border py-2">Hasil Stock Opname (Jumlah)</th>
+                                    <th colspan="2" class="text-center border py-2">Nilai Persediaan</th>
+                                    <th rowspan="2" width="130" class="text-center align-middle border">Aksi</th>
+                                </tr>
+                                <tr class="text-center small">
+                                    <th class="border bg-white text-dark" width="70">Baik</th>
+                                    <th class="border bg-white text-dark" width="70">Rusak</th>
+                                    <th class="border bg-light text-primary" width="80">Total</th>
+                                    <th class="border bg-white text-dark" width="120">Harga</th>
+                                    <th class="border bg-light text-success" width="130">Total Nilai</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <?php foreach ($daftarProduk as $idx => $p): ?>
+                                <?php 
+                                    $totalValue = (float)$p['price'] * (int)$p['current_stock'];
+                                    $hasLowStock = $p['current_stock'] <= $p['min_stock'];
+                                ?>
                                 <tr>
-                                    <td><?= $idx + 1 ?></td>
-                                    <td>
-                                        <div class="fw-bold text-primary"><?= esc($p['name']) ?></div>
-                                        <small class="text-muted"><?= $p['unit'] ?> | Ref: <?= $p['sku'] ?></small>
-                                    </td>
-                                    <td>
-                                        <span class="badge bg-light text-dark border"><?= esc($p['category_name']) ?></span>
-                                    </td>
-                                    <td><code><?= $p['sku'] ?></code></td>
-                                    <td>
-                                        <div class="d-flex align-items-center">
-                                            <span class="fw-bold me-2 <?= $p['current_stock'] <= $p['min_stock'] ? 'text-danger' : 'text-success' ?>">
-                                                <?= number_format($p['current_stock']) ?>
-                                            </span>
-                                            <?php if($p['current_stock'] <= $p['min_stock']): ?>
-                                                <i class="bi bi-exclamation-triangle-fill text-warning" title="Stok Rendah"></i>
-                                            <?php endif; ?>
+                                    <td class="text-center border-start border-end"><?= $idx + 1 ?></td>
+                                    <td class="border-end">
+                                        <div class="fw-bold text-dark mb-0"><?= esc($p['name']) ?></div>
+                                        <div class="d-flex align-items-center gap-2">
+                                            <code class="small text-muted"><?= $p['sku'] ?></code>
+                                            <span class="text-muted small">| <?= esc($p['unit'] ?: 'Pcs') ?></span>
                                         </div>
-                                        <small class="text-muted d-block">Min: <?= $p['min_stock'] ?></small>
                                     </td>
-                                    <td>
-                                        <div class="fw-bold">Rp <?= number_format($p['price'], 0, ',', '.') ?></div>
+                                    <td class="text-center border-end">
+                                        <span class="badge bg-light text-dark border-0 small"><?= esc($p['category_name']) ?></span>
                                     </td>
-                                    <td>
-                                        <div class="d-flex justify-content-center gap-1">
-                                            <a href="<?= base_url('/products/show/' . $p['id']) ?>" class="btn btn-sm btn-info text-white" title="Detail">
+                                    <td class="text-center border-end"><?= number_format($p['stock_baik'] ?? 0) ?></td>
+                                    <td class="text-center border-end"><?= number_format($p['stock_rusak'] ?? 0) ?></td>
+                                    <td class="text-center border-end fw-bold <?= $hasLowStock ? 'text-danger' : 'text-primary' ?>">
+                                        <?= number_format($p['current_stock']) ?>
+                                        <?php if($hasLowStock && $p['current_stock'] > 0): ?>
+                                            <i class="bi bi-exclamation-triangle-fill text-warning ms-1" title="Stok Rendah"></i>
+                                        <?php elseif($p['current_stock'] <= 0): ?>
+                                            <span class="badge bg-danger ms-1" style="font-size: 0.6rem;">HABIS</span>
+                                        <?php endif; ?>
+                                    </td>
+                                    <td class="text-end pe-3 border-end">Rp <?= number_format($p['price'], 0, ',', '.') ?></td>
+                                    <td class="text-end pe-3 border-end fw-bold text-success">Rp <?= number_format($totalValue, 0, ',', '.') ?></td>
+                                    <td class="text-center border-end">
+                                        <div class="btn-group">
+                                            <a href="<?= base_url('/products/show/' . $p['id']) ?>" class="btn btn-sm btn-outline-info" title="Detail">
                                                 <i class="bi bi-eye"></i>
                                             </a>
-                                            <a href="<?= base_url('/products/edit/' . $p['id']) ?>" class="btn btn-sm btn-warning text-white" title="Edit">
+                                            <a href="<?= base_url('/products/edit/' . $p['id']) ?>" class="btn btn-sm btn-outline-warning" title="Edit">
                                                 <i class="bi bi-pencil"></i>
                                             </a>
-                                            <button type="button" class="btn btn-sm btn-danger btn-delete" 
+                                            <button type="button" class="btn btn-sm btn-outline-danger btn-delete" 
                                                     data-id="<?= $p['id'] ?>" data-name="<?= esc($p['name']) ?>">
                                                 <i class="bi bi-trash"></i>
                                             </button>

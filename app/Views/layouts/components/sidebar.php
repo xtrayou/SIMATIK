@@ -113,25 +113,17 @@
                     <!-- UC: Kelola Laporan -->
                     <li class="sidebar-title">Laporan</li>
 
-                    <li class="sidebar-item has-sub <?= (strpos(uri_string(), 'reports') !== false) ? 'active' : '' ?>">
-                        <a href="#" class='sidebar-link'>
-                            <i class="bi bi-graph-up-arrow"></i>
-                            <span>Kelola Laporan</span>
+                    <li class="sidebar-item <?= (uri_string() == 'reports/stock') ? 'active' : '' ?>">
+                        <a href="<?= base_url('/reports/stock') ?>" class='sidebar-link'>
+                            <i class="bi bi-box"></i>
+                            <span>Laporan Stok</span>
                         </a>
-                        <ul class="submenu <?= (strpos(uri_string(), 'reports') !== false) ? 'submenu-open' : '' ?>">
-                            <li class="submenu-item <?= (uri_string() == 'reports/stock') ? 'active' : '' ?>">
-                                <a href="<?= base_url('/reports/stock') ?>" class="submenu-link">
-                                    <i class="bi bi-box"></i>
-                                    <span>Lihat Laporan Stok</span>
-                                </a>
-                            </li>
-                            <li class="submenu-item <?= (uri_string() == 'reports/movements') ? 'active' : '' ?>">
-                                <a href="<?= base_url('/reports/movements') ?>" class="submenu-link">
-                                    <i class="bi bi-arrow-repeat"></i>
-                                    <span>Lihat Laporan Pergerakan Barang</span>
-                                </a>
-                            </li>
-                        </ul>
+                    </li>
+                    <li class="sidebar-item <?= (uri_string() == 'reports/movements') ? 'active' : '' ?>">
+                        <a href="<?= base_url('/reports/movements') ?>" class='sidebar-link'>
+                            <i class="bi bi-arrow-repeat"></i>
+                            <span>Laporan Pergerakan Barang</span>
+                        </a>
                     </li>
 
                 <?php endif; ?>
@@ -155,25 +147,17 @@
                     <!-- UC: Kelola Laporan -->
                     <li class="sidebar-title">Laporan</li>
 
-                    <li class="sidebar-item has-sub <?= (strpos(uri_string(), 'reports') !== false) ? 'active' : '' ?>">
-                        <a href="#" class='sidebar-link'>
-                            <i class="bi bi-graph-up-arrow"></i>
-                            <span>Kelola Laporan</span>
+                    <li class="sidebar-item <?= (uri_string() == 'reports/stock') ? 'active' : '' ?>">
+                        <a href="<?= base_url('/reports/stock') ?>" class='sidebar-link'>
+                            <i class="bi bi-box"></i>
+                            <span>Laporan Stok</span>
                         </a>
-                        <ul class="submenu <?= (strpos(uri_string(), 'reports') !== false) ? 'submenu-open' : '' ?>">
-                            <li class="submenu-item <?= (uri_string() == 'reports/stock') ? 'active' : '' ?>">
-                                <a href="<?= base_url('/reports/stock') ?>" class="submenu-link">
-                                    <i class="bi bi-box"></i>
-                                    <span>Lihat Laporan Stok</span>
-                                </a>
-                            </li>
-                            <li class="submenu-item <?= (uri_string() == 'reports/movements') ? 'active' : '' ?>">
-                                <a href="<?= base_url('/reports/movements') ?>" class="submenu-link">
-                                    <i class="bi bi-arrow-repeat"></i>
-                                    <span>Lihat Laporan Pergerakan Barang</span>
-                                </a>
-                            </li>
-                        </ul>
+                    </li>
+                    <li class="sidebar-item <?= (uri_string() == 'reports/movements') ? 'active' : '' ?>">
+                        <a href="<?= base_url('/reports/movements') ?>" class='sidebar-link'>
+                            <i class="bi bi-arrow-repeat"></i>
+                            <span>Laporan Pergerakan Barang</span>
+                        </a>
                     </li>
 
                 <?php endif; ?>

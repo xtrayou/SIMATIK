@@ -118,20 +118,17 @@
                         </div>
 
                         <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label fw-bold">Stok Saat Ini (Hanya Baca)</label>
-                                <input type="text" class="form-control bg-light" value="<?= number_format($produk['current_stock']) ?>" readonly>
-                                <small class="text-muted">Gunakan menu Mutasi untuk menambah/mengurangi stok.</small>
+                            <div class="col-md-4 mb-3">
+                                <label for="stock_baik" class="form-label fw-bold">Stok Baik</label>
+                                <input type="number" class="form-control" id="stock_baik" name="stock_baik" value="<?= old('stock_baik', $produk['stock_baik']) ?>">
                             </div>
-                            
-                            <div class="col-md-6 mb-3">
+                            <div class="col-md-4 mb-3">
+                                <label for="stock_rusak" class="form-label fw-bold">Stok Rusak</label>
+                                <input type="number" class="form-control" id="stock_rusak" name="stock_rusak" value="<?= old('stock_rusak', $produk['stock_rusak']) ?>">
+                            </div>
+                            <div class="col-md-4 mb-3">
                                 <label for="min_stock" class="form-label fw-bold">Stok Minimum <span class="text-danger">*</span></label>
-                                <input type="number" 
-                                       class="form-control <?= (session('errors.min_stock')) ? 'is-invalid' : '' ?>" 
-                                       id="min_stock" 
-                                       name="min_stock" 
-                                       value="<?= old('min_stock', $produk['min_stock']) ?>"
-                                       required>
+                                <input type="number" class="form-control" id="min_stock" name="min_stock" value="<?= old('min_stock', $produk['min_stock']) ?>" required>
                             </div>
                         </div>
                     </div>

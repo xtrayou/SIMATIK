@@ -100,6 +100,10 @@ class ProdukController extends BaseController
             return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
         }
 
+        $stockBaik = (int) $this->request->getPost('stock_baik') ?: 0;
+        $stockRusak = (int) $this->request->getPost('stock_rusak') ?: 0;
+        $currentStock = $stockBaik + $stockRusak;
+
         $payload = [
             'name'          => $this->request->getPost('name'),
             'sku'           => strtoupper((string)$this->request->getPost('sku')),
@@ -108,7 +112,9 @@ class ProdukController extends BaseController
             'price'         => (float) $this->request->getPost('price'),
             'cost_price'    => (float) $this->request->getPost('cost_price') ?: 0,
             'min_stock'     => (int) $this->request->getPost('min_stock'),
-            'current_stock' => (int) $this->request->getPost('current_stock') ?: 0,
+            'current_stock' => $currentStock,
+            'stock_baik'    => $stockBaik,
+            'stock_rusak'   => $stockRusak,
             'unit'          => $this->request->getPost('unit'),
             'is_active'     => 1
         ];
@@ -122,7 +128,7 @@ class ProdukController extends BaseController
             $this->modelMutasiStok->insert([
                 'product_id'   => $productId,
                 'type'         => 'IN',
-                'quantity'     => (int) $this->request->getPost('current_stock') ?: 0,
+                'quantity'     => $currentStock,
                 'notes'        => 'Stok awal produk baru',
                 'reference_no' => 'INIT-' . time(),
                 'created_by'   => session()->get('userId') ?: null
@@ -212,15 +218,22 @@ class ProdukController extends BaseController
             return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
         }
 
+        $stockBaik = (int) $this->request->getPost('stock_baik') ?: 0;
+        $stockRusak = (int) $this->request->getPost('stock_rusak') ?: 0;
+        $currentStock = $stockBaik + $stockRusak;
+
         $payload = [
-            'name'        => $this->request->getPost('name'),
-            'sku'         => strtoupper((string)$this->request->getPost('sku')),
-            'category_id' => $this->request->getPost('category_id'),
-            'description' => $this->request->getPost('description'),
-            'price'       => (float) $this->request->getPost('price'),
-            'cost_price'  => (float) $this->request->getPost('cost_price') ?: 0,
-            'min_stock'   => (int) $this->request->getPost('min_stock'),
-            'unit'        => $this->request->getPost('unit'),
+            'name'          => $this->request->getPost('name'),
+            'sku'           => strtoupper((string)$this->request->getPost('sku')),
+            'category_id'   => $this->request->getPost('category_id'),
+            'description'   => $this->request->getPost('description'),
+            'price'         => (float) $this->request->getPost('price'),
+            'cost_price'    => (float) $this->request->getPost('cost_price') ?: 0,
+            'min_stock'     => (int) $this->request->getPost('min_stock'),
+            'stock_baik'    => $stockBaik,
+            'stock_rusak'   => $stockRusak,
+            'current_stock' => $currentStock,
+            'unit'          => $this->request->getPost('unit'),
         ];
 
         if ($this->modelProduk->update($id, $payload)) {

@@ -498,47 +498,104 @@
         }
 
         /* Contact */
-        .contact-info-card {
-            background: var(--light-color);
-            border-radius: 20px;
-            padding: 40px;
+        .contact-card {
+            background: white;
+            border-radius: 16px;
+            padding: 28px 20px;
+            text-align: center;
+            border: 1px solid rgba(59, 91, 219, 0.08);
+            transition: all 0.3s ease;
+            height: 100%;
         }
 
-        .contact-item {
-            display: flex;
-            align-items: flex-start;
-            margin-bottom: 25px;
+        .contact-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 30px rgba(59, 91, 219, 0.12);
+            border-color: rgba(59, 91, 219, 0.15);
         }
 
-        .contact-icon {
-            width: 50px;
-            height: 50px;
-            border-radius: 12px;
+        .contact-card .contact-icon {
+            width: 52px;
+            height: 52px;
+            border-radius: 14px;
             background: linear-gradient(135deg, var(--primary-color), var(--primary-light));
             color: white;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            margin-bottom: 14px;
+        }
+
+        .contact-card h6 {
+            font-weight: 700;
+            color: var(--dark-color);
+            margin-bottom: 6px;
+            font-size: 0.9rem;
+        }
+
+        .contact-card p {
+            color: var(--secondary-color);
+            margin-bottom: 0;
+            font-size: 0.85rem;
+            line-height: 1.5;
+        }
+
+        .contact-card a {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+
+        .contact-card a:hover {
+            color: var(--primary-light);
+        }
+
+        .social-bar {
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+            margin-top: 32px;
+        }
+
+        .social-bar a {
+            width: 46px;
+            height: 46px;
+            border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.2rem;
-            margin-right: 15px;
-            flex-shrink: 0;
+            font-size: 1.15rem;
+            color: white;
+            transition: all 0.3s ease;
         }
 
-        .contact-text h6 {
-            font-weight: 600;
-            color: var(--dark-color);
-            margin-bottom: 5px;
+        .social-bar a.sb-ig {
+            background: linear-gradient(135deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
         }
 
-        .contact-text p {
-            color: var(--secondary-color);
-            margin-bottom: 0;
+        .social-bar a.sb-fb {
+            background: #1877F2;
+        }
+
+        .social-bar a.sb-web {
+            background: linear-gradient(135deg, var(--primary-color), var(--primary-light));
+        }
+
+        .social-bar a.sb-link {
+            background: linear-gradient(135deg, #00b894, #00cec9);
+        }
+
+        .social-bar a:hover {
+            transform: translateY(-4px) scale(1.1);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
         }
 
         /* Footer */
         .footer {
             background: linear-gradient(135deg, #1B2865, #2B4ACB, #3B5BDB);
-            padding: 60px 0 30px;
+            padding: 40px 0 20px;
             color: white;
         }
 
@@ -546,49 +603,34 @@
             font-size: 1.5rem;
             font-weight: 700;
             color: white;
-            margin-bottom: 15px;
+            margin-bottom: 10px;
         }
 
         .footer-text {
             color: rgba(255, 255, 255, 0.7);
-            line-height: 1.8;
+            line-height: 1.6;
+            font-size: 0.9rem;
         }
 
-        .footer-title {
-            font-family: 'Playfair Display', Georgia, serif;
-            font-weight: 700;
-            margin-bottom: 20px;
-            color: white;
-        }
-
-        .footer-links {
-            list-style: none;
-            padding: 0;
-        }
-
-        .footer-links li {
-            margin-bottom: 10px;
-        }
-
-        .footer-links a {
+        .footer-nav-link {
             color: rgba(255, 255, 255, 0.7);
             text-decoration: none;
-            transition: all 0.3s;
+            font-size: 0.9rem;
+            transition: all 0.2s;
         }
 
-        .footer-links a:hover {
+        .footer-nav-link:hover {
             color: white;
-            padding-left: 5px;
         }
 
         .social-links {
             display: flex;
-            gap: 15px;
+            gap: 12px;
         }
 
         .social-links a {
-            width: 40px;
-            height: 40px;
+            width: 38px;
+            height: 38px;
             border-radius: 10px;
             background: rgba(255, 255, 255, 0.1);
             color: white;
@@ -596,6 +638,7 @@
             align-items: center;
             justify-content: center;
             transition: all 0.3s;
+            font-size: 1rem;
         }
 
         .social-links a:hover {
@@ -605,10 +648,11 @@
 
         .footer-bottom {
             border-top: 1px solid rgba(255, 255, 255, 0.1);
-            margin-top: 40px;
-            padding-top: 20px;
+            margin-top: 24px;
+            padding-top: 16px;
             text-align: center;
             color: rgba(255, 255, 255, 0.5);
+            font-size: 0.85rem;
         }
 
         /* Modal Login */
@@ -657,7 +701,73 @@
             box-shadow: 0 5px 20px rgba(59, 91, 219, 0.4);
         }
 
-        /* Scroll top */
+        /* Floating Services Button */
+        .floating-service {
+            position: fixed;
+            bottom: 95px;
+            right: 30px;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.3s;
+        }
+
+        .floating-service .service-link {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: #00b894;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.4rem;
+            box-shadow: 0 10px 30px rgba(0, 184, 148, 0.4);
+            transition: all 0.3s;
+            text-decoration: none;
+            position: relative;
+        }
+
+        .floating-service .service-label {
+            background: white;
+            color: #2b3a4a;
+            padding: 8px 15px;
+            border-radius: 12px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            opacity: 0;
+            transform: translateX(10px);
+            transition: all 0.3s;
+            pointer-events: none;
+            white-space: nowrap;
+        }
+
+        .floating-service:hover .service-label {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .floating-service .service-link:hover {
+            transform: scale(1.1);
+            background: #00cec9;
+        }
+
+        .floating-service .pulse {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: rgba(0, 184, 148, 0.4);
+            animation: pulse-animation 2s infinite;
+        }
+
+        @keyframes pulse-animation {
+            0% { transform: scale(1); opacity: 0.8; }
+            100% { transform: scale(1.6); opacity: 0; }
+        }
+
         .scroll-top {
             position: fixed;
             bottom: 30px;
@@ -1004,10 +1114,11 @@
                             </div>
                         </div>
                         <div class="peminjaman-info-item">
-                            <i class="bi bi-telephone"></i>
+                            <i class="bi bi-question-circle"></i>
                             <div>
                                 <h6>Butuh Bantuan?</h6>
-                                <p>Hubungi TU Fakultas di ext. 1234 atau WhatsApp 08xx-xxxx-xxxx</p>
+                                <p>Hubungi Admin di <a href="https://wa.me/6287896314494" target="_blank" class="text-decoration-none fw-bold" style="color:var(--primary-color);">+62 878-9631-4494</a></p>
+                                <p class="mt-1 small text-muted">Akses layanan student services di <a href="https://unsika.link/layananfasilkom" target="_blank">Layanan Fasilkom</a></p>
                             </div>
                         </div>
                         <hr style="opacity:0.2;">
@@ -1073,16 +1184,16 @@
         <div class="container">
             <div class="row" data-aos="fade-up">
                 <div class="col-md-3 col-6">
-                    <div class="stat-item"><span class="stat-number" data-count="500">0</span><span class="stat-label">Jenis Barang</span></div>
+                    <div class="stat-item"><span class="stat-number" data-count="<?= $stats['total_produk'] ?? 0 ?>">0</span><span class="stat-label">Jenis Barang</span></div>
                 </div>
                 <div class="col-md-3 col-6">
-                    <div class="stat-item"><span class="stat-number" data-count="1000">0</span><span class="stat-label">Transaksi/Bulan</span></div>
+                    <div class="stat-item"><span class="stat-number" data-count="<?= $stats['total_laporan'] ?? 0 ?>">0</span><span class="stat-label">Laporan Bulanan</span></div>
                 </div>
                 <div class="col-md-3 col-6">
-                    <div class="stat-item"><span class="stat-number" data-count="50">0</span><span class="stat-label">Kategori</span></div>
+                    <div class="stat-item"><span class="stat-number" data-count="<?= $stats['total_kategori'] ?? 0 ?>">0</span><span class="stat-label">Kategori</span></div>
                 </div>
                 <div class="col-md-3 col-6">
-                    <div class="stat-item"><span class="stat-number" data-count="24">0</span><span class="stat-label">Jam Aktif</span></div>
+                    <div class="stat-item"><span class="stat-number" data-count="<?= $stats['jam_operasi'] ?? 8 ?>">0</span><span class="stat-label">Jam Operasional</span></div>
                 </div>
             </div>
         </div>
@@ -1095,49 +1206,51 @@
                 <h2 class="section-title">Hubungi <span class="font-accent">Kami</span></h2>
                 <p class="section-subtitle">Ada pertanyaan? <span class="font-accent">Jangan ragu</span> untuk menghubungi kami</p>
             </div>
-            <div class="row justify-content-center">
-                <div class="col-lg-10" data-aos="fade-up">
-                    <div class="contact-info-card">
-                        <div class="row g-4">
-                            <div class="col-md-6">
-                                <div class="contact-item">
-                                    <div class="contact-icon"><i class="bi bi-geo-alt"></i></div>
-                                    <div class="contact-text">
-                                        <h6>Alamat</h6>
-                                        <p>Fakultas Ilmu Komputer<br>Universitas XYZ<br>Jl. Pendidikan No. 123</p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="contact-item">
-                                    <div class="contact-icon"><i class="bi bi-telephone"></i></div>
-                                    <div class="contact-text">
-                                        <h6>Telepon</h6>
-                                        <p>(021) 123-4567<br>Ext. 1234</p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="contact-item">
-                                    <div class="contact-icon"><i class="bi bi-envelope"></i></div>
-                                    <div class="contact-text">
-                                        <h6>Email</h6>
-                                        <p>inventaris@fasilkom.ac.id</p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="contact-item">
-                                    <div class="contact-icon"><i class="bi bi-clock"></i></div>
-                                    <div class="contact-text">
-                                        <h6>Jam Operasional</h6>
-                                        <p>Senin–Jumat: 08:00–16:00<br>Sabtu: 08:00–12:00</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+            <div class="row g-3 justify-content-center" data-aos="fade-up" data-aos-delay="100">
+                <div class="col-lg-3 col-md-6 col-sm-6">
+                    <div class="contact-card">
+                        <div class="contact-icon"><i class="bi bi-geo-alt"></i></div>
+                        <h6>Alamat</h6>
+                        <p>Fakultas Ilmu Komputer<br>Universitas Singaperbangsa Karawang</p>
                     </div>
                 </div>
+                <div class="col-lg-3 col-md-6 col-sm-6">
+                    <div class="contact-card">
+                        <div class="contact-icon"><i class="bi bi-telephone"></i></div>
+                        <h6>Telepon</h6>
+                        <p>+62 878-9631-4494</p>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6 col-sm-6">
+                    <div class="contact-card">
+                        <div class="contact-icon"><i class="bi bi-envelope"></i></div>
+                        <h6>Email</h6>
+                        <p>fasilkom@unsika.ac.id</p>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6 col-sm-6">
+                    <div class="contact-card">
+                        <div class="contact-icon"><i class="bi bi-clock"></i></div>
+                        <h6>Jam Operasional</h6>
+                        <p>Sen–Jum: 08:00–16:00<br>Sabtu: 08:00–12:00</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Social Bar -->
+            <div class="social-bar" data-aos="fade-up" data-aos-delay="200">
+                <a href="https://www.instagram.com/fasilkomunsika" target="_blank" class="sb-ig" title="@fasilkomunsika">
+                    <i class="bi bi-instagram"></i>
+                </a>
+                <a href="https://www.facebook.com/fasilkom.unsika/" target="_blank" class="sb-fb" title="Facebook Fasilkom">
+                    <i class="bi bi-facebook"></i>
+                </a>
+                <a href="https://cs.unsika.ac.id/" target="_blank" class="sb-web" title="cs.unsika.ac.id">
+                    <i class="bi bi-globe"></i>
+                </a>
+                <a href="https://unsika.link/layananfasilkom" target="_blank" class="sb-link" title="Layanan Mahasiswa">
+                    <i class="bi bi-link-45deg"></i>
+                </a>
             </div>
         </div>
     </section>
@@ -1145,44 +1258,31 @@
     <!-- Footer -->
     <footer class="footer">
         <div class="container">
-            <div class="row">
-                <div class="col-lg-4 mb-4">
+            <div class="row align-items-center">
+                <div class="col-lg-5 mb-4 mb-lg-0">
                     <div class="footer-brand"><i class="bi bi-box-seam-fill me-2"></i>SIMA<span class="font-accent" style="color:rgba(255,255,255,0.9);">TIK</span></div>
-                    <p class="footer-text">Sistem Informasi Manajemen ATK untuk <span class="font-accent">Fakultas Ilmu Komputer.</span></p>
-                    <div class="social-links">
-                        <a href="#"><i class="bi bi-facebook"></i></a>
-                        <a href="#"><i class="bi bi-instagram"></i></a>
-                        <a href="#"><i class="bi bi-twitter"></i></a>
+                    <p class="footer-text mb-0">Sistem Inventaris ATK — <span class="font-accent">Fakultas Ilmu Komputer</span>, Universitas Singaperbangsa Karawang.</p>
+                </div>
+                <div class="col-lg-4 mb-4 mb-lg-0">
+                    <div class="d-flex flex-wrap gap-3 justify-content-lg-center">
+                        <a href="#beranda" class="footer-nav-link">Beranda</a>
+                        <a href="#fitur" class="footer-nav-link">Fitur</a>
+                        <a href="#permintaan" class="footer-nav-link">Permintaan</a>
+                        <a href="#tentang" class="footer-nav-link">Tentang</a>
+                        <a href="#kontak" class="footer-nav-link">Kontak</a>
                     </div>
                 </div>
-                <div class="col-lg-2 col-md-4 mb-4">
-                    <h5 class="footer-title">Menu</h5>
-                    <ul class="footer-links">
-                        <li><a href="#beranda">Beranda</a></li>
-                        <li><a href="#fitur">Fitur</a></li>
-                        <li><a href="#tentang">Tentang</a></li>
-                        <li><a href="#kontak">Kontak</a></li>
-                    </ul>
-                </div>
-                <div class="col-lg-3 col-md-4 mb-4">
-                    <h5 class="footer-title">Layanan</h5>
-                    <ul class="footer-links">
-                        <li><a href="#">Manajemen Stok</a></li>
-                        <li><a href="#">Laporan</a></li>
-                        <li><a href="#">Permintaan ATK</a></li>
-                    </ul>
-                </div>
-                <div class="col-lg-3 col-md-4 mb-4">
-                    <h5 class="footer-title">Fakultas Ilmu Komputer</h5>
-                    <ul class="footer-links">
-                        <li><a href="#">Website Fakultas</a></li>
-                        <li><a href="#">Portal Akademik</a></li>
-                        <li><a href="#">Perpustakaan</a></li>
-                    </ul>
+                <div class="col-lg-3">
+                    <div class="social-links justify-content-lg-end">
+                        <a href="https://www.instagram.com/fasilkomunsika" target="_blank" title="Instagram"><i class="bi bi-instagram"></i></a>
+                        <a href="https://www.facebook.com/fasilkom.unsika/" target="_blank" title="Facebook"><i class="bi bi-facebook"></i></a>
+                        <a href="https://cs.unsika.ac.id/" target="_blank" title="Website"><i class="bi bi-globe"></i></a>
+                        <a href="https://unsika.link/layananfasilkom" target="_blank" title="Layanan"><i class="bi bi-link-45deg"></i></a>
+                    </div>
                 </div>
             </div>
             <div class="footer-bottom">
-                <p>&copy; <?= date('Y') ?> SIMATIK - Fakultas Ilmu Komputer. All rights reserved.</p>
+                <p>&copy; <?= date('Y') ?> SIMATIK — Fakultas Ilmu Komputer UNSIKA. All rights reserved.</p>
             </div>
         </div>
     </footer>
