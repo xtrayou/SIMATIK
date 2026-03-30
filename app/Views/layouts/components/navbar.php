@@ -106,23 +106,25 @@
                             <?php if (!empty($navNotifications)): ?>
                                 <?php foreach ($navNotifications as $notif): ?>
                                     <li>
-                                        <a class="dropdown-item notification-item py-3"
-                                            href="<?= base_url('/notifications/read/' . $notif['id']) ?>">
-                                            <div class="d-flex">
-                                                <div class="notification-icon bg-<?= esc($notif['color']) ?> me-3">
-                                                    <i class="bi <?= esc($notif['icon']) ?> text-white"></i>
+                                        <form method="post" action="<?= base_url('/notifications/read/' . $notif['id']) ?>">
+                                            <?= csrf_field() ?>
+                                            <button type="submit" class="dropdown-item notification-item py-3 border-0 bg-transparent w-100 text-start">
+                                                <div class="d-flex">
+                                                    <div class="notification-icon bg-<?= esc($notif['color']) ?> me-3">
+                                                        <i class="bi <?= esc($notif['icon']) ?> text-white"></i>
+                                                    </div>
+                                                    <div class="notification-content flex-grow-1">
+                                                        <h6 class="notification-title mb-1"><?= esc($notif['title']) ?></h6>
+                                                        <p class="notification-text mb-1">
+                                                            <?= esc($notif['message']) ?>
+                                                        </p>
+                                                        <small class="text-muted">
+                                                            <?= waktu_lalu($notif['created_at']) ?>
+                                                        </small>
+                                                    </div>
                                                 </div>
-                                                <div class="notification-content flex-grow-1">
-                                                    <h6 class="notification-title mb-1"><?= esc($notif['title']) ?></h6>
-                                                    <p class="notification-text mb-1">
-                                                        <?= esc($notif['message']) ?>
-                                                    </p>
-                                                    <small class="text-muted">
-                                                        <?= waktu_lalu($notif['created_at']) ?>
-                                                    </small>
-                                                </div>
-                                            </div>
-                                        </a>
+                                            </button>
+                                        </form>
                                     </li>
                                 <?php endforeach ?>
 
@@ -133,9 +135,12 @@
                                     <a class="text-primary small" href="<?= base_url('/notifications') ?>">
                                         <i class="bi bi-eye"></i> Lihat Semua
                                     </a>
-                                    <a class="text-muted small" href="<?= base_url('/notifications/mark-all-read') ?>">
-                                        <i class="bi bi-check-all"></i> Tandai Dibaca
-                                    </a>
+                                    <form method="post" action="<?= base_url('/notifications/mark-all-read') ?>" class="d-inline">
+                                        <?= csrf_field() ?>
+                                        <button type="submit" class="text-muted small border-0 bg-transparent p-0">
+                                            <i class="bi bi-check-all"></i> Tandai Dibaca
+                                        </button>
+                                    </form>
                                 </li>
                             <?php else: ?>
                                 <li>
@@ -190,10 +195,12 @@
                                 <hr class="dropdown-divider">
                             </li>
                             <li>
-                                <a class="dropdown-item text-danger" href="<?= base_url('/auth/logout') ?>"
-                                    onclick="return confirm('Yakin ingin logout?')">
-                                    <i class="bi bi-box-arrow-right me-2"></i> Logout
-                                </a>
+                                <form method="post" action="<?= base_url('/auth/logout') ?>" onsubmit="return confirm('Yakin ingin logout?')">
+                                    <?= csrf_field() ?>
+                                    <button type="submit" class="dropdown-item text-danger border-0 bg-transparent w-100 text-start">
+                                        <i class="bi bi-box-arrow-right me-2"></i> Logout
+                                    </button>
+                                </form>
                             </li>
                         </ul>
                     </li>

@@ -34,7 +34,113 @@ class LaporanController extends BaseController
         $stockStatus    = $this->request->getGet('stock_status');
         $sortBy         = $this->request->getGet('sort_by') ?: 'name';
         $sortOrder      = $this->request->getGet('sort_order') ?: 'ASC';
+        $month          = $this->request->getGet('month') ?: date('m');
+        $year           = $this->request->getGet('year') ?: date('Y');
 
+        // Tentukan apakah pakai data arsip atau stok real-time
+        $isArchived = $this->isArchivedPeriod((int) $month, (int) $year);
+        $products = $isArchived 
+            ? $this->getArchivedStockReport((int) $month, (int) $year, $categoryFilter, $sortBy, $sortOrder)
+            : $this->getCurrentStockReport($categoryFilter, $stockStatus, $sortBy, $sortOrder);
+
+        $summary = [
+            'total_products' => count($products),
+            'total_value'    => array_sum(array_column($products, 'stock_value')),
+            'total_quantity' => array_sum(array_column($products, 'current_stock')),
+            'out_of_stock'   => count(array_filter($products, fn($p) => $p['current_stock'] == 0)),
+            'low_stock'      => count(array_filter($products, fn($p) => $p['current_stock'] > 0 && $p['current_stock'] <= $p['min_stock'])),
+        ];
+        $summary['normal_stock'] = $summary['total_products'] - $summary['out_of_stock'] - $summary['low_stock'];
+
+        $categoryBreakdown = [];
+        foreach ($products as $product) {
+            $catName = $product['category_name'];
+            if (!isset($categoryBreakdown[$catName])) {
+                $categoryBreakdown[$catName] = [
+                    'products'    => 0,
+                    'total_stock' => 0,
+                    'total_value' => 0
+                ];
+            }
+            $categoryBreakdown[$catName]['products']++;
+            $categoryBreakdown[$catName]['total_stock'] += $product['current_stock'];
+            $categoryBreakdown[$catName]['total_value'] += $product['stock_value'];
+        }
+
+        $categories = $this->modelKategori->getActiveCategories();
+
+        $data = [
+            'products'           => $products,
+            'categories'         => $categories,
+            'summary'            => $summary,
+            'category_breakdown' => $categoryBreakdown,
+            'filters'            => [
+                'category'     => $categoryFilter,
+                'stock_status' => $stockStatus,
+                'sort_by'      => $sortBy,
+                'sort_order'   => $sortOrder,
+                'month'        => $month,
+                'year'         => $year,
+                'is_archived'  => $isArchived
+            ]
+        ];
+
+        return $this->render('reports/stock', $data);
+    }
+
+    /**
+     * Cek apakah periode yang diminta adalah data arsip (bukan bulan/tahun saat ini)
+     */
+    private function isArchivedPeriod(int $month, int $year): bool
+    {
+        $currentMonth = (int) date('m');
+        $currentYear  = (int) date('Y');
+        return !($month === $currentMonth && $year === $currentYear);
+    }
+
+    /**
+     * Ambil data stok dari stock_opname_archives untuk periode tertentu
+     */
+    private function getArchivedStockReport(int $month, int $year, ?string $categoryFilter, string $sortBy, string $sortOrder): array
+    {
+        $db = \Config\Database::connect();
+        $builder = $db->table('stock_opname_archives')
+            ->select('
+                stock_opname_archives.product_id,
+                stock_opname_archives.product_name as name,
+                stock_opname_archives.quantity as current_stock,
+                stock_opname_archives.unit_price as price,
+                stock_opname_archives.total_value as stock_value,
+                "archived" as stock_status,
+                COALESCE(products.min_stock, 0) as min_stock,
+                COALESCE(categories.name, "Uncategorized") as category_name,
+                COALESCE(products.unit, "Pcs") as unit,
+                COALESCE(products.sku, "-") as sku
+            ')
+            ->join('products', 'products.id = stock_opname_archives.product_id', 'left')
+            ->join('categories', 'categories.id = products.category_id', 'left')
+            ->where('stock_opname_archives.period_month', $month)
+            ->where('stock_opname_archives.period_year', $year);
+
+        // Filter kategori bisa di‑apply dengan JOIN ke products jika ada product_id
+        if ($categoryFilter) {
+            $builder->where('categories.id', $categoryFilter);
+        }
+
+        // Sort by field yang valid
+        $validSorts = ['name', 'current_stock', 'stock_value', 'category_name'];
+        if (in_array($sortBy, $validSorts)) {
+            $builder->orderBy($sortBy, $sortOrder);
+        }
+
+        return $builder->get()->getResultArray();
+    }
+
+    /**
+     * Ambil data stok dari database produk saat ini
+     */
+    private function getCurrentStockReport(?string $categoryFilter, ?string $stockStatus, string $sortBy, string $sortOrder): array
+    {
         $builder = $this->modelProduk->select("
                 products.*, 
                 categories.name as category_name,
@@ -75,48 +181,7 @@ class LaporanController extends BaseController
             $builder->orderBy($sortBy, $sortOrder);
         }
 
-        $products = $builder->findAll();
-
-        $summary = [
-            'total_products' => count($products),
-            'total_value'    => array_sum(array_column($products, 'stock_value')),
-            'total_quantity' => array_sum(array_column($products, 'current_stock')),
-            'out_of_stock'   => count(array_filter($products, fn($p) => $p['current_stock'] == 0)),
-            'low_stock'      => count(array_filter($products, fn($p) => $p['current_stock'] > 0 && $p['current_stock'] <= $p['min_stock'])),
-        ];
-        $summary['normal_stock'] = $summary['total_products'] - $summary['out_of_stock'] - $summary['low_stock'];
-
-        $categoryBreakdown = [];
-        foreach ($products as $product) {
-            $catName = $product['category_name'];
-            if (!isset($categoryBreakdown[$catName])) {
-                $categoryBreakdown[$catName] = [
-                    'products'    => 0,
-                    'total_stock' => 0,
-                    'total_value' => 0
-                ];
-            }
-            $categoryBreakdown[$catName]['products']++;
-            $categoryBreakdown[$catName]['total_stock'] += $product['current_stock'];
-            $categoryBreakdown[$catName]['total_value'] += $product['stock_value'];
-        }
-
-        $categories = $this->modelKategori->getActiveCategories();
-
-        $data = [
-            'products'           => $products,
-            'categories'         => $categories,
-            'summary'            => $summary,
-            'category_breakdown' => $categoryBreakdown,
-            'filters'            => [
-                'category'     => $categoryFilter,
-                'stock_status' => $stockStatus,
-                'sort_by'      => $sortBy,
-                'sort_order'   => $sortOrder
-            ]
-        ];
-
-        return $this->render('reports/stock', $data);
+        return $builder->findAll();
     }
 
     /**
@@ -289,10 +354,13 @@ class LaporanController extends BaseController
      */
     public function exportStock($format = 'excel')
     {
+        $month = $this->request->getGet('month') ?: date('m');
+        $year = $this->request->getGet('year') ?: date('Y');
+
         if ($format === 'excel') {
-            return $this->exportStockExcel();
+            return $this->exportStockExcel($month, $year);
         } elseif ($format === 'pdf') {
-            return $this->exportStockPDF();
+            return $this->exportStockPDF($month, $year);
         }
         
         return redirect()->back()->with('error', 'Format export tidak valid');
@@ -526,8 +594,26 @@ class LaporanController extends BaseController
     /**
      * Export Stock Report to Excel - Matching official Stock Opname template
      */
-    private function exportStockExcel()
+    private function exportStockExcel($month = null, $year = null)
     {
+        $month = $month ?: ($this->request->getGet('month') ?: date('m'));
+        $year  = $year ?: ($this->request->getGet('year') ?: date('Y'));
+
+        // Jika ada file stock opname arsip untuk bulan/tahun tersebut,
+        // langsung kirim file itu (tidak generate dari data stok saat ini)
+        $archivedFile = $this->findArchivedStockOpnameExcel($month, $year);
+        if ($archivedFile && is_file($archivedFile)) {
+            $filename = basename($archivedFile);
+
+            header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+            header('Content-Disposition: attachment;filename="' . $filename . '"');
+            header('Cache-Control: max-age=0');
+
+            readfile($archivedFile);
+            exit;
+        }
+
+        // Jika tidak ada arsip, baru generate berdasarkan stok saat ini
         $products = $this->getStockReportData();
 
         $spreadsheet = new \PhpOffice\PhpSpreadsheet\Spreadsheet();
@@ -560,7 +646,7 @@ class LaporanController extends BaseController
         $sheet->setCellValue('B3', ': ........../UN64.7/LK/' . date('Y'));
 
         $sheet->setCellValue('A4', 'Tanggal ');
-        $sheet->setCellValue('B4', ': ' . $this->formatTanggalIndonesia(date('Y-m-d')));
+        $sheet->setCellValue('B4', ': ' . $this->formatTanggalIndonesia($year . '-' . $month . '-01'));
 
         $sheet->setCellValue('A5', 'Unit');
         $sheet->setCellValue('B5', ': Fakultas Ilmu Komputer');
@@ -570,7 +656,7 @@ class LaporanController extends BaseController
         $sheet->getStyle('A6')->getFont()->setBold(true)->setSize(12);
         $sheet->getStyle('A6')->getAlignment()->setHorizontal($alignment::HORIZONTAL_CENTER);
 
-        $sheet->setCellValue('A7', 'UNTUK PERIODE YANG BERAKHIR TANGGAL  ' . strtoupper($this->formatTanggalIndonesia(date('Y-m-d'))));
+        $sheet->setCellValue('A7', 'UNTUK PERIODE YANG BERAKHIR TANGGAL  ' . strtoupper($this->formatTanggalIndonesia($year . '-' . $month . '-01')));
         $sheet->mergeCells('A7:G7');
         $sheet->getStyle('A7')->getAlignment()->setHorizontal($alignment::HORIZONTAL_CENTER);
 
@@ -671,8 +757,8 @@ class LaporanController extends BaseController
         $sheet->setCellValue('B' . $sigRow, 'NIP. 198910232018032001');
 
         // ── Generate file ──
-        $bulan = strtoupper($this->getNamaBulan(date('n')));
-        $filename = $bulan . ' - STOCK OPNAME PERSEDIAAN FASILKOM ' . date('Y') . '.xlsx';
+        $bulan = strtoupper($this->getNamaBulan((int)$month));
+        $filename = $bulan . ' - STOCK OPNAME PERSEDIAAN FASILKOM ' . $year . '.xlsx';
         $writer = new \PhpOffice\PhpSpreadsheet\Writer\Xlsx($spreadsheet);
 
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
@@ -686,11 +772,14 @@ class LaporanController extends BaseController
     /**
      * Export Stock Report to PDF - Matching official Stock Opname template
      */
-    private function exportStockPDF()
+    private function exportStockPDF($month = null, $year = null)
     {
         $products = $this->getStockReportData();
 
-        $tanggal = $this->formatTanggalIndonesia(date('Y-m-d'));
+        $month = $month ?: ($this->request->getGet('month') ?: date('m'));
+        $year  = $year ?: ($this->request->getGet('year') ?: date('Y'));
+
+        $tanggal = $this->formatTanggalIndonesia($year . '-' . $month . '-01');
         $periodeUpper = strtoupper($tanggal);
 
         $html = '
@@ -726,7 +815,7 @@ class LaporanController extends BaseController
 
             <div class="title">LAPORAN STOCK OPNAME</div>
             <div class="subtitle">UNTUK PERIODE YANG BERAKHIR TANGGAL ' . $periodeUpper . '</div>
-            <div class="subtitle">TAHUN ANGGARAN</div>
+            <div class="subtitle">TAHUN ANGGARAN ' . $year . '</div>
 
             <table>
                 <thead>
@@ -799,8 +888,8 @@ class LaporanController extends BaseController
         $dompdf->setPaper('A4', 'portrait');
         $dompdf->render();
 
-        $bulan = strtoupper($this->getNamaBulan(date('n')));
-        $filename = $bulan . '_STOCK_OPNAME_' . date('Y') . '.pdf';
+        $bulan = strtoupper($this->getNamaBulan((int)$month));
+        $filename = $bulan . '_STOCK_OPNAME_' . $year . '.pdf';
         $dompdf->stream($filename, ['Attachment' => true]);
         exit;
     }
@@ -808,38 +897,90 @@ class LaporanController extends BaseController
     /**
      * Get stock report data for export
      */
-    private function getStockReportData()
+    /**
+     * Get stock report data for export - checks if archived or current
+     */
+    private function getStockReportData(): array
     {
+        $month = (int) ($this->request->getGet('month') ?: date('m'));
+        $year  = (int) ($this->request->getGet('year') ?: date('Y'));
         $categoryFilter = $this->request->getGet('category');
         $stockStatus    = $this->request->getGet('stock_status');
 
-        $builder = $this->modelProduk->select("
-                products.*,
-                categories.name as category_name
-            ")
-            ->join('categories', 'categories.id = products.category_id')
-            ->where('products.is_active', true);
+        $isArchived = $this->isArchivedPeriod($month, $year);
+        
+        if ($isArchived) {
+            return $this->getArchivedStockReport($month, $year, $categoryFilter, 'name', 'ASC');
+        } else {
+            return $this->getCurrentStockReport($categoryFilter, $stockStatus, 'name', 'ASC');
+        }
+    }
 
-        if ($categoryFilter) {
-            $builder->where('products.category_id', $categoryFilter);
+    /**
+     * Cari file Excel Stock Opname arsip di folder public/laporan bulanan
+     * berdasarkan bulan & tahun yang diminta.
+     */
+    private function findArchivedStockOpnameExcel($month, $year): ?string
+    {
+        $dir = FCPATH . 'laporan bulanan' . DIRECTORY_SEPARATOR;
+        if (!is_dir($dir)) {
+            return null;
         }
 
-        if ($stockStatus) {
-            switch ($stockStatus) {
-                case 'out_of_stock':
-                    $builder->where('products.current_stock', 0);
-                    break;
-                case 'low_stock':
-                    $builder->where('products.current_stock <= products.min_stock', null, false)
-                            ->where('products.current_stock >', 0);
-                    break;
-                case 'normal':
-                    $builder->where('products.current_stock > products.min_stock', null, false);
-                    break;
+        $files = glob($dir . '*.xlsx');
+        if (!$files) {
+            return null;
+        }
+
+        $targetMonth = (int) $month;
+        foreach ($files as $file) {
+            $basename = basename($file);
+
+            // Contoh nama file:
+            // "MAR 2025 - STOCK OPNAME PERSEDIAAN FASILKOM 2025.xlsx"
+            if (!preg_match('/^([A-Z]+)\s+' . preg_quote((string) $year, '/') . '\s*-\s*STOCK OPNAME PERSEDIAAN FASILKOM\s+' . preg_quote((string) $year, '/') . '\.xlsx$/i', $basename, $m)) {
+                continue;
+            }
+
+            $token = strtoupper($m[1]);
+            $fileMonth = $this->monthTokenToNumber($token);
+            if ($fileMonth === $targetMonth) {
+                return $file;
             }
         }
 
-        return $builder->orderBy('products.name', 'ASC')->findAll();
+        return null;
+    }
+
+    /**
+     * Konversi token bulan (JAN, FEB, MAR, JUNI, SEPT, DES, dll) menjadi nomor bulan.
+     */
+    private function monthTokenToNumber(string $token): ?int
+    {
+        $token = strtoupper(trim($token));
+
+        $map = [
+            1  => ['JAN', 'JANUARI'],
+            2  => ['FEB', 'FEBRUARI'],
+            3  => ['MAR', 'MARET'],
+            4  => ['APR', 'APRIL'],
+            5  => ['MEI'],
+            6  => ['JUN', 'JUNI'],
+            7  => ['JUL', 'JULI'],
+            8  => ['AGT', 'AGUST', 'AGUSTUS'],
+            9  => ['SEP', 'SEPT', 'SEPTEMBER'],
+            10 => ['OKT', 'OKTOBER'],
+            11 => ['NOV', 'NOVEMBER'],
+            12 => ['DES', 'DESEMBER'],
+        ];
+
+        foreach ($map as $num => $tokens) {
+            if (in_array($token, $tokens, true)) {
+                return $num;
+            }
+        }
+
+        return null;
     }
 
     /**

@@ -69,25 +69,25 @@ class NotifikasiModel extends Model
     /**
      * Tandai satu notifikasi sebagai dibaca
      */
-    public function markAsRead(int $id, int $userId): bool
+    public function markAsRead(int $id, ?int $userId): bool
     {
         return $this->update($id, [
             'is_read' => 1,
-            'read_by' => $userId,
+            'read_by' => $userId ?: null,
         ]);
     }
 
     /**
      * Tandai semua notifikasi role sebagai dibaca
      */
-    public function markAllAsRead(string $role, int $userId): int
+    public function markAllAsRead(string $role, ?int $userId): int
     {
         $builder = $this->builder();
         return $builder->whereIn('for_role', [$role, 'all'])
             ->where('is_read', 0)
             ->update([
                 'is_read' => 1,
-                'read_by' => $userId,
+                'read_by' => $userId ?: null,
             ]);
     }
 

@@ -39,13 +39,17 @@ class NotifikasiController extends BaseController
      */
     public function read($id)
     {
-        $notification = $this->modelNotifikasi->find($id);
+        $role = session()->get('role') ?? 'staff';
+        $notification = $this->modelNotifikasi
+            ->where('id', (int) $id)
+            ->whereIn('for_role', [$role, 'all'])
+            ->first();
 
         if (!$notification) {
-            return redirect()->to('/notifications')->with('error', 'Notifikasi tidak ditemukan.');
+            return redirect()->to('/notifications')->with('error', 'Notifikasi tidak ditemukan atau tidak dapat diakses.');
         }
 
-        $userId = session()->get('userId');
+        $userId = session()->get('userId') ?: null;
         $this->modelNotifikasi->markAsRead($id, $userId);
 
         // Redirect ke URL tujuan jika tersedia
@@ -78,7 +82,11 @@ class NotifikasiController extends BaseController
      */
     public function delete($id)
     {
-        $notification = $this->modelNotifikasi->find($id);
+        $role = session()->get('role') ?? 'staff';
+        $notification = $this->modelNotifikasi
+            ->where('id', (int) $id)
+            ->whereIn('for_role', [$role, 'all'])
+            ->first();
 
         if (!$notification) {
             return $this->jsonResponse(['status' => false, 'message' => 'Notifikasi tidak ditemukan.'], 404);
@@ -98,7 +106,8 @@ class NotifikasiController extends BaseController
      */
     public function cleanOld()
     {
-        if (session()->get('role') !== 'admin') {
+        $role = session()->get('role');
+        if (!in_array($role, ['admin', 'superadmin'], true)) {
             return $this->jsonResponse(['status' => false, 'message' => 'Akses ditolak.'], 403);
         }
 

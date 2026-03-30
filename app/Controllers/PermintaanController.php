@@ -160,9 +160,7 @@ class PermintaanController extends BaseController
         $dataPermintaan = $this->modelPermintaan->find($id);
         if (!$dataPermintaan) return $this->jsonResponse(['status' => false, 'message' => 'Data tidak ditemukan'], 404);
 
-        $reason = $this->request->getPost('reason') ?: 'Disetujui oleh Admin';
-
-        if ($this->modelPermintaan->update($id, ['status' => 'approved', 'status_reason' => $reason])) {
+        if ($this->modelPermintaan->update($id, ['status' => 'approved'])) {
             // Kirim notifikasi disetujui
             try {
                 $this->modelNotifikasi->createRequestApprovedNotification($dataPermintaan);
@@ -240,10 +238,7 @@ class PermintaanController extends BaseController
                 ]);
             }
 
-            $this->modelPermintaan->update($id, [
-                'status' => 'distributed',
-                'status_reason' => $this->request->getPost('reason') ?: 'Barang didistribusikan'
-            ]);
+            $this->modelPermintaan->update($id, ['status' => 'distributed']);
             $db->transComplete();
 
             if ($db->transStatus() === false) {
@@ -285,9 +280,7 @@ class PermintaanController extends BaseController
             return $this->jsonResponse(['status' => false, 'message' => 'Tidak bisa membatalkan permintaan yang sudah didistribusikan.'], 400);
         }
 
-        $reason = $this->request->getPost('reason') ?: 'Dibatalkan oleh Admin';
-
-        if ($this->modelPermintaan->update($id, ['status' => 'cancelled', 'status_reason' => $reason])) {
+        if ($this->modelPermintaan->update($id, ['status' => 'cancelled'])) {
             // Kirim notifikasi dibatalkan
             try {
                 $this->modelNotifikasi->createRequestCancelledNotification($dataPermintaan);

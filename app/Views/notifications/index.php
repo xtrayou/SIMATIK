@@ -37,9 +37,12 @@
                     </div>
                     <div>
                         <?php if ($unreadCount > 0): ?>
-                            <a href="<?= base_url('/notifications/mark-all-read') ?>" class="btn btn-sm btn-outline-primary">
-                                <i class="bi bi-check-all"></i> Tandai Semua Dibaca
-                            </a>
+                            <form method="post" action="<?= base_url('/notifications/mark-all-read') ?>" class="d-inline">
+                                <?= csrf_field() ?>
+                                <button type="submit" class="btn btn-sm btn-outline-primary">
+                                    <i class="bi bi-check-all"></i> Tandai Semua Dibaca
+                                </button>
+                            </form>
                         <?php endif ?>
                     </div>
                 </div>
@@ -56,8 +59,10 @@
                         <?php else: ?>
                             <div class="list-group list-group-flush">
                                 <?php foreach ($notifications as $notif): ?>
-                                    <a href="<?= base_url('/notifications/read/' . $notif['id']) ?>"
-                                        class="list-group-item list-group-item-action <?= $notif['is_read'] ? '' : 'bg-light-primary' ?>">
+                                    <form method="post" action="<?= base_url('/notifications/read/' . $notif['id']) ?>">
+                                        <?= csrf_field() ?>
+                                        <div class="list-group-item list-group-item-action text-start <?= $notif['is_read'] ? '' : 'bg-light-primary' ?>"
+                                            onclick="this.closest('form').submit()">
                                         <div class="d-flex align-items-start py-2">
                                             <!-- Icon -->
                                             <div class="me-3">
@@ -91,14 +96,15 @@
 
                                             <!-- Delete button -->
                                             <div class="ms-2">
-                                                <button class="btn btn-sm btn-light btn-delete-notif"
+                                                <button type="button" class="btn btn-sm btn-light btn-delete-notif"
                                                     data-id="<?= $notif['id'] ?>"
                                                     onclick="event.preventDefault(); event.stopPropagation(); deleteNotification(<?= $notif['id'] ?>);">
                                                     <i class="bi bi-x"></i>
                                                 </button>
                                             </div>
                                         </div>
-                                    </a>
+                                        </div>
+                                    </form>
                                 <?php endforeach ?>
                             </div>
                         <?php endif ?>
@@ -117,22 +123,26 @@
 </div>
 
 <script>
+    const csrfName = '<?= csrf_token() ?>';
+    const csrfHash = '<?= csrf_hash() ?>';
+
     function deleteNotification(id) {
         if (!confirm('Hapus notifikasi ini?')) return;
 
         fetch(`<?= base_url('/notifications/delete') ?>/${id}`, {
-                method: 'DELETE',
+                method: 'POST',
                 headers: {
                     'X-Requested-With': 'XMLHttpRequest',
                     'Content-Type': 'application/json'
-                }
+                },
+                body: JSON.stringify({
+                    [csrfName]: csrfHash
+                })
             })
             .then(res => res.json())
             .then(data => {
                 if (data.status) {
-                    // Hapus elemen dari DOM
-                    const item = document.querySelector(`[data-id="${id}"]`).closest('.list-group-item');
-                    if (item) item.remove();
+                    location.reload();
                 }
             })
             .catch(err => console.error(err));

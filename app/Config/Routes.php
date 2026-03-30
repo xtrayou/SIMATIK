@@ -13,12 +13,12 @@ $routes->get('/', 'BerandaController::index');
 $routes->get('login', 'BerandaController::index');   // fallback: tampilkan landing page
 $routes->post('login', 'AuthController::login');
 $routes->post('auth/login', 'AuthController::login'); // aksi form modal di landing page
-$routes->get('logout', 'AuthController::logout');
-$routes->get('auth/logout', 'AuthController::logout');
+$routes->post('logout', 'AuthController::logout');
+$routes->post('auth/logout', 'AuthController::logout');
 
 // ── Dashboard ────────────────────────────────────────────────────────
 $routes->get('dashboard', 'DasborController::index', ['filter' => 'auth']);
-$routes->get('api/dashboard/stats', 'Api\DasborController::getStats');
+$routes->get('api/dashboard/stats', 'Api\DasborController::getStats', ['filter' => 'auth']);
 
 //category
 $routes->group('categories', ['filter' => 'auth'], function ($routes) {
@@ -77,7 +77,7 @@ $routes->group('reports', ['filter' => 'auth'], function ($routes) {
 });
 
 //Api routes untuk ajax
-$routes->group('api', function ($routes) {
+$routes->group('api', ['filter' => 'auth'], function ($routes) {
     $routes->get('products/search', 'Api\ProdukController::search');
     $routes->get('categories/active', 'Api\KategoriController::getActive');
     $routes->get('product/(:num)/info', 'Api\StokController::getProductInfo/$1');
@@ -87,7 +87,7 @@ $routes->group('api', function ($routes) {
 });
 
 // Products API routes
-$routes->group('api/products', function ($routes) {
+$routes->group('api/products', ['filter' => 'auth'], function ($routes) {
     $routes->get('search', 'Api\ProdukController::search');
     $routes->get('stock-status/(:num)', 'Api\ProdukController::getStockStatus/$1');
     $routes->get('by-category/(:num)', 'Api\ProdukController::getByCategory/$1');
@@ -119,16 +119,16 @@ $routes->get('settings', 'PengaturanController::index', ['filter' => 'role:super
 $routes->post('settings/update', 'PengaturanController::update', ['filter' => 'role:superadmin']);
 
 // Notifications
-$routes->group('notifications', function ($routes) {
+$routes->group('notifications', ['filter' => 'auth'], function ($routes) {
     $routes->get('/', 'NotifikasiController::index');
-    $routes->get('read/(:num)', 'NotifikasiController::read/$1');
-    $routes->get('mark-all-read', 'NotifikasiController::markAllRead');
-    $routes->delete('delete/(:num)', 'NotifikasiController::delete/$1');
+    $routes->post('read/(:num)', 'NotifikasiController::read/$1');
+    $routes->post('mark-all-read', 'NotifikasiController::markAllRead');
+    $routes->post('delete/(:num)', 'NotifikasiController::delete/$1');
     $routes->post('clean-old', 'NotifikasiController::cleanOld');
 });
 
 // Notifications API
-$routes->group('api/notifications', function ($routes) {
+$routes->group('api/notifications', ['filter' => 'auth'], function ($routes) {
     $routes->get('/', 'Api\NotifikasiController::latest');
     $routes->get('count', 'Api\NotifikasiController::count');
 });
@@ -143,7 +143,7 @@ $routes->get('track', 'PermintaanController::trackForm');
 $routes->post('track-status', 'PermintaanController::trackStatus');
 
 // ── Maintenance Routes (Admin only) ──────────────────────────────
-$routes->get('admin/fix-request-status', function () {
+$routes->match(['post'], 'admin/fix-request-status', function () {
     $db = \Config\Database::connect();
     $sql = "UPDATE requests SET status = 'requested' WHERE status IS NULL OR status = '' OR status = 'pending'";
     $db->query($sql);
@@ -162,10 +162,10 @@ $routes->get('admin/fix-request-status', function () {
     $output .= '<p><a href="' . base_url('requests') . '">← Kembali ke Daftar Permintaan</a></p>';
 
     return $output;
-});
+}, ['filter' => 'role:superadmin']);
 
 // Fix Session - Regenerate userId in session
-$routes->get('admin/fix-session', function () {
+$routes->match(['post'], 'admin/fix-session', function () {
     $username = session()->get('username');
 
     if (!$username) {
@@ -191,4 +191,4 @@ $routes->get('admin/fix-session', function () {
     $output .= '<p><a href="' . base_url('dashboard') . '">← Kembali ke Dashboard</a></p>';
 
     return $output;
-});
+}, ['filter' => 'role:superadmin']);
